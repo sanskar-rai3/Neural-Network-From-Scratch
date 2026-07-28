@@ -22,8 +22,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 
+/* Helper Funtions */
 static inline u32 bswap32(u32 byte) {
 #if (defined(__GNUC__) || defined(__clang__))
     return __builtin_bswap32(byte);
@@ -39,47 +39,71 @@ static inline u32 bswap32(u32 byte) {
 
 static u32 read_be(FILE *file) {
     u32 read;
-    fread(&read, sizeof(read), 1, file);
+    if (fread(&read, sizeof(read), 1, file) != 1) {
+        exit(EXIT_FAILURE);
+    }
 
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
     return bswap32(read);
+#else
+    return read;
+#endif
 }
 
-void mnist_read_images_header(FILE *file, MNIST_IMAGES_HEADER *header) {
+/* Reading Headers */
+void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header) {
     header->magic = read_be(file);
+    if (header->magic != 2051) {
+        fprintf(stderr, "Invalid image file.\n");
+        exit(EXIT_FAILURE);
+    }
+
     header->count = read_be(file);
 
     header->rows  = read_be(file);
     header->cols  = read_be(file);
     if (header->rows != 28 || header->cols != 28) {
-        fprintf(stderr, "Unsupported image size.\n");
+        fprintf(stderr, "Unsupported image size\n");
         exit(EXIT_FAILURE);
     }
 }
 
-void mnist_read_labels_header(FILE *file, MNIST_LABELS_HEADER *header) {
+void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header) {
     header->magic = read_be(file);
+    if (header->magic != 2049) {
+        fprintf(stderr, "Invalid label file\n");
+        exit(EXIT_FAILURE);
+    }
+
     header->count = read_be(file);
 }
 
-void mnist_read_images_data(FILE *file, u8 *data, size_t count) {
-    fread(data, sizeof(u8), count, file);
+/* Reading Datas */
+void mnist_read_image_data(FILE *file, u8 *data, usize count) {
+    if (fread(data, sizeof(u8), count, file) != count) {
+        fprintf(stderr, "Failed to read image data\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
-void mnist_read_labels_data(FILE *file, u8 *data, size_t count) {
-    fread(data, sizeof(u8), count, file);
+void mnist_read_label_data(FILE *file, u8 *data, usize count) {
+    if (fread(data, sizeof(u8), count, file) != count) {
+        fprintf(stderr, "Failed to read label data\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
-void mnist_read_images_data_normalized(FILE *file, float *datas, size_t count) {
+void mnist_read_image_data_normalized(FILE *file, float *data, usize count) {
     u8 *pixels = malloc(count * sizeof(u8));
     if (!pixels) {
         perror("malloc");
         return;
     }
 
-    mnist_read_images_data(file, pixels, count);
+    mnist_read_image_data(file, pixels, count);
 
     for (size_t i = 0; i < count; i++) {
-        datas[i] = pixels[i] / 255.0f; 
+        data[i] = pixels[i] / 255.0f; 
     }
 
     free(pixels);

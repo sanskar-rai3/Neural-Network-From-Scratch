@@ -17,29 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __MNIST_H__
+#define __MNIST_H__
+
 #include "common.h"
 
 #include <stdio.h>
-#include <stddef.h>
 
 /* Header Types */
-typedef struct MNIST_IMAGES_HEADER {
-    int    magic;
-    size_t count;
-    int    rows;
-    int    cols;
-} MNIST_IMAGES_HEADER;
+typedef struct MNIST_IMAGE_HEADER {
+    int   magic;
+    usize count;
+    int   rows;
+    int   cols;
+} MNIST_IMAGE_HEADER;
 
-typedef struct MNIST_LABELS_HEADER {
-    int    magic;
-    size_t count;
-} MNIST_LABELS_HEADER;
+typedef struct MNIST_LABEL_HEADER {
+    int   magic;
+    usize count;
+} MNIST_LABEL_HEADER;
 
 /* Reading Headers */
-void mnist_read_images_header(FILE *file, MNIST_IMAGES_HEADER *header);
-void mnist_read_labels_header(FILE *file, MNIST_LABELS_HEADER *header);
+void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header);
+void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header);
 
-/* Reading Contents */
-void mnist_read_images_data(FILE *file, u8 *data, size_t count);
-void mnist_read_labels_data(FILE *file, u8 *data, size_t count);
-void mnist_read_images_data_normallized(FILE *file, float *datas, size_t count);
+/* Reading Data */
+void mnist_read_image_data(FILE *file, u8 *data, usize count);
+void mnist_read_label_data(FILE *file, u8 *data, usize count);
+void mnist_read_image_data_normalized(FILE *file, float *data, usize count);
+
+#endif
