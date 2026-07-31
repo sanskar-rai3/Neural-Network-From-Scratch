@@ -16,3 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "common.h"
+#include "activation.h"
+
+#include <math.h>
+
+float ReLU(float val) {
+    return val < 0 ? 0 : val;
+}
+
+float Leaky_ReLU(float val) {
+    return val < 0 ? 0.01f * val : val;
+}
+
+float Tanh(float val) {
+    return tanh(val);
+}
+
+float Sigmoid(float val) {
+    return 1.0f / (1.0f + exp(-val));
+}
+
+float Softmax(float val) {
+
+}

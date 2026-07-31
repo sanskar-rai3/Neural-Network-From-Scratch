@@ -16,3 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef __ACTIVATION_H__
+#define __ACTIVATION_H__
+
+#include "common.h"
+
+float ReLU(float val);
+float Leaky_ReLU(float val);
+float Tanh(float val);
+float Sigmoid(float val);
+float Softmax(float val);
+
+#endif

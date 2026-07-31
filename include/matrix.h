@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MATRIX_H_
-#define __MATRIX_H_
+#ifndef __MATRIX_H__
+#define __MATRIX_H__
 
 #include "common.h"
 
@@ -30,7 +30,7 @@ typedef struct Matrix {
 
 /* Creation & Destruction */
 int matrix_create(Matrix *mat, usize rows, usize cols);
-void matrix_free(Matrix *mat);
+void matrix_destroy(Matrix *mat);
 
 /* Element Access */
 float matrix_get(const Matrix *mat, usize row, usize col);
