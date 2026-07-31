@@ -20,20 +20,30 @@
 #include "common.h"
 #include "matrix.h"
 
-#include <math.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <stdbool.h>
 
 /* Helper Function */
-static MATRIX matrix_empty(void) {
-    return (MATRIX) {
+static inline Matrix matrix_empty(void) {
+    return (Matrix) {
         .rows = 0,
         .cols = 0,
         .data = NULL
     };
 }
 
+static inline usize matrix_size(const Matrix *mat) {
+    return mat->rows * mat->cols;
+}
+
+static inline float random_float(float min, float max) {
+    return min + ((float)rand() / (float)RAND_MAX) * (max - min);
+}
+
 /* Creation & Destruction */
-int matrix_create(MATRIX *mat, usize rows, usize cols) {
+int matrix_create(Matrix *mat, usize rows, usize cols) {
     mat->data = malloc(rows * cols * sizeof(float));
     if (!mat->data) {
         return 0;
@@ -45,7 +55,7 @@ int matrix_create(MATRIX *mat, usize rows, usize cols) {
     return 1;
 }
 
-void matrix_free(MATRIX *mat) {
+void matrix_destroy(Matrix *mat) {
     free(mat->data);
 
     mat->data = NULL;
@@ -54,86 +64,176 @@ void matrix_free(MATRIX *mat) {
 }
 
 /* Element Access */
-float matrix_get(const MATRIX *mat, usize row, usize col) {
+float matrix_get(const Matrix *mat, usize row, usize col) {
     return mat->data[row * mat->cols + col];
 }
 
-void matrix_set(MATRIX *mat, usize row, usize col, float value) {
+void matrix_set(Matrix *mat, usize row, usize col, float value) {
     mat->data[row * mat->cols + col] = value;
 }
 
 /* Utility */
-void matrix_fill(MATRIX *mat, float value);
-void matrix_randomize(MATRIX *mat, float min, float max);
-void matrix_copy(MATRIX *dest, const MATRIX *src);
-void matrix_print(const MATRIX *mat);
+void matrix_fill(Matrix *mat, float value) {
+    for (usize i = 0; i < matrix_size(mat) ; i++) {
+        mat->data[i] = value;
+    }
+}
+
+void matrix_randomize(Matrix *mat, float min, float max) {
+    static bool seeded = false;
+
+    if (!seeded) {
+        srand(time(NULL));
+        seeded = true;
+    }
+
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] = random_float(min, max);
+    }
+}
+
+void matrix_copy(Matrix *dest, const Matrix *src) {
+    if (dest->rows != src->rows || dest->cols != src->cols) {
+        return;
+    }
+     
+    memcpy(dest->data, src->data, matrix_size(dest) * sizeof(float));
+}
 
 /* Arithmetic */
-MATRIX matrix_add(const MATRIX *a, const MATRIX *b) {
-    MATRIX result;
-
+Matrix matrix_add(const Matrix *a, const Matrix *b) {
     if (a->rows != b->rows || a->cols != b->cols) {
         return matrix_empty();
     }
 
+    Matrix result;
     if (!matrix_create(&result, a->rows, a->cols)) {
         return matrix_empty();
     }
 
-    for (usize i = 0; i < result.rows * result.cols; i++) {
+    for (usize i = 0; i < matrix_size(&result); i++) {
         result.data[i] = a->data[i] + b->data[i];
     }
 
     return result;
 }
 
-MATRIX matrix_subtract(const MATRIX *a, const MATRIX *b) {
-    MATRIX result;
-
+Matrix matrix_subtract(const Matrix *a, const Matrix *b) {
     if (a->rows != b->rows || a->cols != b->cols) {
         return matrix_empty();
     }
 
+    Matrix result;
     if (!matrix_create(&result, a->rows, a->cols)) {
         return matrix_empty();
     }
 
-    for (usize i = 0; i < result.rows * result.cols; i++) {
+    for (usize i = 0; i < matrix_size(&result); i++) {
         result.data[i] = a->data[i] - b->data[i];
     }
 
     return result;
 }
 
-MATRIX matrix_multiply(const MATRIX *a, const MATRIX *b) {
+Matrix matrix_multiply(const Matrix *a, const Matrix *b) {
+    if (a->cols != b->rows) {
+        return matrix_empty();
+    }
 
+    Matrix result;
+    if (!matrix_create(&result, a->rows, b->cols)) {
+        return matrix_empty();
+    }
+
+    for (usize i = 0; i < result.rows; i++) {
+        for (usize j = 0; j < result.cols; j++) {
+            float sum = 0.0f;
+
+            for (usize k = 0; k < a->cols; k++) {
+                sum += matrix_get(a, i, k) * matrix_get(b, k, j);
+            }
+
+            matrix_set(&result, i, j, sum);
+        }
+    }
+
+    return result;
 }
 
-MATRIX matrix_hadamard(const MATRIX *a, const MATRIX *b) {
+Matrix matrix_hadamard(const Matrix *a, const Matrix *b) {
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return matrix_empty();
+    }
 
+    Matrix result;
+    if (!matrix_create(&result, a->rows, a->cols)) {
+        return matrix_empty();
+    }
+
+    for (usize i = 0; i < matrix_size(&result); i++) {
+        result.data[i] = a->data[i] * b->data[i];
+    }
+
+    return result;   
 }
 
-MATRIX matrix_scalar_multiply(const MATRIX *mat, float scalar) {
-    MATRIX result;
+Matrix matrix_scalar_multiply(const Matrix *mat, float scalar) {
+    Matrix result;
     if (!matrix_create(&result, mat->rows, mat->cols)) {
         return matrix_empty();
     }
 
-    for (usize i = 0; i < mat->rows * mat->cols; i++) {
+    for (usize i = 0; i < matrix_size(mat); i++) {
         result.data[i] = mat->data[i] * scalar;
     }
 
     return result;
 }
 
-MATRIX matrix_transpose(const MATRIX *mat) {
+Matrix matrix_transpose(const Matrix *mat) {
+    Matrix result;
+    if (!matrix_create(&result, mat->cols, mat->rows)) {
+        return matrix_empty();
+    }
 
+    for (usize r = 0; r < mat->rows; r++) {
+        for (usize c = 0; c < mat->cols; c++) {
+            matrix_set(&result, c, r, matrix_get(mat, r, c));
+        }
+    }
+
+    return result;
 }
 
 /* In-place Arithmetic */
-void matrix_add_inplace(MATRIX *a, const MATRIX *b);
-void matrix_subtract_inplace(MATRIX *a, const MATRIX *b);
-void matrix_scalar_multiply_inplace(MATRIX *mat, float scalar);
+void matrix_add_inplace(Matrix *a, const Matrix *b) {
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return;
+    }
+
+    for (usize i = 0; i < a->rows * b->cols; i++) {
+        a->data[i] += b->data[i];
+    }
+}
+void matrix_subtract_inplace(Matrix *a, const Matrix *b) {
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return;
+    }
+
+    for (usize i = 0; i < a->rows * b->cols; i++) {
+        a->data[i] -= b->data[i];
+    }
+}
+
+void matrix_scalar_multiply_inplace(Matrix *mat, float scalar) {
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] *= scalar;
+    }
+}
 
 /* Element-wise Operations */
-void matrix_apply(MATRIX *mat, float (*func)(float));
+void matrix_apply(Matrix *mat, float (*func)(float)) {
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] = func(mat->data[i]);
+    }
+}

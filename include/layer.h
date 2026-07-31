@@ -16,34 +16,3 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef __MNIST_H__
-#define __MNIST_H__
-
-#include "common.h"
-
-#include <stdio.h>
-
-/* Header Types */
-typedef struct MNIST_IMAGE_HEADER {
-    int   magic;
-    usize count;
-    int   rows;
-    int   cols;
-} MNIST_IMAGE_HEADER;
-
-typedef struct MNIST_LABEL_HEADER {
-    int   magic;
-    usize count;
-} MNIST_LABEL_HEADER;
-
-/* Reading Headers */
-void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header);
-void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header);
-
-/* Reading Data */
-void mnist_read_image_data(FILE *file, u8 *data, usize count);
-void mnist_read_label_data(FILE *file, u8 *data, usize count);
-void mnist_read_image_data_normalized(FILE *file, float *data, usize count);
-
-#endif
