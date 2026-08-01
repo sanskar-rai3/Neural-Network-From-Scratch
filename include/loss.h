@@ -17,16 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACTIVATION_H__
-#define __ACTIVATION_H__
+#ifndef __LOSS_H__
+#define __LOSS_H__
 
-#include "common.h"
+#include "common.h" 
 #include "matrix.h"
 
-float ReLU(float val);
-float Leaky_ReLU(float val);
-float Tanh(float val);
-float Sigmoid(float val);
-void  activation_Softmax(Matrix *mat);
+/* Loss Functions */
+float loss_mse(const Matrix *prediction, const Matrix *target);
+float loss_cross_entropy(const Matrix *prediction, const Matrix *target);
 
 #endif

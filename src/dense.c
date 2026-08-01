@@ -27,10 +27,11 @@ int dense_init(Dense *layer, usize input_size, usize output_size) {
     }
 
     if (!matrix_create(&layer->bias, 1, output_size)) {
+        matrix_destroy(&layer->weights);
         return 0;
     }
 
-    matrix_randomize(&layer->weights, -1.0f, 1.0f);
+    matrix_he_uniform(&layer->weights, input_size);
 
     matrix_fill(&layer->bias, 0.0f);
 

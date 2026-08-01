@@ -17,7 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "common.h"
 #include "mnist.h"
+#include "activation.h"
+#include "dense.h"
+#include "matrix.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,34 +40,45 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    MNIST_IMAGES_HEADER images_header;
-    MNIST_LABELS_HEADER labels_header;
+    MNIST_IMAGE_HEADER images_header;
+    MNIST_LABEL_HEADER labels_header;
 
-    mnist_read_images_header(images, &images_header);
-    mnist_read_labels_header(labels, &labels_header); 
+    mnist_read_image_header(images, &images_header);
+    mnist_read_label_header(labels, &labels_header); 
 
-    // printf("Image headers\n");
-    // printf("Magic: %" PRIu32 "\n", images_header.magic);
-    // printf("Image Count: %" PRIu32 "\n", images_header.count);
-    // printf("Rows: %" PRIu32 "\n", images_header.rows);
-    // printf("Cols: %" PRIu32 "\n", images_header.cols);
+    float *images_data = malloc(images_header.count * sizeof(float));
+    mnist_read_image_data_normalized(images, images_data, images_header.count);
 
-    // printf("\nLabels header\n");
-    // printf("Magic: %" PRIu32 "\n", labels_header.magic);
-    // printf("Label Count: %" PRIu32 "\n", labels_header.count);
+    Matrix sample;
+    matrix_create_buf(&sample, 1, 784, images_data);
     
-    u8 *labels_data = malloc(labels_header.count * sizeof(u8));
-    mnist_read_labels_data(labels, labels_data, labels_header.count);
+    Dense layer;
+    dense_init(&layer, 784, 128);
+    Matrix layer_mat = dense_forward(&layer, &sample);
+    matrix_apply(&layer_mat, ReLU);
 
-    u8 *images_data = malloc(images_header.count * sizeof(u8));
-    mnist_read_images_data(images, images_data, images_header.count);
-    
-    // for (int i = 0; i < labels_header.count; i++) {
-    //     printf("%" PRIu8 " ", labels_data[i]);
-    // }
-    
+    Dense output;
+    dense_init(&output, 128, 10);
+    Matrix output_mat = dense_forward(&output, &layer_mat);
+    activation_Softmax(&output_mat);
 
-    free(labels_data);
+    for (usize i = 0; i < 10; i++) {
+        printf("%ld    ", i);
+    }
+    putchar('\n');
+
+    for (usize i = 0; i < 10; i++) {
+        printf("%.2f ", output_mat.data[i]);
+    }
+    putchar('\n');
+    
+    matrix_destroy(&sample);
+    matrix_destroy(&layer_mat);
+    matrix_destroy(&output_mat);
+    
+    dense_destroy(&layer);
+    dense_destroy(&output);
+
     free(images_data);
     fclose(images);
     fclose(labels);

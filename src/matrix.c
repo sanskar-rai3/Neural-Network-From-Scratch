@@ -24,6 +24,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include <math.h>
 
 /* Helper Function */
 static inline Matrix matrix_empty(void) {
@@ -32,10 +33,6 @@ static inline Matrix matrix_empty(void) {
         .cols = 0,
         .data = NULL
     };
-}
-
-static inline usize matrix_size(const Matrix *mat) {
-    return mat->rows * mat->cols;
 }
 
 static inline float random_float(float min, float max) {
@@ -48,6 +45,20 @@ int matrix_create(Matrix *mat, usize rows, usize cols) {
     if (!mat->data) {
         return 0;
     }
+
+    mat->rows = rows;
+    mat->cols = cols;
+
+    return 1;
+}
+
+int matrix_create_buf(Matrix *mat, usize rows, usize cols, float *buffer) {
+    mat->data = malloc(rows * cols * sizeof(float));
+    if (!mat->data) {
+        return 0;
+    }
+
+    memcpy(mat->data, buffer, rows * cols * sizeof(float));
 
     mat->rows = rows;
     mat->cols = cols;
@@ -73,12 +84,33 @@ void matrix_set(Matrix *mat, usize row, usize col, float value) {
 }
 
 /* Utility */
+usize matrix_size(const Matrix *mat) {
+    return mat->rows * mat->cols;
+}
+
+Matrix matrix_init(void) {
+    return (Matrix) {
+        .rows = 0,
+        .cols = 0,
+        .data = NULL
+    };
+}
+
 void matrix_fill(Matrix *mat, float value) {
     for (usize i = 0; i < matrix_size(mat) ; i++) {
         mat->data[i] = value;
     }
 }
 
+void matrix_copy(Matrix *dest, const Matrix *src) {
+    if (dest->rows != src->rows || dest->cols != src->cols) {
+        return;
+    }
+     
+    memcpy(dest->data, src->data, matrix_size(dest) * sizeof(float));
+}
+
+/* Random */
 void matrix_randomize(Matrix *mat, float min, float max) {
     static bool seeded = false;
 
@@ -92,12 +124,14 @@ void matrix_randomize(Matrix *mat, float min, float max) {
     }
 }
 
-void matrix_copy(Matrix *dest, const Matrix *src) {
-    if (dest->rows != src->rows || dest->cols != src->cols) {
-        return;
-    }
-     
-    memcpy(dest->data, src->data, matrix_size(dest) * sizeof(float));
+void matrix_he_uniform(Matrix *mat, usize fan_in) {
+    float limit = sqrtf(6.0f / fan_in);
+    matrix_randomize(mat, -limit, limit);
+}
+
+void matrix_xavier_uniform(Matrix *mat, usize fan_in, usize fan_out) {
+    float limit = sqrtf(6.0f / (fan_in + fan_out));
+    matrix_randomize(mat, -limit, limit);
 }
 
 /* Arithmetic */

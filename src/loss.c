@@ -18,44 +18,30 @@
  */
 
 #include "common.h"
-#include "activation.h"
 #include "matrix.h"
+#include "loss.h"
 
 #include <math.h>
 
-float ReLU(float val) {
-    return val < 0 ? 0 : val;
-}
-
-float Leaky_ReLU(float val) {
-    return val < 0 ? 0.01f * val : val;
-}
-
-float Tanh(float val) {
-    return tanh(val);
-}
-
-float Sigmoid(float val) {
-    return 1.0f / (1.0f + expf(-val));
-}
-
-void activation_Softmax(Matrix *mat) {
-    usize size = matrix_size(mat);
-
-    float max = mat->data[0];
-    for (usize i = 1; i < size; i++) {
-        if (mat->data[i] > max) {
-            max = mat->data[i];
-        }
-    }     
-
+/* Loss Functions */
+float loss_mse(const Matrix *prediction, const Matrix *target) {
     float sum = 0.0f;
-    for (usize i = 0; i < size; i++) {
-        mat->data[i] = expf(mat->data[i] - max);
-        sum += mat->data[i];
+    for (usize i = 0; i < matrix_size(prediction); i++) {
+        float diff = prediction->data[i] - target->data[i];
+        sum += diff * diff; 
     }
 
-    for (usize i = 0; i < size; i++) {
-        mat->data[i] /= sum;
+    float average = sum / matrix_size(prediction);
+
+    return average;
+}
+
+float loss_cross_entropy(const Matrix *prediction, const Matrix *target) {
+    float sum = 0.0f;
+    for (usize i = 0; i < matrix_size(prediction); i++) {
+        float p = fmaxf(prediction->data[i], 1e-7);
+        sum += target->data[i] * logf(p); 
     }
+
+    return -sum;
 }

@@ -30,6 +30,7 @@ typedef struct Matrix {
 
 /* Creation & Destruction */
 int matrix_create(Matrix *mat, usize rows, usize cols);
+int matrix_create_buf(Matrix *mat, usize rows, usize cols, float *buffer);
 void matrix_destroy(Matrix *mat);
 
 /* Element Access */
@@ -37,9 +38,15 @@ float matrix_get(const Matrix *mat, usize row, usize col);
 void matrix_set(Matrix *mat, usize row, usize col, float value);
 
 /* Utility */
+usize matrix_size(const Matrix *mat);
+Matrix matrix_init(void);
 void matrix_fill(Matrix *mat, float value);
-void matrix_randomize(Matrix *mat, float min, float max);
 void matrix_copy(Matrix *dest, const Matrix *src);
+
+/* Random */
+void matrix_randomize(Matrix *mat, float min, float max);
+void matrix_he_uniform(Matrix *mat, usize fan_in);
+void matrix_xavier_uniform(Matrix *mat, usize fan_in, usize fan_out);
 
 /* Arithmetic */
 Matrix matrix_add(const Matrix *a, const Matrix *b);

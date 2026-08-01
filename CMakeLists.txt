@@ -48,6 +48,13 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 find_package(SDL2 REQUIRED)
 
+if(NOT MSVC)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            m
+    )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         SDL2::SDL2
