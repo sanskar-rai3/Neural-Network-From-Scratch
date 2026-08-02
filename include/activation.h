@@ -23,16 +23,36 @@
 #include "common.h"
 #include "matrix.h"
 
-/* Activation function type */
-typedef enum Activation {
-    RELU = 0,
-    LEAKY_RELU,
-    TANH,
-    SIGMOID,
-    SOFTMAX
-} Activation;
+/*==============================================================================
+ * Types & Enumerations
+ *============================================================================*/
 
-/* Apply Function */
-void activation_apply(Matrix *mat, Activation activation);
+/**
+ * @brief Supported neural network activation function types.
+ */
+typedef enum ActivationType {
+    ACT_RELU = 0,   /**< Rectified Linear Unit: f(x) = max(0, x) */
+    ACT_LEAKY_RELU, /**< Leaky ReLU: f(x) = x if x > 0 else 0.01 * x */
+    ACT_TANH,       /**< Hyperbolic Tangent: f(x) = tanh(x) */
+    ACT_SIGMOID,    /**< Sigmoid / Logistic: f(x) = 1 / (1 + exp(-x)) */
+    ACT_SOFTMAX,    /**< Softmax (row-wise / batch probability distribution) */
+    ACT_NONE        /**< Identity function / Linear pass-through: f(x) = x */
+} ActivationType;
+
+
+/*==============================================================================
+ * Activation Application
+ *============================================================================*/
+
+/**
+ * @brief Applies the specified activation function to a matrix in-place.
+ *
+ * For scalar activations (ReLU, Leaky ReLU, Tanh, Sigmoid), the function is 
+ * applied element-wise. For Softmax, it is evaluated across rows (samples).
+ *
+ * @param mat        Pointer to the matrix to modify in-place.
+ * @param activation The activation function type to apply.
+ */
+void activation_apply(Matrix *mat, ActivationType activation);
 
 #endif

@@ -22,12 +22,14 @@
 #include "activation.h"
 #include "layer.h"
 #include "matrix.h"
+#include "nn.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
 
-int main() {
+int main(void) {
+    /* 1. Open MNIST Data Files */
     FILE *images = fopen("data/train-images-idx3-ubyte", "rb");
     if (!images) {
         perror("fopen images");
@@ -37,57 +39,78 @@ int main() {
     FILE *labels = fopen("data/train-labels-idx1-ubyte", "rb");
     if (!labels) {
         perror("fopen labels");
+        fclose(images);
         return EXIT_FAILURE;
     }
 
+    /* 2. Read Headers */
     MNIST_IMAGE_HEADER images_header;
     MNIST_LABEL_HEADER labels_header;
 
     mnist_read_image_header(images, &images_header);
-    mnist_read_label_header(labels, &labels_header); 
+    mnist_read_label_header(labels, &labels_header);
 
-    float *images_data = malloc(images_header.count * sizeof(float));
+    /* 3. Load & Normalize Pixel Data (784 floats per image) */
+    usize total_pixels = images_header.count * 784;
+    float *images_data = (float *)malloc(total_pixels * sizeof(float));
+    if (!images_data) {
+        fprintf(stderr, "Failed to allocate memory for images data\n");
+        fclose(images);
+        fclose(labels);
+        return EXIT_FAILURE;
+    }
+
     mnist_read_image_data_normalized(images, images_data, images_header.count);
 
+    /* 4. Prepare Single Sample Input Matrix (1 x 784) */
     Matrix sample;
-    matrix_copy_from_buffer(&sample, 1, 784, images_data);
-    
-    Dense layer;
-    dense_init(&layer, 784, 128);
-    Matrix layer_mat = dense_forward(&layer, &sample);
-    activation_apply(&layer_mat, RELU);
+    matrix_copy_buffer(&sample, 1, 784, images_data);
 
-    Dense output;
-    dense_init(&output, 128, 10);
-    Matrix output_mat = dense_forward(&output, &layer_mat);
-    activation_apply(&output_mat, SOFTMAX);
+    /* 5. Configure & Initialize Neural Network */
+    LayerConfig lconfig[] = {
+        { .input_size = 784, .output_size = 128, .activation = ACT_RELU },
+        { .input_size = 128, .output_size = 10,  .activation = ACT_SOFTMAX }
+    };
+    usize layer_count = sizeof(lconfig) / sizeof(lconfig[0]);
 
-    for (usize i = 0; i < 10; i++) {
-        printf("%ld    ", i);
+    Network nn;
+    if (!network_init(&nn, lconfig, layer_count)) {
+        fprintf(stderr, "Failed to initialize neural network\n");
+        matrix_destroy(&sample);
+        free(images_data);
+        fclose(images);
+        fclose(labels);
+        return EXIT_FAILURE;
     }
-    putchar('\n');
 
+    /* 6. Perform Forward Pass */
+    Matrix output;
+    matrix_create(&output, 1, 10);
+
+    network_forward(&output, &nn, &sample);
+
+    /* 7. Display Results */
+    printf("Class: ");
     for (usize i = 0; i < 10; i++) {
-        printf("%.2f ", output_mat.data[i]);
+        printf("%zu\t", i);
     }
-    putchar('\n');
+    printf("\nProb:  ");
 
     float sum = 0.0f;
     for (usize i = 0; i < 10; i++) {
-        sum += output_mat.data[i];
+        printf("%.2f\t", output.data[i]);
+        sum += output.data[i];
     }
-    printf("%.2f\n", sum);
+    printf("\nTotal Probability Sum: %.2f\n", sum);
 
+    /* 8. Cleanup Allocations */
     matrix_destroy(&sample);
-    matrix_destroy(&layer_mat);
-    matrix_destroy(&output_mat);
-    
-    dense_destroy(&layer);
-    dense_destroy(&output);
+    matrix_destroy(&output);
+    network_destroy(&nn);
 
     free(images_data);
     fclose(images);
     fclose(labels);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

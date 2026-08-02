@@ -24,65 +24,86 @@
 #include <math.h>
 #include <assert.h>
 
-/* Helper Function */
-static void ReLU(Matrix *mat) {
-    assert(mat != NULL);
-    for (usize i = 0; i < matrix_size(mat); i++) {
-        mat->data[i] = mat->data[i] < 0 ? 0 : mat->data[i];
-    }
+/*==============================================================================
+ * Scalar Activation Callbacks (for matrix_apply)
+ *============================================================================*/
+
+static float relu_scalar(float x) {
+    return x < 0.0f ? 0.0f : x;
 }
 
-static void Leaky_ReLU(Matrix *mat) {
-    assert(mat != NULL);
-    for (usize i = 0; i < matrix_size(mat); i++) {
-        mat->data[i] = mat->data[i] < 0 ? 0.01 * mat->data[i] : mat->data[i];
-    }
+static float leaky_relu_scalar(float x) {
+    return x < 0.0f ? 0.01f * x : x;
 }
 
-static void Tanh(Matrix *mat) {
-    assert(mat != NULL);
-    for (usize i = 0; i < matrix_size(mat); i++) {
-        mat->data[i] = tanhf(mat->data[i]);
-    }
+static float sigmoid_scalar(float x) {
+    return 1.0f / (1.0f + expf(-x));
 }
 
-static void Sigmoid(Matrix *mat) {
-    assert(mat != NULL);
-    for (usize i = 0; i < matrix_size(mat); i++) {
-        mat->data[i] = 1.0f / (1.0f + expf(-mat->data[i]));
-    }
-}
+/*==============================================================================
+ * Matrix Activation Functions
+ *============================================================================*/
 
-static void Softmax(Matrix *mat) {
-    assert(mat != NULL);
-    usize size = matrix_size(mat);
+static void softmax(Matrix *mat) {
+    assert(mat);
+    assert(mat->data);
+    assert(mat->rows > 0);
+    assert(mat->cols > 0);
 
-    float max = mat->data[0];
-    for (usize i = 1; i < size; i++) {
-        if (mat->data[i] > max) {
-            max = mat->data[i];
+    /* Process softmax row by row to support multi-sample batch processing */
+    for (usize r = 0; r < mat->rows; r++) {
+        usize offset = r * mat->cols;
+
+        /* Find max value in row for numerical stability */
+        float max_val = mat->data[offset];
+        for (usize c = 1; c < mat->cols; c++) {
+            if (mat->data[offset + c] > max_val) {
+                max_val = mat->data[offset + c];
+            }
         }
-    }     
 
-    float sum = 0.0f;
-    for (usize i = 0; i < size; i++) {
-        mat->data[i] = expf(mat->data[i] - max);
-        sum += mat->data[i];
-    }
+        /* Exponentiate and sum */
+        float sum = 0.0f;
+        for (usize c = 0; c < mat->cols; c++) {
+            mat->data[offset + c] = expf(mat->data[offset + c] - max_val);
+            sum += mat->data[offset + c];
+        }
 
-    for (usize i = 0; i < size; i++) {
-        mat->data[i] /= sum;
+        /* Normalize */
+        for (usize c = 0; c < mat->cols; c++) {
+            mat->data[offset + c] /= sum;
+        }
     }
 }
 
-/* Apply Function */
-void activation_apply(Matrix *mat, Activation activation) {
+/*==============================================================================
+ * Activation Application
+ *============================================================================*/
+
+void activation_apply(Matrix *mat, ActivationType activation) {
+    assert(mat);
+    assert(mat->data);
+
     switch (activation) {
-        case RELU:         ReLU(mat); break;
-        case LEAKY_RELU:   Leaky_ReLU(mat); break;
-        case TANH:         Tanh(mat); break;
-        case SIGMOID:      Sigmoid(mat); break;
-        case SOFTMAX:      Softmax(mat); break;
-        default:           assert(!"Invalid activation function"); break;
+        case ACT_RELU:
+            matrix_apply(mat, relu_scalar);
+            break;
+        case ACT_LEAKY_RELU:
+            matrix_apply(mat, leaky_relu_scalar);
+            break;
+        case ACT_TANH:
+            matrix_apply(mat, tanhf);
+            break;
+        case ACT_SIGMOID:
+            matrix_apply(mat, sigmoid_scalar);
+            break;
+        case ACT_SOFTMAX:
+            softmax(mat);
+            break;
+        case ACT_NONE:
+            break;
+        default:
+            assert(!"Invalid activation function");
+            break;
     }
 }

@@ -21,40 +21,45 @@
 #include "dense.h"
 #include "matrix.h"
 
-int dense_init(Dense *layer, usize input_size, usize output_size) {
-    if (!matrix_create(&layer->weights, input_size, output_size)) {
-        return 0;
-    }
+#include <assert.h>
 
-    if (!matrix_create(&layer->bias, 1, output_size)) {
-        matrix_destroy(&layer->weights);
-        return 0;
-    }
+/*==============================================================================
+ * Creation & Destruction
+ *============================================================================*/
+
+int dense_init(Dense *layer, usize input_size, usize output_size) {
+    assert(layer);
+    assert(input_size > 0);
+    assert(output_size > 0);
+
+    matrix_create(&layer->weights, input_size, output_size);
+    matrix_create(&layer->bias, 1, output_size);
 
     matrix_he_uniform(&layer->weights, input_size);
-
     matrix_fill(&layer->bias, 0.0f);
 
     return 1;
 }
 
 void dense_destroy(Dense *layer) {
-    matrix_destroy(&layer->weights); 
-    matrix_destroy(&layer->bias); 
+    assert(layer);
+
+    matrix_destroy(&layer->weights);
+    matrix_destroy(&layer->bias);
 }
 
-Matrix dense_forward(Dense *layer, const Matrix *input) {
-    Matrix output = matrix_multiply(input, &layer->weights);
+/*==============================================================================
+ * Forward Pass
+ *============================================================================*/
 
-    for (usize r = 0; r < output.rows; r++)
-        for (usize c = 0; c < output.cols; c++)
-            matrix_set(
-                &output,
-                r,
-                c,
-                matrix_get(&output, r, c) +
-                matrix_get(&layer->bias, 0, c)
-            );
+void dense_forward(Matrix *output, const Dense *layer, const Matrix *input) {
+    assert(output);
+    assert(layer);
+    assert(input);
+    assert(input->cols == layer->weights.rows);
+    assert(output->rows == input->rows);
+    assert(output->cols == layer->weights.cols);
 
-    return output;
+    matrix_multiply(output, input, &layer->weights);
+    matrix_add_row_inplace(output, &layer->bias);
 }

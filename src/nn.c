@@ -19,39 +19,92 @@
 
 #include "common.h"
 #include "nn.h" 
-#include "dense.h"
+#include "layer.h"
 
-int network_init(Network *network, const LayerConfig *config, usize layer_count) {
-    network->layer = malloc(layer_count * sizeof(Layer));
-    if (!network->layer) {
+#include <stdlib.h>
+#include <assert.h>
+
+/*==============================================================================
+ * Creation & Destruction
+ *============================================================================*/
+
+int network_init(Network *network, const LayerConfig *configs, usize layer_count) {
+    assert(network != NULL);
+    assert(configs != NULL);
+    assert(layer_count > 0);
+
+    network->layers = (Layer *)malloc(layer_count * sizeof(Layer));
+    if (!network->layers) {
         return 0;
     }
 
     network->layer_count = layer_count;
 
     for (usize i = 0; i < layer_count; i++) {
-        if (!dense_init(&network->layer[i].dense, config->input_size, config->output_size)) {
-            while (i--) {
-                dense_destroy(&network->layer[i].dense);
-
-                free(network->layer);
-                network->layer = NULL;
-                network->layer_count = 0; 
+        if (!layer_init(&network->layers[i], &configs[i])) {
+            while (i > 0) {
+                i--;
+                layer_destroy(&network->layers[i]);
             }
+            
+            free(network->layers);
+            network->layers = NULL;
+            network->layer_count = 0;
 
             return 0;
         }
-
-        network->layer[i].activation = config[i].activation;
     }
 
     return 1;
 }
 
 void network_destroy(Network *network) {
+    assert(network != NULL);
 
+    if (network->layers != NULL) {
+        for (usize i = 0; i < network->layer_count; i++) {
+            layer_destroy(&network->layers[i]);
+        }
+
+        free(network->layers);
+        network->layers = NULL;
+    }
+
+    network->layer_count = 0;
 }
 
-Matrix network_forward(Network *network) {
+/*==============================================================================
+ * Forward Pass
+ *============================================================================*/
 
+void network_forward(Matrix *output, const Network *network, const Matrix *input) {
+    assert(output != NULL);
+    assert(network != NULL);
+    assert(input != NULL);
+    assert(network->layer_count > 0);
+
+    /* Layer 1: Run input directly into a temp matrix */
+    Matrix current;
+    matrix_create(&current, input->rows, network->layers[0].dense.weights.cols);
+    layer_forward(&current, &network->layers[0], input);
+
+    /* Middle Layers: Run current -> next, swap */
+    for (usize i = 1; i < network->layer_count - 1; i++) {
+        Matrix next;
+        matrix_create(&next, input->rows, network->layers[i].dense.weights.cols);
+
+        layer_forward(&next, &network->layers[i], &current);
+
+        matrix_destroy(&current);
+        current = next;
+    }
+
+    /* Final Layer: Compute directly into output */
+    if (network->layer_count > 1) {
+        layer_forward(output, &network->layers[network->layer_count - 1], &current);
+        matrix_destroy(&current);
+    } else {
+        /* If 1 layer total, output gets current's data */
+        *output = current;
+    }
 }

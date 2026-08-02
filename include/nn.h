@@ -17,16 +17,61 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __NETWORK_H__
+#define __NETWORK_H__
+
 #include "common.h"
 #include "layer.h"
 #include "matrix.h"
 
-typedef struct Network {
-    Layer *layer;
-    usize  layer_count;
-} Network; 
+/*==============================================================================
+ * Network Structure Definition
+ *============================================================================*/
 
-int network_init(Network *network, const LayerConfig *config, usize layer_count);
+/**
+ * @brief Sequential neural network model composed of stacked layers.
+ */
+typedef struct Network {
+    Layer *layers;     /**< Dynamic array of sequential Layer structures */
+    usize  layer_count; /**< Total number of layers in the network */
+} Network;
+
+
+/*==============================================================================
+ * Creation & Destruction
+ *============================================================================*/
+
+/**
+ * @brief Allocates and initializes a sequential neural network from layer configurations.
+ *
+ * @param network     Pointer to the Network structure to initialize.
+ * @param configs     Array of LayerConfig structures defining each layer.
+ * @param layer_count Number of layers to create.
+ * @return            1 on success, 0 on failure.
+ */
+int network_init(Network *network, const LayerConfig *configs, usize layer_count);
+
+/**
+ * @brief Frees all dynamic memory owned by the network and its constituent layers.
+ *
+ * @param network Pointer to the Network to destroy.
+ */
 void network_destroy(Network *network);
 
-Matrix network_forward(Network *network);
+
+/*==============================================================================
+ * Forward Pass
+ *============================================================================*/
+
+/**
+ * @brief Performs a forward pass through all layers sequentially.
+ *
+ * Computes: output = Layer_N(... Layer_2(Layer_1(input)))
+ *
+ * @param output Destination matrix to store the final output (batch_size x final_output_size).
+ * @param network Pointer to the initialized Network.
+ * @param input   Input matrix (batch_size x initial_input_size).
+ */
+void network_forward(Matrix *output, const Network *network, const Matrix *input);
+
+#endif

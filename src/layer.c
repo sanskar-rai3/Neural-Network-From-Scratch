@@ -18,5 +18,53 @@
  */
 
 #include "common.h"
+#include "layer.h"
 #include "dense.h"
 #include "matrix.h"
+
+#include <assert.h>
+
+/*==============================================================================
+ * Creation & Destruction
+ *============================================================================*/
+
+int layer_init(Layer *layer, const LayerConfig *config) {
+    assert(layer);
+    assert(config);
+    assert(config->input_size > 0);
+    assert(config->output_size > 0);
+
+    if (!dense_init(&layer->dense, config->input_size, config->output_size)) {
+        return 0;
+    }
+
+    layer->activation = config->activation;
+
+    return 1;
+}
+
+void layer_destroy(Layer *layer) {
+    assert(layer);
+
+    dense_destroy(&layer->dense);
+    layer->activation = ACT_NONE;
+}
+
+/*==============================================================================
+ * Forward Pass
+ *============================================================================*/
+
+void layer_forward(Matrix *output, const Layer *layer, const Matrix *input) {
+    assert(output);
+    assert(layer);
+    assert(input);
+    assert(input->cols == layer->dense.weights.rows);
+    assert(output->rows == input->rows);
+    assert(output->cols == layer->dense.weights.cols);
+
+    /* Perform linear transformation: output = (input * weights) + bias */
+    dense_forward(output, &layer->dense, input);
+
+    /* Apply activation function in-place on output matrix */
+    activation_apply(output, layer->activation);
+}

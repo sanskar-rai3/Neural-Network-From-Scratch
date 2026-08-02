@@ -18,36 +18,52 @@
  */
 
 #include "common.h"
-#include "matrix.h"
 #include "loss.h"
+#include "matrix.h"
 
 #include <math.h>
 #include <assert.h>
 
-/* Loss Functions */
+/*==============================================================================
+ * Loss Functions
+ *============================================================================*/
+
 float loss_mse(const Matrix *prediction, const Matrix *target) {
-    assert(prediction != NULL && target != NULL);
-    assert(prediction->rows == target->rows && prediction->cols == target->cols);
+    assert(prediction);
+    assert(target);
+    assert(prediction->data);
+    assert(target->data);
+    assert(prediction->rows == target->rows);
+    assert(prediction->cols == target->cols);
+
+    usize n = matrix_size(prediction);
+    assert(n > 0);
 
     float sum = 0.0f;
-    for (usize i = 0; i < matrix_size(prediction); i++) {
+    for (usize i = 0; i < n; i++) {
         float diff = prediction->data[i] - target->data[i];
-        sum += diff * diff; 
+        sum += diff * diff;
     }
 
-    float average = sum / matrix_size(prediction);
-
-    return average;
+    return sum / (float)n;
 }
 
 float loss_cross_entropy(const Matrix *prediction, const Matrix *target) {
-    assert(prediction != NULL && target != NULL);
-    assert(prediction->rows == target->rows && prediction->cols == target->cols);
+    assert(prediction);
+    assert(target);
+    assert(prediction->data);
+    assert(target->data);
+    assert(prediction->rows == target->rows);
+    assert(prediction->cols == target->cols);
+
+    usize n = matrix_size(prediction);
+    assert(n > 0);
 
     float sum = 0.0f;
-    for (usize i = 0; i < matrix_size(prediction); i++) {
-        float p = fmaxf(prediction->data[i], 1e-7);
-        sum += target->data[i] * logf(p); 
+    for (usize i = 0; i < n; i++) {
+        /* Clamp prediction to avoid log(0) numerical instability */
+        float p = fmaxf(prediction->data[i], 1e-7f);
+        sum += target->data[i] * logf(p);
     }
 
     return -sum;

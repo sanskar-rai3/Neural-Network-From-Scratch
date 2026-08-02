@@ -24,15 +24,60 @@
 #include "dense.h"
 #include "activation.h"
 
+/*==============================================================================
+ * Types & Configuration
+ *============================================================================*/
+
+/**
+ * @brief High-level neural network layer combining a Dense layer with an activation function.
+ */
 typedef struct Layer {
-    Dense dense;
-    Activation activation;
+    Dense dense;               /**< Underlying fully connected dense layer (weights & biases) */
+    ActivationType activation; /**< Activation function applied post-linear transformation */
 } Layer;
 
+/**
+ * @brief Configuration parameters used to initialize a Layer.
+ */
 typedef struct LayerConfig {
-    usize input_size;
-    usize output_size;
-    Activation activation;
+    usize input_size;          /**< Number of input features */
+    usize output_size;         /**< Number of output neurons/features */
+    ActivationType activation; /**< Type of activation function to apply */
 } LayerConfig;
+
+
+/*==============================================================================
+ * Creation & Destruction
+ *============================================================================*/
+
+/**
+ * @brief Initializes a Layer according to the specified configuration.
+ *
+ * @param layer  Pointer to the Layer structure to initialize.
+ * @param config Pointer to the layer configuration parameters.
+ * @return       1 on success, 0 on failure.
+ */
+int layer_init(Layer *layer, const LayerConfig *config);
+
+/**
+ * @brief Frees all allocated memory owned by the layer.
+ *
+ * @param layer Pointer to the Layer to destroy.
+ */
+void layer_destroy(Layer *layer);
+
+
+/*==============================================================================
+ * Forward Pass
+ *============================================================================*/
+
+/**
+ * @brief Performs a complete forward pass through the layer: output = activation(input * W + b).
+ *
+ * @param output Destination matrix to store the results (batch_size x output_size).
+ * @param layer  Pointer to the initialized Layer.
+ * @param input  Input matrix (batch_size x input_size).
+ */
+void layer_forward(Matrix *output, const Layer *layer, const Matrix *input);
 
 #endif

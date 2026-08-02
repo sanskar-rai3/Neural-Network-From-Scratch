@@ -21,253 +21,339 @@
 #include "matrix.h"
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <time.h>
-#include <stdbool.h>
 #include <math.h>
+#include <assert.h>
 
-/* Helper Function */
-static inline Matrix matrix_empty(void) {
-    return (Matrix) {
-        .rows = 0,
-        .cols = 0,
-        .data = NULL
-    };
-}
+/*==============================================================================
+ * Creation & Destruction
+ *============================================================================*/
 
-static inline float random_float(float min, float max) {
-    return min + ((float)rand() / (float)RAND_MAX) * (max - min);
-}
-
-/* Creation & Destruction */
 int matrix_create(Matrix *mat, usize rows, usize cols) {
-    mat->data = malloc(rows * cols * sizeof(float));
-    if (!mat->data) {
+    assert(mat);
+    assert(rows > 0);
+    assert(cols > 0);
+
+    float *data = malloc(rows * cols * sizeof(float));
+    if (!data) {
         return 0;
     }
 
     mat->rows = rows;
     mat->cols = cols;
-
+    mat->data = data;
     return 1;
 }
 
-int matrix_copy_from_buffer(Matrix *mat, usize rows, usize cols, float *buffer) {
-    mat->data = malloc(rows * cols * sizeof(float));
-    if (!mat->data) {
+int matrix_copy_buffer(Matrix *mat, usize rows, usize cols, float *buffer) {
+    assert(mat);
+    assert(buffer);
+    assert(rows > 0);
+    assert(cols > 0);
+
+    if (!matrix_create(mat, rows, cols)) {
         return 0;
     }
 
     memcpy(mat->data, buffer, rows * cols * sizeof(float));
-
-    mat->rows = rows;
-    mat->cols = cols;
-
     return 1;
 }
 
 void matrix_destroy(Matrix *mat) {
-    free(mat->data);
+    assert(mat);
 
+    free(mat->data);
     mat->data = NULL;
     mat->rows = 0;
     mat->cols = 0;
 }
 
-/* Element Access */
-float matrix_get(const Matrix *mat, usize row, usize col) {
+/*==============================================================================
+ * Element Access
+ *============================================================================*/
+
+inline float matrix_get(const Matrix *mat, usize row, usize col) {
+    assert(mat);
+    assert(row < mat->rows);
+    assert(col < mat->cols);
+
     return mat->data[row * mat->cols + col];
 }
 
-void matrix_set(Matrix *mat, usize row, usize col, float value) {
+inline void matrix_set(Matrix *mat, usize row, usize col, float value) {
+    assert(mat);
+    assert(row < mat->rows);
+    assert(col < mat->cols);
+
     mat->data[row * mat->cols + col] = value;
 }
 
-/* Utility */
-usize matrix_size(const Matrix *mat) {
+/*==============================================================================
+ * Utility
+ *============================================================================*/
+
+inline usize matrix_size(const Matrix *mat) {
+    assert(mat);
     return mat->rows * mat->cols;
 }
 
-Matrix matrix_init(void) {
-    return (Matrix) {
-        .rows = 0,
-        .cols = 0,
-        .data = NULL
-    };
+inline Matrix matrix_empty(void) {
+    Matrix m;
+    m.rows = 0;
+    m.cols = 0;
+    m.data = NULL;
+    return m;
 }
 
 void matrix_fill(Matrix *mat, float value) {
-    for (usize i = 0; i < matrix_size(mat) ; i++) {
+    assert(mat);
+    assert(mat->data);
+
+    usize n = matrix_size(mat);
+    for (usize i = 0; i < n; i++) {
         mat->data[i] = value;
     }
 }
 
 void matrix_copy(Matrix *dest, const Matrix *src) {
-    if (dest->rows != src->rows || dest->cols != src->cols) {
-        return;
-    }
-     
-    memcpy(dest->data, src->data, matrix_size(dest) * sizeof(float));
+    assert(dest);
+    assert(src);
+    assert(src->data);
+    assert(dest->rows == src->rows);
+    assert(dest->cols == src->cols);
+    assert(dest->data);
+
+    memcpy(dest->data, src->data, matrix_size(src) * sizeof(float));
 }
 
-/* Random */
-void matrix_randomize(Matrix *mat, float min, float max) {
-    static bool seeded = false;
+/*==============================================================================
+ * Random Initialization
+ *============================================================================*/
 
+static inline float random_float(float min, float max) {
+    static bool seeded = false;
     if (!seeded) {
         srand(time(NULL));
         seeded = true;
     }
 
-    for (usize i = 0; i < matrix_size(mat); i++) {
+    float scale = (float)rand() / (float)RAND_MAX;
+    return min + scale * (max - min);
+}
+
+void matrix_randomize(Matrix *mat, float min, float max) {
+    assert(mat);
+    assert(mat->data);
+
+    usize n = matrix_size(mat);
+    for (usize i = 0; i < n; i++) {
         mat->data[i] = random_float(min, max);
     }
 }
 
 void matrix_he_uniform(Matrix *mat, usize fan_in) {
-    float limit = sqrtf(6.0f / fan_in);
+    assert(mat);
+    assert(mat->data);
+    assert(fan_in > 0);
+
+    float limit = sqrtf(6.0f / (float)fan_in);
     matrix_randomize(mat, -limit, limit);
 }
 
 void matrix_xavier_uniform(Matrix *mat, usize fan_in, usize fan_out) {
-    float limit = sqrtf(6.0f / (fan_in + fan_out));
+    assert(mat);
+    assert(mat->data);
+    assert(fan_in + fan_out > 0);
+
+    float limit = sqrtf(6.0f / (float)(fan_in + fan_out));
     matrix_randomize(mat, -limit, limit);
 }
 
-/* Arithmetic */
-Matrix matrix_add(const Matrix *a, const Matrix *b) {
-    if (a->rows != b->rows || a->cols != b->cols) {
-        return matrix_empty();
-    }
+/*==============================================================================
+ * Matrix Arithmetic
+ *============================================================================*/
 
-    Matrix result;
-    if (!matrix_create(&result, a->rows, a->cols)) {
-        return matrix_empty();
-    }
+void matrix_add(Matrix *result, const Matrix *a, const Matrix *b) {
+    assert(result);
+    assert(a);
+    assert(b);
+    assert(a->rows == b->rows);
+    assert(a->cols == b->cols);
+    assert(result->rows == a->rows);
+    assert(result->cols == a->cols);
 
-    for (usize i = 0; i < matrix_size(&result); i++) {
-        result.data[i] = a->data[i] + b->data[i];
+    usize n = matrix_size(a);
+    for (usize i = 0; i < n; i++) {
+        result->data[i] = a->data[i] + b->data[i];
     }
-
-    return result;
 }
 
-Matrix matrix_subtract(const Matrix *a, const Matrix *b) {
-    if (a->rows != b->rows || a->cols != b->cols) {
-        return matrix_empty();
-    }
+void matrix_subtract(Matrix *result, const Matrix *a, const Matrix *b) {
+    assert(result);
+    assert(a);
+    assert(b);
+    assert(a->rows == b->rows);
+    assert(a->cols == b->cols);
+    assert(result->rows == a->rows);
+    assert(result->cols == a->cols);
 
-    Matrix result;
-    if (!matrix_create(&result, a->rows, a->cols)) {
-        return matrix_empty();
+    usize n = matrix_size(a);
+    for (usize i = 0; i < n; i++) {
+        result->data[i] = a->data[i] - b->data[i];
     }
-
-    for (usize i = 0; i < matrix_size(&result); i++) {
-        result.data[i] = a->data[i] - b->data[i];
-    }
-
-    return result;
 }
 
-Matrix matrix_multiply(const Matrix *a, const Matrix *b) {
-    if (a->cols != b->rows) {
-        return matrix_empty();
-    }
+void matrix_multiply(Matrix *result, const Matrix *a, const Matrix *b) {
+    assert(result);
+    assert(a);
+    assert(b);
+    assert(a->cols == b->rows);
+    assert(result->rows == a->rows);
+    assert(result->cols == b->cols);
+    assert(result->data != a->data);
+    assert(result->data != b->data);
 
-    Matrix result;
-    if (!matrix_create(&result, a->rows, b->cols)) {
-        return matrix_empty();
-    }
+    memset(result->data, 0, matrix_size(result) * sizeof(float));
 
-    for (usize i = 0; i < result.rows; i++) {
-        for (usize j = 0; j < result.cols; j++) {
-            float sum = 0.0f;
-
-            for (usize k = 0; k < a->cols; k++) {
-                sum += matrix_get(a, i, k) * matrix_get(b, k, j);
+    for (usize i = 0; i < a->rows; i++) {
+        for (usize k = 0; k < a->cols; k++) {
+            float a_val = matrix_get(a, i, k);
+            for (usize j = 0; j < b->cols; j++) {
+                result->data[i * result->cols + j] += a_val * matrix_get(b, k, j);
             }
-
-            matrix_set(&result, i, j, sum);
         }
     }
-
-    return result;
 }
 
-Matrix matrix_hadamard(const Matrix *a, const Matrix *b) {
-    if (a->rows != b->rows || a->cols != b->cols) {
-        return matrix_empty();
-    }
+void matrix_hadamard(Matrix *result, const Matrix *a, const Matrix *b) {
+    assert(result);
+    assert(a);
+    assert(b);
+    assert(a->rows == b->rows);
+    assert(a->cols == b->cols);
+    assert(result->rows == a->rows);
+    assert(result->cols == a->cols);
 
-    Matrix result;
-    if (!matrix_create(&result, a->rows, a->cols)) {
-        return matrix_empty();
+    usize n = matrix_size(a);
+    for (usize i = 0; i < n; i++) {
+        result->data[i] = a->data[i] * b->data[i];
     }
-
-    for (usize i = 0; i < matrix_size(&result); i++) {
-        result.data[i] = a->data[i] * b->data[i];
-    }
-
-    return result;   
 }
 
-Matrix matrix_scalar_multiply(const Matrix *mat, float scalar) {
-    Matrix result;
-    if (!matrix_create(&result, mat->rows, mat->cols)) {
-        return matrix_empty();
-    }
+void matrix_scalar_multiply(Matrix *result, const Matrix *mat, float scalar) {
+    assert(result);
+    assert(mat);
+    assert(mat->data);
+    assert(result->rows == mat->rows);
+    assert(result->cols == mat->cols);
 
-    for (usize i = 0; i < matrix_size(mat); i++) {
-        result.data[i] = mat->data[i] * scalar;
+    usize n = matrix_size(mat);
+    for (usize i = 0; i < n; i++) {
+        result->data[i] = mat->data[i] * scalar;
     }
-
-    return result;
 }
 
-Matrix matrix_transpose(const Matrix *mat) {
-    Matrix result;
-    if (!matrix_create(&result, mat->cols, mat->rows)) {
-        return matrix_empty();
+void matrix_transpose(Matrix *result, const Matrix *mat) {
+    assert(result);
+    assert(mat);
+    assert(mat->data);
+    assert(result->rows == mat->cols);
+    assert(result->cols == mat->rows);
+    assert(result->data != mat->data);
+
+    for (usize i = 0; i < mat->rows; i++) {
+        for (usize j = 0; j < mat->cols; j++) {
+            matrix_set(result, j, i, matrix_get(mat, i, j));
+        }
     }
+}
+
+void matrix_add_row(Matrix *result, const Matrix *mat, const Matrix *row) {
+    assert(result);
+    assert(mat);
+    assert(row);
+    assert(mat->data);
+    assert(row->data);
+    assert(row->rows == 1);
+    assert(mat->cols == row->cols);
+    assert(result->rows == mat->rows);
+    assert(result->cols == mat->cols);
 
     for (usize r = 0; r < mat->rows; r++) {
+        usize offset = r * mat->cols;
         for (usize c = 0; c < mat->cols; c++) {
-            matrix_set(&result, c, r, matrix_get(mat, r, c));
+            result->data[offset + c] = mat->data[offset + c] + row->data[c];
         }
     }
-
-    return result;
 }
 
-/* In-place Arithmetic */
-void matrix_add_inplace(Matrix *a, const Matrix *b) {
-    if (a->rows != b->rows || a->cols != b->cols) {
-        return;
-    }
+/*==============================================================================
+ * In-place Arithmetic
+ *============================================================================*/
 
-    for (usize i = 0; i < a->rows * b->cols; i++) {
+void matrix_add_inplace(Matrix *a, const Matrix *b) {
+    assert(a);
+    assert(b);
+    assert(a->rows == b->rows);
+    assert(a->cols == b->cols);
+
+    usize n = matrix_size(a);
+    for (usize i = 0; i < n; i++) {
         a->data[i] += b->data[i];
     }
 }
-void matrix_subtract_inplace(Matrix *a, const Matrix *b) {
-    if (a->rows != b->rows || a->cols != b->cols) {
-        return;
-    }
 
-    for (usize i = 0; i < a->rows * b->cols; i++) {
+void matrix_subtract_inplace(Matrix *a, const Matrix *b) {
+    assert(a);
+    assert(b);
+    assert(a->rows == b->rows);
+    assert(a->cols == b->cols);
+
+    usize n = matrix_size(a);
+    for (usize i = 0; i < n; i++) {
         a->data[i] -= b->data[i];
     }
 }
 
 void matrix_scalar_multiply_inplace(Matrix *mat, float scalar) {
-    for (usize i = 0; i < matrix_size(mat); i++) {
+    assert(mat);
+    assert(mat->data);
+
+    usize n = matrix_size(mat);
+    for (usize i = 0; i < n; i++) {
         mat->data[i] *= scalar;
     }
 }
 
-/* Element-wise Operations */
+void matrix_add_row_inplace(Matrix *mat, const Matrix *row) {
+    assert(mat);
+    assert(row);
+    assert(mat->data);
+    assert(row->data);
+    assert(row->rows == 1);
+    assert(mat->cols == row->cols);
+
+    for (usize r = 0; r < mat->rows; r++) {
+        usize offset = r * mat->cols;
+        for (usize c = 0; c < mat->cols; c++) {
+            mat->data[offset + c] += row->data[c];
+        }
+    }
+}
+
+/*==============================================================================
+ * Element-wise Operations
+ *============================================================================*/
+
 void matrix_apply(Matrix *mat, float (*func)(float)) {
-    for (usize i = 0; i < matrix_size(mat); i++) {
+    assert(mat);
+    assert(mat->data);
+    assert(func);
+
+    usize n = matrix_size(mat);
+    for (usize i = 0; i < n; i++) {
         mat->data[i] = func(mat->data[i]);
     }
 }
