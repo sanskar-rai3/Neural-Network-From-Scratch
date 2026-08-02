@@ -29,19 +29,19 @@ typedef struct Matrix {
 } Matrix;
 
 /* Creation & Destruction */
-int matrix_create(Matrix *mat, usize rows, usize cols);
-int matrix_create_buf(Matrix *mat, usize rows, usize cols, float *buffer);
+int  matrix_create(Matrix *mat, usize rows, usize cols);
+int  matrix_copy_from_buffer(Matrix *mat, usize rows, usize cols, float *buffer);
 void matrix_destroy(Matrix *mat);
 
 /* Element Access */
 float matrix_get(const Matrix *mat, usize row, usize col);
-void matrix_set(Matrix *mat, usize row, usize col, float value);
+void  matrix_set(Matrix *mat, usize row, usize col, float value);
 
 /* Utility */
-usize matrix_size(const Matrix *mat);
+usize  matrix_size(const Matrix *mat);
 Matrix matrix_init(void);
-void matrix_fill(Matrix *mat, float value);
-void matrix_copy(Matrix *dest, const Matrix *src);
+void   matrix_fill(Matrix *mat, float value);
+void   matrix_copy(Matrix *dest, const Matrix *src);
 
 /* Random */
 void matrix_randomize(Matrix *mat, float min, float max);

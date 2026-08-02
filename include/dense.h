@@ -30,6 +30,7 @@ typedef struct Dense {
 
 int dense_init(Dense *layer, usize input_size, usize output_size);
 void dense_destroy(Dense *layer);
+
 Matrix dense_forward(Dense *layer, const Matrix *input);
 
 #endif

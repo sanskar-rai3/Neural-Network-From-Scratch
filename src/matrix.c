@@ -52,7 +52,7 @@ int matrix_create(Matrix *mat, usize rows, usize cols) {
     return 1;
 }
 
-int matrix_create_buf(Matrix *mat, usize rows, usize cols, float *buffer) {
+int matrix_copy_from_buffer(Matrix *mat, usize rows, usize cols, float *buffer) {
     mat->data = malloc(rows * cols * sizeof(float));
     if (!mat->data) {
         return 0;

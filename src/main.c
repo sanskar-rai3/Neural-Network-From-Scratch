@@ -20,7 +20,7 @@
 #include "common.h"
 #include "mnist.h"
 #include "activation.h"
-#include "dense.h"
+#include "layer.h"
 #include "matrix.h"
 
 #include <stdio.h>
@@ -50,17 +50,17 @@ int main() {
     mnist_read_image_data_normalized(images, images_data, images_header.count);
 
     Matrix sample;
-    matrix_create_buf(&sample, 1, 784, images_data);
+    matrix_copy_from_buffer(&sample, 1, 784, images_data);
     
     Dense layer;
     dense_init(&layer, 784, 128);
     Matrix layer_mat = dense_forward(&layer, &sample);
-    matrix_apply(&layer_mat, ReLU);
+    activation_apply(&layer_mat, RELU);
 
     Dense output;
     dense_init(&output, 128, 10);
     Matrix output_mat = dense_forward(&output, &layer_mat);
-    activation_Softmax(&output_mat);
+    activation_apply(&output_mat, SOFTMAX);
 
     for (usize i = 0; i < 10; i++) {
         printf("%ld    ", i);
@@ -71,7 +71,13 @@ int main() {
         printf("%.2f ", output_mat.data[i]);
     }
     putchar('\n');
-    
+
+    float sum = 0.0f;
+    for (usize i = 0; i < 10; i++) {
+        sum += output_mat.data[i];
+    }
+    printf("%.2f\n", sum);
+
     matrix_destroy(&sample);
     matrix_destroy(&layer_mat);
     matrix_destroy(&output_mat);

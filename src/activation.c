@@ -22,24 +22,39 @@
 #include "matrix.h"
 
 #include <math.h>
+#include <assert.h>
 
-float ReLU(float val) {
-    return val < 0 ? 0 : val;
+/* Helper Function */
+static void ReLU(Matrix *mat) {
+    assert(mat != NULL);
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] = mat->data[i] < 0 ? 0 : mat->data[i];
+    }
 }
 
-float Leaky_ReLU(float val) {
-    return val < 0 ? 0.01f * val : val;
+static void Leaky_ReLU(Matrix *mat) {
+    assert(mat != NULL);
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] = mat->data[i] < 0 ? 0.01 * mat->data[i] : mat->data[i];
+    }
 }
 
-float Tanh(float val) {
-    return tanh(val);
+static void Tanh(Matrix *mat) {
+    assert(mat != NULL);
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] = tanhf(mat->data[i]);
+    }
 }
 
-float Sigmoid(float val) {
-    return 1.0f / (1.0f + expf(-val));
+static void Sigmoid(Matrix *mat) {
+    assert(mat != NULL);
+    for (usize i = 0; i < matrix_size(mat); i++) {
+        mat->data[i] = 1.0f / (1.0f + expf(-mat->data[i]));
+    }
 }
 
-void activation_Softmax(Matrix *mat) {
+static void Softmax(Matrix *mat) {
+    assert(mat != NULL);
     usize size = matrix_size(mat);
 
     float max = mat->data[0];
@@ -57,5 +72,17 @@ void activation_Softmax(Matrix *mat) {
 
     for (usize i = 0; i < size; i++) {
         mat->data[i] /= sum;
+    }
+}
+
+/* Apply Function */
+void activation_apply(Matrix *mat, Activation activation) {
+    switch (activation) {
+        case RELU:         ReLU(mat); break;
+        case LEAKY_RELU:   Leaky_ReLU(mat); break;
+        case TANH:         Tanh(mat); break;
+        case SIGMOID:      Sigmoid(mat); break;
+        case SOFTMAX:      Softmax(mat); break;
+        default:           assert(!"Invalid activation function"); break;
     }
 }

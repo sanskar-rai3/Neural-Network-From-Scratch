@@ -1,7 +1,7 @@
 /*
  * Neural Network From Scratch in C
  *
- * Copyright (C) 2026 Sanskar Rai 
+* Copyright (C) 2026 Sanskar Rai 
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACTIVATION_H__
-#define __ACTIVATION_H__
+#ifndef __LAYER_H__
+#define __LAYER_H__
 
 #include "common.h"
-#include "matrix.h"
+#include "dense.h"
+#include "activation.h"
 
-/* Activation function type */
-typedef enum Activation {
-    RELU = 0,
-    LEAKY_RELU,
-    TANH,
-    SIGMOID,
-    SOFTMAX
-} Activation;
+typedef struct Layer {
+    Dense dense;
+    Activation activation;
+} Layer;
 
-/* Apply Function */
-void activation_apply(Matrix *mat, Activation activation);
+typedef struct LayerConfig {
+    usize input_size;
+    usize output_size;
+    Activation activation;
+} LayerConfig;
 
 #endif

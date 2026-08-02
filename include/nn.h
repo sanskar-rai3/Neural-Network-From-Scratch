@@ -17,22 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACTIVATION_H__
-#define __ACTIVATION_H__
-
 #include "common.h"
+#include "layer.h"
 #include "matrix.h"
 
-/* Activation function type */
-typedef enum Activation {
-    RELU = 0,
-    LEAKY_RELU,
-    TANH,
-    SIGMOID,
-    SOFTMAX
-} Activation;
+typedef struct Network {
+    Layer *layer;
+    usize  layer_count;
+} Network; 
 
-/* Apply Function */
-void activation_apply(Matrix *mat, Activation activation);
+int network_init(Network *network, const LayerConfig *config, usize layer_count);
+void network_destroy(Network *network);
 
-#endif
+Matrix network_forward(Network *network);

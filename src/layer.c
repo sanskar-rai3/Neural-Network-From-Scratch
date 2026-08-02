@@ -17,22 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACTIVATION_H__
-#define __ACTIVATION_H__
-
 #include "common.h"
+#include "dense.h"
 #include "matrix.h"
-
-/* Activation function type */
-typedef enum Activation {
-    RELU = 0,
-    LEAKY_RELU,
-    TANH,
-    SIGMOID,
-    SOFTMAX
-} Activation;
-
-/* Apply Function */
-void activation_apply(Matrix *mat, Activation activation);
-
-#endif

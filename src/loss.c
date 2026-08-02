@@ -22,9 +22,13 @@
 #include "loss.h"
 
 #include <math.h>
+#include <assert.h>
 
 /* Loss Functions */
 float loss_mse(const Matrix *prediction, const Matrix *target) {
+    assert(prediction != NULL && target != NULL);
+    assert(prediction->rows == target->rows && prediction->cols == target->cols);
+
     float sum = 0.0f;
     for (usize i = 0; i < matrix_size(prediction); i++) {
         float diff = prediction->data[i] - target->data[i];
@@ -37,6 +41,9 @@ float loss_mse(const Matrix *prediction, const Matrix *target) {
 }
 
 float loss_cross_entropy(const Matrix *prediction, const Matrix *target) {
+    assert(prediction != NULL && target != NULL);
+    assert(prediction->rows == target->rows && prediction->cols == target->cols);
+
     float sum = 0.0f;
     for (usize i = 0; i < matrix_size(prediction); i++) {
         float p = fmaxf(prediction->data[i], 1e-7);
