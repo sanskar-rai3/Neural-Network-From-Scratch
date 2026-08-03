@@ -74,6 +74,12 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
         IMAGE_SIZE,
         IMAGE_SIZE
     );
+    if (!texture) {
+        fprintf(stderr, "SDL_CreateTexture error: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+    }
 
     /* -------------------------------------------------------------------------
      * Convert Normalized Floats (0.0 - 1.0) to RGBA8888 Pixel Buffer
