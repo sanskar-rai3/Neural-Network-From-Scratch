@@ -23,6 +23,7 @@
 #include "layer.h"
 #include "matrix.h"
 #include "nn.h"
+#include "render.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,6 +103,8 @@ int main(void) {
         sum += output.data[i];
     }
     printf("\nTotal Probability Sum: %.2f\n", sum);
+
+    render_mnist_sample(&sample, "Sample"); 
 
     /* 8. Cleanup Allocations */
     matrix_destroy(&sample);
