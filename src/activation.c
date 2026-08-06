@@ -25,32 +25,20 @@
 #include <assert.h>
 
 /*==============================================================================
- * Scalar Activation Callbacks (for matrix_apply)
+ * static constant
  *============================================================================*/
 
-static float relu_scalar(float x) {
-    return x < 0.0f ? 0.0f : x;
-}
-
-static float leaky_relu_scalar(float x) {
-    return x < 0.0f ? 0.01f * x : x;
-}
-
-static float sigmoid_scalar(float x) {
-    return 1.0f / (1.0f + expf(-x));
-}
+static const float LEAKY_RELU_ALPHA = 0.01f;
 
 /*==============================================================================
  * Matrix Activation Functions
  *============================================================================*/
 
 static void softmax(Matrix *mat) {
-    assert(mat);
-    assert(mat->data);
-    assert(mat->rows > 0);
-    assert(mat->cols > 0);
+    assert(mat && mat->data);
+    assert(mat->rows > 0 && mat->cols > 0);
 
-    /* Process softmax row by row to support multi-sample batch processing */
+    /* Process softmax row-by-row for batch support */
     for (usize r = 0; r < mat->rows; r++) {
         usize offset = r * mat->cols;
 
@@ -70,40 +58,125 @@ static void softmax(Matrix *mat) {
         }
 
         /* Normalize */
+        float inv_sum = 1.0f / (sum + 1e-7f); /* Avoid div by zero */
         for (usize c = 0; c < mat->cols; c++) {
-            mat->data[offset + c] /= sum;
+            mat->data[offset + c] *= inv_sum;
         }
     }
 }
 
 /*==============================================================================
- * Activation Application
+ * Forward Pass 
  *============================================================================*/
 
-void activation_apply(Matrix *mat, ActivationType activation) {
-    assert(mat);
-    assert(mat->data);
+void activation_apply(Matrix *mat, ActivationType type) {
+    assert(mat != NULL && mat->data != NULL);
 
-    switch (activation) {
-        case ACT_RELU:
-            matrix_apply(mat, relu_scalar);
+    usize total = mat->rows * mat->cols;
+
+    switch (type) {
+        case ACT_RELU: {
+            for (usize i = 0; i < total; i++) {
+                if (mat->data[i] < 0.0f) mat->data[i] = 0.0f;
+            }
             break;
-        case ACT_LEAKY_RELU:
-            matrix_apply(mat, leaky_relu_scalar);
+        }
+
+        case ACT_LEAKY_RELU: {
+            for (usize i = 0; i < total; i++) {
+                if (mat->data[i] < 0.0f) mat->data[i] *= LEAKY_RELU_ALPHA;
+            }
             break;
-        case ACT_TANH:
-            matrix_apply(mat, tanhf);
+        }
+
+        case ACT_TANH: {
+            for (usize i = 0; i < total; i++) {
+                mat->data[i] = tanhf(mat->data[i]);
+            }
             break;
-        case ACT_SIGMOID:
-            matrix_apply(mat, sigmoid_scalar);
+        }
+
+        case ACT_SIGMOID: {
+            for (usize i = 0; i < total; i++) {
+                mat->data[i] = 1.0f / (1.0f + expf(-mat->data[i]));
+            }
             break;
+        }
+
         case ACT_SOFTMAX:
             softmax(mat);
             break;
+
         case ACT_NONE:
-            break;
         default:
-            assert(!"Invalid activation function");
             break;
+    }
+}
+
+void activation_backward(Matrix *dZ, const Matrix *dA, const Matrix *Z, ActivationType type) {
+    assert(dZ != NULL);
+    assert(dA != NULL);
+    assert(Z != NULL);
+    assert(dA->rows == Z->rows && dA->cols == Z->cols);
+    assert(dZ->rows == Z->rows && dZ->cols == Z->cols);
+
+    usize total = Z->rows * Z->cols;
+
+    switch (type) {
+        case ACT_RELU: {
+            /* ReLU derivative: 1 if Z > 0, else 0 */
+            for (usize i = 0; i < total; i++) {
+                dZ->data[i] = (Z->data[i] > 0.0f) ? dA->data[i] : 0.0f;
+            }
+            break;
+        }
+
+        case ACT_LEAKY_RELU: {
+            usize total = Z->rows * Z->cols;
+            for (usize i = 0; i < total; i++) {
+                float slope = (Z->data[i] > 0.0f) ? 1.0f : LEAKY_RELU_ALPHA;
+                dZ->data[i] = dA->data[i] * slope;
+            }
+            break;
+        }
+
+        case ACT_TANH: {
+            /* Tanh derivative: 1 - tanh^2(Z) */
+            for (usize i = 0; i < total; i++) {
+                float t = tanhf(Z->data[i]);
+                dZ->data[i] = dA->data[i] * (1.0f - t * t);
+            }
+            break;
+        }
+
+        case ACT_SIGMOID: {
+            /* Sigmoid derivative: s(Z) * (1 - s(Z)) */
+            for (usize i = 0; i < total; i++) {
+                float s = 1.0f / (1.0f + expf(-Z->data[i]));
+                dZ->data[i] = dA->data[i] * (s * (1.0f - s));
+            }
+            break;
+        }
+
+        case ACT_SOFTMAX: {
+            /* 
+             * Softmax + Cross-Entropy shortcut:
+             * When paired with Cross-Entropy loss, dZ = A - Y (handled at loss layer).
+             * For general output gradients dA, pass gradient through directly.
+             */
+            for (usize i = 0; i < total; i++) {
+                dZ->data[i] = dA->data[i];
+            }
+            break;
+        }
+
+        case ACT_NONE:
+        default: {
+            /* Linear activation pass-through */
+            for (usize i = 0; i < total; i++) {
+                dZ->data[i] = dA->data[i];
+            }
+            break;
+        }
     }
 }

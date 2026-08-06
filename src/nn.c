@@ -108,3 +108,4 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
         *output = current;
     }
 }
+

@@ -31,12 +31,12 @@
  * @brief Supported neural network activation function types.
  */
 typedef enum ActivationType {
-    ACT_RELU = 0,   /**< Rectified Linear Unit: f(x) = max(0, x) */
-    ACT_LEAKY_RELU, /**< Leaky ReLU: f(x) = x if x > 0 else 0.01 * x */
-    ACT_TANH,       /**< Hyperbolic Tangent: f(x) = tanh(x) */
-    ACT_SIGMOID,    /**< Sigmoid / Logistic: f(x) = 1 / (1 + exp(-x)) */
-    ACT_SOFTMAX,    /**< Softmax (row-wise / batch probability distribution) */
-    ACT_NONE        /**< Identity function / Linear pass-through: f(x) = x */
+    ACT_NONE = 0,       /**< Identity function / Linear pass-through: f(x) = x */
+    ACT_RELU,           /**< Rectified Linear Unit: f(x) = max(0, x) */
+    ACT_LEAKY_RELU,     /**< Leaky ReLU: f(x) = x if x > 0 else 0.01 * x */
+    ACT_TANH,           /**< Hyperbolic Tangent: f(x) = tanh(x) */
+    ACT_SIGMOID,        /**< Sigmoid / Logistic: f(x) = 1 / (1 + exp(-x)) */
+    ACT_SOFTMAX         /**< Softmax (row-wise / batch probability distribution) */
 } ActivationType;
 
 
@@ -54,5 +54,15 @@ typedef enum ActivationType {
  * @param activation The activation function type to apply.
  */
 void activation_apply(Matrix *mat, ActivationType activation);
+
+/**
+ * @brief Computes pre-activation gradient: dZ = dA * derivative(Z).
+ *
+ * @param dZ   Output matrix to store pre-activation gradient (same shape as Z).
+ * @param dA   Incoming output gradient from next layer (same shape as Z).
+ * @param Z    Stored pre-activation cache from forward pass (batch_size x cols).
+ * @param type Activation function type.
+ */
+void activation_backward(Matrix *dZ, const Matrix *dA, const Matrix *Z, ActivationType type);
 
 #endif

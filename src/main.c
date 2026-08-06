@@ -52,7 +52,7 @@ int main(void) {
     mnist_read_label_header(labels, &labels_header);
 
     /* 3. Load & Normalize Pixel Data (784 floats per image) */
-    usize total_pixels = images_header.count * 784;
+    usize total_pixels = images_header.count * images_header.rows * images_header.cols;
     float *images_data = (float *)malloc(total_pixels * sizeof(float));
     if (!images_data) {
         fprintf(stderr, "Failed to allocate memory for images data\n");
@@ -104,9 +104,10 @@ int main(void) {
     }
     printf("\nTotal Probability Sum: %.2f\n", sum);
 
+    /* 8. Render the Sample */
     render_mnist_sample(&sample, "Sample"); 
 
-    /* 8. Cleanup Allocations */
+    /* 9. Cleanup Allocations */
     matrix_destroy(&sample);
     matrix_destroy(&output);
     network_destroy(&nn);
