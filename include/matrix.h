@@ -82,7 +82,7 @@ void matrix_destroy(Matrix *mat);
  * @param col Zero-based column index.
  * @return    The float value stored at (row, col).
  */
-inline float matrix_get(const Matrix *mat, usize row, usize col);
+float matrix_get(const Matrix *mat, usize row, usize col);
 
 /**
  * @brief Sets the value at the specified row and column.
@@ -92,7 +92,7 @@ inline float matrix_get(const Matrix *mat, usize row, usize col);
  * @param col   Zero-based column index.
  * @param value The float value to set.
  */
-inline void matrix_set(Matrix *mat, usize row, usize col, float value);
+void matrix_set(Matrix *mat, usize row, usize col, float value);
 
 
 /*==============================================================================
@@ -105,14 +105,14 @@ inline void matrix_set(Matrix *mat, usize row, usize col, float value);
  * @param mat Pointer to the matrix.
  * @return    Total element count.
  */
-inline usize matrix_size(const Matrix *mat);
+usize matrix_size(const Matrix *mat);
 
 /**
  * @brief Returns an unallocated matrix structure with zero dimensions.
  *
  * @return Empty Matrix structure.
  */
-inline Matrix matrix_empty(void);
+Matrix matrix_empty(void);
 
 /**
  * @brief Fills every element of a matrix with a scalar value.

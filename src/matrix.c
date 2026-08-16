@@ -74,7 +74,7 @@ void matrix_destroy(Matrix *mat) {
  * Element Access
  *============================================================================*/
 
-inline float matrix_get(const Matrix *mat, usize row, usize col) {
+float matrix_get(const Matrix *mat, usize row, usize col) {
     assert(mat);
     assert(row < mat->rows);
     assert(col < mat->cols);
@@ -82,7 +82,7 @@ inline float matrix_get(const Matrix *mat, usize row, usize col) {
     return mat->data[row * mat->cols + col];
 }
 
-inline void matrix_set(Matrix *mat, usize row, usize col, float value) {
+void matrix_set(Matrix *mat, usize row, usize col, float value) {
     assert(mat);
     assert(row < mat->rows);
     assert(col < mat->cols);
@@ -94,12 +94,12 @@ inline void matrix_set(Matrix *mat, usize row, usize col, float value) {
  * Utility
  *============================================================================*/
 
-inline usize matrix_size(const Matrix *mat) {
+usize matrix_size(const Matrix *mat) {
     assert(mat);
     return mat->rows * mat->cols;
 }
 
-inline Matrix matrix_empty(void) {
+Matrix matrix_empty(void) {
     Matrix m;
     m.rows = 0;
     m.cols = 0;
