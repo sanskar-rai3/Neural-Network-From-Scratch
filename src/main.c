@@ -70,7 +70,7 @@ int main(void) {
     /* 5. Configure & Initialize Neural Network */
     LayerConfig lconfig[] = {
         { .input_size = 784, .output_size = 128, .activation = ACT_RELU },
-        { .input_size = 128, .output_size = 10,  .activation = ACT_SOFTMAX }
+        { .input_size = 128, .output_size = 10,  .activation = ACT_SOFTMAX_CEL }
     };
     usize layer_count = sizeof(lconfig) / sizeof(lconfig[0]);
 

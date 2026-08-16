@@ -72,7 +72,7 @@ static void softmax(Matrix *mat) {
 void activation_apply(Matrix *mat, ActivationType type) {
     assert(mat != NULL && mat->data != NULL);
 
-    usize total = mat->rows * mat->cols;
+    usize total = matrix_size(mat);
 
     switch (type) {
         case ACT_RELU: {
@@ -103,7 +103,7 @@ void activation_apply(Matrix *mat, ActivationType type) {
             break;
         }
 
-        case ACT_SOFTMAX:
+        case ACT_SOFTMAX_CEL:
             softmax(mat);
             break;
 
@@ -158,7 +158,7 @@ void activation_backward(Matrix *dZ, const Matrix *dA, const Matrix *Z, Activati
             break;
         }
 
-        case ACT_SOFTMAX: {
+        case ACT_SOFTMAX_CEL: {
             /* 
              * Softmax + Cross-Entropy shortcut:
              * When paired with Cross-Entropy loss, dZ = A - Y (handled at loss layer).
