@@ -41,7 +41,7 @@ typedef enum ActivationType {
 
 
 /*==============================================================================
- * Activation Application
+ * Forward pass 
  *============================================================================*/
 
 /**
@@ -53,7 +53,11 @@ typedef enum ActivationType {
  * @param mat        Pointer to the matrix to modify in-place.
  * @param activation The activation function type to apply.
  */
-void activation_apply(Matrix *mat, ActivationType activation);
+void activation_forward(Matrix *mat, ActivationType activation);
+
+/*==============================================================================
+ * Backward pass 
+ *============================================================================*/
 
 /**
  * @brief Computes pre-activation gradient: dZ = dA * derivative(Z).

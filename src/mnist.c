@@ -44,6 +44,8 @@ static u32 read_be(FILE *file) {
 
     u32 val = 0;
     size_t bytes_read = fread(&val, sizeof(val), 1, file);
+    if (bytes_read){} /* To remove compiler warning */
+
     assert(bytes_read == 1);
 
 #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__

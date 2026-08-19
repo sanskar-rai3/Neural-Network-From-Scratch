@@ -34,6 +34,8 @@
 typedef struct Layer {
     Dense dense;               /**< Underlying fully connected dense layer (weights & biases) */
     ActivationType activation; /**< Activation function applied post-linear transformation */
+
+    Matrix z_cache;
 } Layer;
 
 /**
@@ -78,6 +80,36 @@ void layer_destroy(Layer *layer);
  * @param layer  Pointer to the initialized Layer.
  * @param input  Input matrix (batch_size x input_size).
  */
-void layer_forward(Matrix *output, const Layer *layer, const Matrix *input);
+void layer_forward(Matrix *output, Layer *layer, const Matrix *input);
+
+/*==============================================================================
+ *  Backward Pass
+ *============================================================================*/
+
+/**
+ * @brief Performs a backward pass through the layer, propagating the gradient
+ *        through the activation function and underlying dense layer.
+ *
+ * @param d_input   Destination matrix for the gradient with respect to the
+ *                  layer input (dL/dInput). Must be pre-allocated with shape
+ *                  (batch_size x input_size).
+ * @param d_weights Destination matrix for the gradient with respect to the
+ *                  layer weights (dL/dW). Must be pre-allocated with the same
+ *                  shape as the layer's weights.
+ * @param d_bias    Destination matrix for the gradient with respect to the
+ *                  layer bias (dL/db). Must be pre-allocated with the same
+ *                  shape as the layer's bias.
+ * @param layer     Pointer to the initialized Layer.
+ * @param d_output  Gradient with respect to the layer output (dL/dA).
+ *                  Must have the same shape as the layer's cached Z.
+ */
+void layer_backward(
+    Matrix *d_input,
+    Matrix *d_weights,
+    Matrix *d_bias,
+
+    Layer *layer,
+    const Matrix *d_output
+);
 
 #endif

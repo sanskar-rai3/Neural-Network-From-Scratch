@@ -54,7 +54,7 @@ void layer_destroy(Layer *layer) {
  * Forward Pass
  *============================================================================*/
 
-void layer_forward(Matrix *output, const Layer *layer, const Matrix *input) {
+void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
     assert(output);
     assert(layer);
     assert(input);
@@ -66,5 +66,65 @@ void layer_forward(Matrix *output, const Layer *layer, const Matrix *input) {
     dense_forward(output, &layer->dense, input);
 
     /* Apply activation function in-place on output matrix */
-    activation_apply(output, layer->activation);
+    activation_forward(output, layer->activation);
+}
+
+/*==============================================================================
+ *  Backward Pass
+ *============================================================================*/
+
+void layer_backward(
+    Matrix *d_input,
+    Matrix *d_weights,
+    Matrix *d_bias,
+    Layer *layer,
+    const Matrix *d_output
+) {
+    assert(d_input);
+    assert(d_weights);
+    assert(d_bias);
+    assert(layer);
+    assert(d_output);
+
+    assert(d_output->rows == layer->z_cache.rows);
+    assert(d_output->cols == layer->z_cache.cols);
+
+    Matrix dZ;
+
+    assert(matrix_create(
+        &dZ,
+        layer->z_cache.rows,
+        layer->z_cache.cols
+    ));
+
+    /*
+     * Activation backward:
+     *
+     * dZ = dA ⊙ f'(Z)
+     *
+     * d_output = dA
+     */
+    activation_backward(
+        &dZ,
+        d_output,
+        &layer->z_cache,
+        layer->activation
+    );
+
+    /*
+     * Dense backward:
+     *
+     * dX = dZ * W^T
+     * dW = X^T * dZ
+     * db = sum(dZ)
+     */
+    dense_backward(
+        d_input,
+        d_weights,
+        d_bias,
+        &layer->dense,
+        &dZ
+    );
+
+    matrix_destroy(&dZ);
 }

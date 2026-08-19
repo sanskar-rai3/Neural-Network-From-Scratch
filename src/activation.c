@@ -69,7 +69,7 @@ static void softmax(Matrix *mat) {
  * Forward Pass 
  *============================================================================*/
 
-void activation_apply(Matrix *mat, ActivationType type) {
+void activation_forward(Matrix *mat, ActivationType type) {
     assert(mat != NULL && mat->data != NULL);
 
     usize total = matrix_size(mat);
