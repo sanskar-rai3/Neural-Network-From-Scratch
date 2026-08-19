@@ -45,6 +45,9 @@ int dense_init(Dense *layer, usize input_size, usize output_size) {
 
     layer->input_cache = matrix_empty();
 
+    layer->d_weights = matrix_empty();
+    layer->d_bias    = matrix_empty();
+
     return 1;
 }
 
@@ -53,8 +56,17 @@ void dense_destroy(Dense *layer) {
 
     matrix_destroy(&layer->weights);
     matrix_destroy(&layer->bias);
+
     if (layer->input_cache.data) {
         matrix_destroy(&layer->input_cache);
+    }
+    
+    if (layer->d_weights.data) {
+        matrix_destroy(&layer->d_weights);
+    }
+
+    if (layer->d_bias.data) {
+        matrix_destroy(&layer->d_bias);
     }
 }
 
@@ -99,70 +111,62 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
 
 void dense_backward(
     Matrix *d_input,
-    Matrix *d_weights,
-    Matrix *d_bias,
-    const Dense *layer,
+    Dense *layer,
     const Matrix *dZ
 ) {
     assert(d_input);
-    assert(d_weights);
-    assert(d_bias);
     assert(layer);
     assert(dZ);
 
     const Matrix *X = &layer->input_cache;
     const Matrix *W = &layer->weights;
 
-    /* dW = X^T * dZ
-     *
-     * X:     (batch x input_size)
-     * X^T:   (input_size x batch)
-     * dZ:    (batch x output_size)
-     *
-     * dW:    (input_size x output_size)
-     */
+    assert(dZ->rows == X->rows);
+    assert(dZ->cols == W->cols);
 
+    /*
+     * dW = X^T * dZ
+     */
     Matrix X_T = matrix_empty();
 
     assert(matrix_create(&X_T, X->cols, X->rows));
 
     matrix_transpose(&X_T, X);
-    matrix_multiply(d_weights, &X_T, dZ);
+
+    matrix_multiply(
+        &layer->d_weights,
+        &X_T,
+        dZ
+    );
 
     matrix_destroy(&X_T);
 
-
     /*
      * db = sum(dZ over the batch)
-     *
-     * dZ:   (batch x output_size)
-     * db:   (1 x output_size)
      */
-
-    matrix_fill(d_bias, 0.0f);
+    matrix_fill(&layer->d_bias, 0.0f);
 
     for (usize r = 0; r < dZ->rows; r++) {
         for (usize c = 0; c < dZ->cols; c++) {
-            d_bias->data[c] += dZ->data[r * dZ->cols + c];
+            layer->d_bias.data[c] +=
+                dZ->data[r * dZ->cols + c];
         }
     }
 
-
     /*
      * dX = dZ * W^T
-     *
-     * dZ:   (batch x output_size)
-     * W^T:  (output_size x input_size)
-     *
-     * dX:   (batch x input_size)
      */
-
     Matrix W_T = matrix_empty();
 
     assert(matrix_create(&W_T, W->cols, W->rows));
 
     matrix_transpose(&W_T, W);
-    matrix_multiply(d_input, dZ, &W_T);
+
+    matrix_multiply(
+        d_input,
+        dZ,
+        &W_T
+    );
 
     matrix_destroy(&W_T);
 }

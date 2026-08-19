@@ -27,11 +27,15 @@
  * @brief Fully connected (Dense) layer structure containing weights and biases.
  */
 typedef struct Dense {
-    Matrix weights; /**< Weight matrix: (input_size x output_size) */
-    Matrix bias;    /**< Bias matrix: (1 x output_size) */
+    Matrix weights;     /**< Weight matrix: (input_size x output_size) */
+    Matrix bias;        /**< Bias matrix: (1 x output_size) */
 
     /* Cached values from the forward pass */
     Matrix input_cache; /**< Input X: (batch_size x input_size) */
+
+    /* Gradients computed during the backward pass */
+    Matrix d_weights;   /**< Gradient dL/dW: same shape as weights */
+    Matrix d_bias;      /**< Gradient dL/db: same shape as bias */
 } Dense;
 
 /*==============================================================================
@@ -97,9 +101,7 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input);
  */
 void dense_backward(
     Matrix *d_input,
-    Matrix *d_weights,
-    Matrix *d_bias,
-    const Dense *layer,
+    Dense *layer,
     const Matrix *dZ
 );
 

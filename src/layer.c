@@ -75,8 +75,6 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
 
 void layer_backward(
     Matrix *d_input,
-    Matrix *d_weights,
-    Matrix *d_bias,
     Layer *layer,
     const Matrix *d_output
 ) {
@@ -120,8 +118,6 @@ void layer_backward(
      */
     dense_backward(
         d_input,
-        d_weights,
-        d_bias,
         &layer->dense,
         &dZ
     );
