@@ -33,7 +33,7 @@ int network_init(Network *network, const LayerConfig *configs, usize layer_count
     assert(configs != NULL);
     assert(layer_count > 0);
 
-    network->layers = (Layer *)malloc(layer_count * sizeof(Layer));
+    network->layers = malloc(layer_count * sizeof(Layer));
     if (!network->layers) {
         return 0;
     }

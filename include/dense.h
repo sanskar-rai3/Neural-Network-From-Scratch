@@ -27,8 +27,11 @@
  * @brief Fully connected (Dense) layer structure containing weights and biases.
  */
 typedef struct Dense {
-    Matrix weights; /**< Weight matrix of shape (input_size x output_size) */
-    Matrix bias;    /**< Bias matrix of shape (1 x output_size) */
+    Matrix weights; /**< Weight matrix: (input_size x output_size) */
+    Matrix bias;    /**< Bias matrix: (1 x output_size) */
+
+    /* Cached values from the forward pass */
+    Matrix input_cache; /**< Input X: (batch_size x input_size) */
 } Dense;
 
 /*==============================================================================
@@ -68,5 +71,36 @@ void dense_destroy(Dense *layer);
  * @param input  Input matrix of shape (batch_size x input_size).
  */
 void dense_forward(Matrix *output, const Dense *layer, const Matrix *input);
+
+/*==============================================================================
+ *  Backward Pass
+ *============================================================================*/
+
+/**
+ * @brief Performs a backward pass through the dense layer, computing the
+ *        gradients with respect to the weights, bias, and input.
+ *
+ * @param d_input   Destination matrix for the gradient with respect to the
+ *                  input (dL/dInput). Must be pre-allocated with shape
+ *                  (batch_size x input_size).
+ * @param d_weights Destination matrix for the gradient with respect to the
+ *                  weights (dL/dWeights). Must be pre-allocated with the same
+ *                  shape as the layer's weights.
+ * @param d_bias    Destination matrix for the gradient with respect to the
+ *                  bias (dL/dBias). Must be pre-allocated with the same shape
+ *                  as the layer's bias.
+ * @param layer     Pointer to the initialized Dense layer.
+ * @param input     Input matrix from the forward pass, of shape
+ *                  (batch_size x input_size).
+ * @param d_output  Gradient with respect to the dense layer's output
+ *                  (dL/dOutput), of shape (batch_size x output_size).
+ */
+void dense_backward(
+    Matrix *d_input,
+    Matrix *d_weights,
+    Matrix *d_bias,
+    const Dense *layer,
+    const Matrix *dZ
+);
 
 #endif
