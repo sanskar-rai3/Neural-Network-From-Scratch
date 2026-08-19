@@ -82,6 +82,7 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
     assert(network != NULL);
     assert(input != NULL);
     assert(network->layer_count > 0);
+    assert(network->layers != NULL);
 
     /* Layer 1: Run input directly into a temp matrix */
     Matrix current;
@@ -107,4 +108,68 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
         /* If 1 layer total, output gets current's data */
         *output = current;
     }
+}
+
+/*==============================================================================
+ * Backward Pass
+ *============================================================================*/
+
+void network_backward(
+    Network *network,
+    const Matrix *d_output
+) {
+    assert(network);
+    assert(d_output);
+    assert(network->layer_count > 0);
+
+    Matrix d_current = matrix_empty();
+
+    /*
+     * Initially:
+     *
+     * d_current = dL/dA of the final layer
+     */
+    assert(matrix_create(
+        &d_current,
+        d_output->rows,
+        d_output->cols
+    ));
+
+    matrix_copy(&d_current, d_output);
+
+    for (usize i = network->layer_count; i-- > 0;) {
+        Layer *layer = &network->layers[i];
+
+        /*
+         * d_next = dL/dX for this layer.
+         *
+         * X has the same shape as the layer's cached input.
+         */
+        Matrix d_next = matrix_empty();
+
+        assert(matrix_create(
+            &d_next,
+            layer->dense.input_cache.rows,
+            layer->dense.input_cache.cols
+        ));
+
+        /*
+         * d_current = dL/dA
+         * d_next    = dL/dX
+         */
+        layer_backward(
+            &d_next,
+            layer,
+            &d_current
+        );
+
+        matrix_destroy(&d_current);
+
+        d_current = d_next;
+    }
+
+    /*
+     * d_current is now dL/dX for the entire network.
+     */
+    matrix_destroy(&d_current);
 }

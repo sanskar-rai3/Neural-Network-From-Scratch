@@ -24,8 +24,8 @@
 #include "matrix.h"
 
 /*==============================================================================
- * Loss Functions
- *============================================================================*/
+ * Forward pass
+ *=============1===============================================================*/
 
 /**
  * @brief Computes the Mean Squared Error (MSE) loss between predictions and targets.
@@ -48,5 +48,46 @@ float loss_mse(const Matrix *prediction, const Matrix *target);
  * @return           The calculated Cross-Entropy loss value.
  */
 float loss_cross_entropy(const Matrix *prediction, const Matrix *target);
+
+/*==============================================================================
+ * Loss Backward Pass
+ *============================================================================*/
+
+/**
+ * @brief Computes the gradient of the Mean Squared Error loss with respect
+ *        to the predictions.
+ *
+ * Formula:
+ *     dL/dPrediction = (2 / N) * (prediction - target)
+ *
+ * @param d_prediction Destination matrix for the loss gradient.
+ *                     Must have the same shape as prediction.
+ * @param prediction   Pointer to the predicted output matrix.
+ * @param target       Pointer to the target ground truth matrix.
+ */
+void loss_mse_backward(
+    Matrix *d_prediction,
+    const Matrix *prediction,
+    const Matrix *target
+);
+
+/**
+ * @brief Computes the gradient of the Cross-Entropy loss with respect
+ *        to the predictions.
+ *
+ * Formula:
+ *     dL/dPrediction =
+ *         -(1 / N) * target / prediction
+ *
+ * @param d_prediction Destination matrix for the loss gradient.
+ *                     Must have the same shape as prediction.
+ * @param prediction   Pointer to predicted probability distribution matrix.
+ * @param target        Pointer to one-hot encoded ground truth matrix.
+ */
+void loss_cross_entropy_backward(
+    Matrix *d_prediction,
+    const Matrix *prediction,
+    const Matrix *target
+);
 
 #endif

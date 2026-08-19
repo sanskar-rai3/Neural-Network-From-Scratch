@@ -35,18 +35,19 @@ int dense_init(Dense *layer, usize input_size, usize output_size) {
     if (!matrix_create(&layer->weights, input_size, output_size))
         return 0;
 
-    if (!matrix_create(&layer->bias, 1, output_size)) {
-        matrix_destroy(&layer->weights);
+    if (!matrix_create(&layer->bias, 1, output_size))
         return 0;
-    }
+
+    if (!matrix_create(&layer->d_weights, input_size, output_size))
+        return 0;
+
+    if (!matrix_create(&layer->d_bias, 1, output_size))
+        return 0;
 
     matrix_he_uniform(&layer->weights, input_size);
     matrix_fill(&layer->bias, 0.0f);
 
     layer->input_cache = matrix_empty();
-
-    layer->d_weights = matrix_empty();
-    layer->d_bias    = matrix_empty();
 
     return 1;
 }
@@ -57,19 +58,11 @@ void dense_destroy(Dense *layer) {
     matrix_destroy(&layer->weights);
     matrix_destroy(&layer->bias);
 
-    if (layer->input_cache.data) {
-        matrix_destroy(&layer->input_cache);
-    }
-    
-    if (layer->d_weights.data) {
-        matrix_destroy(&layer->d_weights);
-    }
+    matrix_destroy(&layer->d_weights);
+    matrix_destroy(&layer->d_bias);
 
-    if (layer->d_bias.data) {
-        matrix_destroy(&layer->d_bias);
-    }
+    matrix_destroy(&layer->input_cache);
 }
-
 /*==============================================================================
  * Forward Pass
  *============================================================================*/

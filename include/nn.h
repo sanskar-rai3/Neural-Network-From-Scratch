@@ -74,4 +74,23 @@ void network_destroy(Network *network);
  */
 void network_forward(Matrix *output, const Network *network, const Matrix *input);
 
+/*==============================================================================
+ * Backward Pass
+ *============================================================================*/
+
+/**
+ * @brief Performs a backward pass through all layers in reverse order.
+ *
+ * Propagates the output gradient backward through every layer, computing
+ * gradients for each layer's weights and biases.
+ *
+ * @param network  Pointer to the initialized Network.
+ * @param d_output Gradient of the loss with respect to the network output
+ *                 (dL/dA), with shape (batch_size x output_size).
+ */
+void network_backward(
+    Network *network,
+    const Matrix *d_output
+);
+
 #endif

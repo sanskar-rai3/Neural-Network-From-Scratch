@@ -40,6 +40,8 @@ int layer_init(Layer *layer, const LayerConfig *config) {
 
     layer->activation = config->activation;
 
+    layer->z_cache = matrix_empty();
+
     return 1;
 }
 
@@ -47,6 +49,8 @@ void layer_destroy(Layer *layer) {
     assert(layer);
 
     dense_destroy(&layer->dense);
+    matrix_destroy(&layer->z_cache);
+
     layer->activation = ACT_NONE;
 }
 
@@ -58,15 +62,47 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
     assert(output);
     assert(layer);
     assert(input);
+
     assert(input->cols == layer->dense.weights.rows);
     assert(output->rows == input->rows);
     assert(output->cols == layer->dense.weights.cols);
 
-    /* Perform linear transformation: output = (input * weights) + bias */
-    dense_forward(output, &layer->dense, input);
+    /*
+     * Z = XW + b
+     */
+    dense_forward(
+        output,
+        &layer->dense,
+        input
+    );
 
-    /* Apply activation function in-place on output matrix */
-    activation_forward(output, layer->activation);
+    /*
+     * Cache Z for the backward pass.
+     */
+    if (layer->z_cache.rows != output->rows ||
+        layer->z_cache.cols != output->cols) {
+
+        matrix_destroy(&layer->z_cache);
+
+        assert(matrix_create(
+            &layer->z_cache,
+            output->rows,
+            output->cols
+        ));
+    }
+
+    matrix_copy(
+        &layer->z_cache,
+        output
+    );
+
+    /*
+     * A = activation(Z)
+     */
+    activation_forward(
+        output,
+        layer->activation
+    );
 }
 
 /*==============================================================================
@@ -79,8 +115,6 @@ void layer_backward(
     const Matrix *d_output
 ) {
     assert(d_input);
-    assert(d_weights);
-    assert(d_bias);
     assert(layer);
     assert(d_output);
 

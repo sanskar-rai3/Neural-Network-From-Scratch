@@ -68,3 +68,57 @@ float loss_cross_entropy(const Matrix *prediction, const Matrix *target) {
 
     return -sum;
 }
+
+/*==============================================================================
+ * Loss Backward Pass
+ *============================================================================*/
+
+void loss_mse_backward(
+    Matrix *d_prediction,
+    const Matrix *prediction,
+    const Matrix *target
+) {
+    assert(d_prediction);
+    assert(prediction);
+    assert(target);
+
+    assert(prediction->rows == target->rows);
+    assert(prediction->cols == target->cols);
+
+    assert(d_prediction->rows == prediction->rows);
+    assert(d_prediction->cols == prediction->cols);
+
+    usize n = matrix_size(prediction);
+
+    for (usize i = 0; i < n; i++) {
+        d_prediction->data[i] =
+            (2.0f / (float)n) *
+            (prediction->data[i] - target->data[i]);
+    }
+}
+
+void loss_cross_entropy_backward(
+    Matrix *d_prediction,
+    const Matrix *prediction,
+    const Matrix *target
+) {
+    assert(d_prediction);
+    assert(prediction);
+    assert(target);
+
+    assert(prediction->rows == target->rows);
+    assert(prediction->cols == target->cols);
+
+    assert(d_prediction->rows == prediction->rows);
+    assert(d_prediction->cols == prediction->cols);
+
+    const float epsilon = 1e-7f;
+    usize n = matrix_size(prediction);
+
+    for (usize i = 0; i < n; i++) {
+        d_prediction->data[i] =
+            -(target->data[i] /
+              (prediction->data[i] + epsilon))
+            / (float)n;
+    }
+}
