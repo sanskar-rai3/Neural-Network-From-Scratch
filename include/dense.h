@@ -70,7 +70,7 @@ void dense_destroy(Dense *layer);
  * @param layer  Pointer to the initialized Dense layer.
  * @param input  Input matrix of shape (batch_size x input_size).
  */
-void dense_forward(Matrix *output, const Dense *layer, const Matrix *input);
+void dense_forward(Matrix *output, Dense *layer, const Matrix *input);
 
 /*==============================================================================
  *  Backward Pass
