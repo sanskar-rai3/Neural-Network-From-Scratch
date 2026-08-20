@@ -65,11 +65,7 @@ float loss_cross_entropy(const Matrix *prediction, const Matrix *target);
  * @param prediction   Pointer to the predicted output matrix.
  * @param target       Pointer to the target ground truth matrix.
  */
-void loss_mse_backward(
-    Matrix *d_prediction,
-    const Matrix *prediction,
-    const Matrix *target
-);
+void loss_mse_backward(Matrix *d_prediction, const Matrix *prediction, const Matrix *target);
 
 /**
  * @brief Computes the gradient of the Cross-Entropy loss with respect
@@ -84,10 +80,6 @@ void loss_mse_backward(
  * @param prediction   Pointer to predicted probability distribution matrix.
  * @param target        Pointer to one-hot encoded ground truth matrix.
  */
-void loss_cross_entropy_backward(
-    Matrix *d_prediction,
-    const Matrix *prediction,
-    const Matrix *target
-);
+void loss_cross_entropy_backward(Matrix *d_prediction, const Matrix *prediction, const Matrix *target);
 
 #endif

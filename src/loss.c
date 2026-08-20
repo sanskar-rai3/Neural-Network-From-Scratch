@@ -73,11 +73,7 @@ float loss_cross_entropy(const Matrix *prediction, const Matrix *target) {
  * Loss Backward Pass
  *============================================================================*/
 
-void loss_mse_backward(
-    Matrix *d_prediction,
-    const Matrix *prediction,
-    const Matrix *target
-) {
+void loss_mse_backward(Matrix *d_prediction, const Matrix *prediction, const Matrix *target) {
     assert(d_prediction);
     assert(prediction);
     assert(target);
@@ -97,11 +93,7 @@ void loss_mse_backward(
     }
 }
 
-void loss_cross_entropy_backward(
-    Matrix *d_prediction,
-    const Matrix *prediction,
-    const Matrix *target
-) {
+void loss_cross_entropy_backward(Matrix *d_prediction, const Matrix *prediction, const Matrix *target) {
     assert(d_prediction);
     assert(prediction);
     assert(target);
