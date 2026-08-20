@@ -31,12 +31,12 @@
  * @brief Supported neural network activation function types.
  */
 typedef enum ActivationType {
-    ACT_NONE = 0,           /**< Identity function / Linear pass-through: f(x) = x */
-    ACT_RELU,               /**< Rectified Linear Unit: f(x) = max(0, x) */
-    ACT_LEAKY_RELU,         /**< Leaky ReLU: f(x) = x if x > 0 else 0.01 * x */
-    ACT_TANH,               /**< Hyperbolic Tangent: f(x) = tanh(x) */
-    ACT_SIGMOID,            /**< Sigmoid / Logistic: f(x) = 1 / (1 + exp(-x)) */
-    ACT_SOFTMAX_CEL         /**< Softmax (row-wise / batch probability distribution) with Cross-Entropy Loss */
+    ACT_NONE = 0,           /* Identity function / Linear pass-through: f(x) = x */
+    ACT_RELU,               /* Rectified Linear Unit: f(x) = max(0, x) */
+    ACT_LEAKY_RELU,         /* Leaky ReLU: f(x) = x if x > 0 else 0.01 * x */
+    ACT_TANH,               /* Hyperbolic Tangent: f(x) = tanh(x) */
+    ACT_SIGMOID,            /* Sigmoid / Logistic: f(x) = 1 / (1 + exp(-x)) */
+    ACT_SOFTMAX_CEL         /* Softmax (row-wise / batch probability distribution) with Cross-Entropy Loss */
 } ActivationType;
 
 

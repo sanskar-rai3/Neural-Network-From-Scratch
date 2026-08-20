@@ -38,7 +38,6 @@ static void softmax(Matrix *mat) {
     assert(mat && mat->data);
     assert(mat->rows > 0 && mat->cols > 0);
 
-    /* Process softmax row-by-row for batch support */
     for (usize r = 0; r < mat->rows; r++) {
         usize offset = r * mat->cols;
 

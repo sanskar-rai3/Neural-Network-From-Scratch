@@ -109,11 +109,7 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
  *  Backward Pass
  *============================================================================*/
 
-void layer_backward(
-    Matrix *d_input,
-    Layer *layer,
-    const Matrix *d_output
-) {
+void layer_backward(Matrix *d_input, Layer *layer, const Matrix *d_output) {
     assert(d_input);
     assert(layer);
     assert(d_output);
