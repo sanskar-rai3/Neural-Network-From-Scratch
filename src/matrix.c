@@ -44,6 +44,7 @@ int matrix_create(Matrix *mat, usize rows, usize cols) {
     mat->rows = rows;
     mat->cols = cols;
     mat->data = data;
+
     return 1;
 }
 
@@ -100,11 +101,11 @@ usize matrix_size(const Matrix *mat) {
 }
 
 Matrix matrix_empty(void) {
-    Matrix m;
-    m.rows = 0;
-    m.cols = 0;
-    m.data = NULL;
-    return m;
+    return (Matrix) {
+        .rows = 0,
+        .cols = 0,
+        .data = NULL
+    };
 }
 
 void matrix_fill(Matrix *mat, float value) {
@@ -347,7 +348,7 @@ void matrix_add_row_inplace(Matrix *mat, const Matrix *row) {
  * Element-wise Operations
  *============================================================================*/
 
-void matrix_apply(Matrix *mat, float (*func)(float)) {
+void matrix_apply_function(Matrix *mat, float (*func)(float)) {
     assert(mat);
     assert(mat->data);
     assert(func);

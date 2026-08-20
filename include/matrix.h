@@ -286,6 +286,6 @@ void matrix_add_row_inplace(Matrix *mat, const Matrix *row);
  * @param mat  Pointer to the matrix to update.
  * @param func Function pointer taking and returning a float.
  */
-void matrix_apply(Matrix *mat, float (*func)(float));
+void matrix_apply_function(Matrix *mat, float (*func)(float));
 
 #endif
