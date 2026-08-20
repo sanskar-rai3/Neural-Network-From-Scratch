@@ -84,11 +84,11 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
 
         matrix_destroy(&layer->z_cache);
 
-        assert(matrix_create(
+        matrix_create(
             &layer->z_cache,
             output->rows,
             output->cols
-        ));
+        );
     }
 
     matrix_copy(
@@ -119,11 +119,11 @@ void layer_backward(Matrix *d_input, Layer *layer, const Matrix *d_output) {
 
     Matrix dZ;
 
-    assert(matrix_create(
+    matrix_create(
         &dZ,
         layer->z_cache.rows,
         layer->z_cache.cols
-    ));
+    );
 
     /*
      * Activation backward:

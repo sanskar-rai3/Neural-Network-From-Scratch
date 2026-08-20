@@ -15,10 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# ==============================================================================
-# CMake Requirements & Project Setup
-# ==============================================================================
-
 cmake_minimum_required(VERSION 3.16)
 
 project(nn
@@ -27,7 +23,10 @@ project(nn
     LANGUAGES C
 )
 
-# Enforce strict C11 standard without compiler-specific extensions (e.g., gnu11)
+# ==============================================================================
+# C Standard
+# ==============================================================================
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -44,19 +43,19 @@ endif()
 # Source Files & Dependencies
 # ==============================================================================
 
-# Automatically gather all C source files in src/ directory.
-# CONFIGURE_DEPENDS re-runs CMake automatically when files are added/removed.
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c"
 )
 
-# Define the target executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# Locate required external dependency: SDL2
+# Locate SDL2
 find_package(SDL2 REQUIRED)
 
-# Link Math library (-lm) on non-MSVC toolchains (GCC/Clang)
+# ==============================================================================
+# Libraries
+# ==============================================================================
+
 if(NOT MSVC)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
@@ -64,14 +63,13 @@ if(NOT MSVC)
     )
 endif()
 
-# Link SDL2 target
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         SDL2::SDL2
 )
 
 # ==============================================================================
-# Target Configuration & Output
+# Target Configuration
 # ==============================================================================
 
 # Output binary directly to the project root directory
@@ -86,29 +84,39 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # ==============================================================================
-# Compiler Warnings & Diagnostics
+# Compiler Warnings
 # ==============================================================================
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME}
         PRIVATE
-            /W4            # Warning Level 4
-            /permissive-   # Strict standard conformance mode
+            /W4
+            /permissive-
     )
 else()
     target_compile_options(${PROJECT_NAME}
         PRIVATE
-            -Wall          # Enable common warnings
-            -Wextra        # Enable extra helpful warnings
-            -Wpedantic     # Enforce strict standard adherence
+            -Wall
+            -Wextra
+            -Wpedantic
     )
 endif()
 
 # ==============================================================================
-# Debug Build Options (Sanitizers)
+# Assertions
 # ==============================================================================
 
-# Enable AddressSanitizer (ASan) & UndefinedBehaviorSanitizer (UBSan) in Debug
+# Disable assert() in Release builds.
+# assert() remains enabled in Debug builds.
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+        $<$<CONFIG:Release>:NDEBUG>
+)
+
+# ==============================================================================
+# Debug Build Options
+# ==============================================================================
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT MSVC)
     target_compile_options(${PROJECT_NAME}
         PRIVATE
@@ -125,15 +133,19 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND NOT MSVC)
 endif()
 
 # ==============================================================================
-# Release Build Optimizations (Interprocedural / Link Time Optimization)
+# Release Build Optimizations
 # ==============================================================================
 
-# Enable Link Time Optimization (LTO) for Release builds if supported by toolchain
 include(CheckIPOSupported)
-check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT IPO_ERROR)
+
+check_ipo_supported(
+    RESULT IPO_SUPPORTED
+    OUTPUT IPO_ERROR
+)
 
 if(IPO_SUPPORTED)
-    set_property(TARGET ${PROJECT_NAME}
+    set_property(
+        TARGET ${PROJECT_NAME}
         PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE
     )
 endif()

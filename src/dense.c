@@ -84,11 +84,11 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
             matrix_destroy(&layer->input_cache);
         }
 
-        assert(matrix_create(
+        matrix_create(
             &layer->input_cache,
             input->rows,
             input->cols
-        ));
+        );
     }
 
     matrix_copy(&layer->input_cache, input);
@@ -118,7 +118,7 @@ void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ) {
      */
     Matrix X_T = matrix_empty();
 
-    assert(matrix_create(&X_T, X->cols, X->rows));
+    matrix_create(&X_T, X->cols, X->rows);
 
     matrix_transpose(&X_T, X);
 
@@ -147,7 +147,7 @@ void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ) {
      */
     Matrix W_T = matrix_empty();
 
-    assert(matrix_create(&W_T, W->cols, W->rows));
+    matrix_create(&W_T, W->cols, W->rows);
 
     matrix_transpose(&W_T, W);
 

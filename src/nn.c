@@ -126,11 +126,11 @@ void network_backward(Network *network, const Matrix *d_output) {
      *
      * d_current = dL/dA of the final layer
      */
-    assert(matrix_create(
+    matrix_create(
         &d_current,
         d_output->rows,
         d_output->cols
-    ));
+    );
 
     matrix_copy(&d_current, d_output);
 
@@ -144,11 +144,11 @@ void network_backward(Network *network, const Matrix *d_output) {
          */
         Matrix d_next = matrix_empty();
 
-        assert(matrix_create(
+        matrix_create(
             &d_next,
             layer->dense.input_cache.rows,
             layer->dense.input_cache.cols
-        ));
+        );
 
         /*
          * d_current = dL/dA
