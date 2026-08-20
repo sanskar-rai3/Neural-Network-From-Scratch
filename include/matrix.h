@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MATRIX_H__
-#define __MATRIX_H__
+#ifndef MATRIX_H
+#define MATRIX_H
 
 #include "common.h"
 

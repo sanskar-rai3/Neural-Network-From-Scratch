@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACTIVATION_H__
-#define __ACTIVATION_H__
+#ifndef ACTIVATION_H
+#define ACTIVATION_H
 
 #include "common.h"
 #include "matrix.h"

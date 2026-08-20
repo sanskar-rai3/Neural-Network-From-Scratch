@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __OPTIMIZER_H_
-#define __OPTIMIZER_H_
+#ifndef OPTIMIZER_H
+#define OPTIMIZER_H
 
 #include "common.h"
 

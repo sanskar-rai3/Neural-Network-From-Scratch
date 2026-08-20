@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LOSS_H__
-#define __LOSS_H__
+#ifndef LOSS_H
+#define LOSS_H
 
 #include "common.h"
 #include "matrix.h"

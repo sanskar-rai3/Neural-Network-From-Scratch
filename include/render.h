@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RENDER_H_
-#define __RENDER_H_
+#ifndef RENDER_H
+#define RENDER_H
 
 #include "common.h"
 #include "matrix.h"

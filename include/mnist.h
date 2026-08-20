@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __MNIST_H__
-#define __MNIST_H__
+#ifndef MNIST_H
+#define MNIST_H
 
 #include "common.h"
 

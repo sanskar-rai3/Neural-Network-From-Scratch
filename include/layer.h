@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LAYER_H__
-#define __LAYER_H__
+#ifndef LAYER_H
+#define LAYER_H
 
 #include "common.h"
 #include "dense.h"

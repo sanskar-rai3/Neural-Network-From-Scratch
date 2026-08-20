@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __DENSE_H__
-#define __DENSE_H__
+#ifndef DENSE_H
+#define DENSE_H
 
 #include "common.h"
 #include "matrix.h"
