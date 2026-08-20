@@ -99,10 +99,6 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input);
  * @param d_output  Gradient with respect to the dense layer's output
  *                  (dL/dOutput), of shape (batch_size x output_size).
  */
-void dense_backward(
-    Matrix *d_input,
-    Dense *layer,
-    const Matrix *dZ
-);
+void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ);
 
 #endif

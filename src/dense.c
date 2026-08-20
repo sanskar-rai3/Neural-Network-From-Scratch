@@ -102,11 +102,7 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
  * Backward Pass
  *============================================================================*/
 
-void dense_backward(
-    Matrix *d_input,
-    Dense *layer,
-    const Matrix *dZ
-) {
+void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ) {
     assert(d_input);
     assert(layer);
     assert(dZ);
