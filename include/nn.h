@@ -32,8 +32,8 @@
  * @brief Sequential neural network model composed of stacked layers.
  */
 typedef struct Network {
-    Layer *layers;     /**< Dynamic array of sequential Layer structures */
-    usize  layer_count; /**< Total number of layers in the network */
+    Layer *layers;      /* Dynamic array of sequential Layer structures */
+    usize  layer_count; /* Total number of layers in the network */
 } Network;
 
 
@@ -88,9 +88,6 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
  * @param d_output Gradient of the loss with respect to the network output
  *                 (dL/dA), with shape (batch_size x output_size).
  */
-void network_backward(
-    Network *network,
-    const Matrix *d_output
-);
+void network_backward(Network *network, const Matrix *d_output);
 
 #endif

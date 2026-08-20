@@ -114,10 +114,7 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
  * Backward Pass
  *============================================================================*/
 
-void network_backward(
-    Network *network,
-    const Matrix *d_output
-) {
+void network_backward(Network *network, const Matrix *d_output) {
     assert(network);
     assert(d_output);
     assert(network->layer_count > 0);
