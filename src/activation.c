@@ -131,7 +131,6 @@ void activation_backward(Matrix *dZ, const Matrix *dA, const Matrix *Z, Activati
         }
 
         case ACT_LEAKY_RELU: {
-            usize total = Z->rows * Z->cols;
             for (usize i = 0; i < total; i++) {
                 float slope = (Z->data[i] > 0.0f) ? 1.0f : LEAKY_RELU_ALPHA;
                 dZ->data[i] = dA->data[i] * slope;
@@ -158,17 +157,23 @@ void activation_backward(Matrix *dZ, const Matrix *dA, const Matrix *Z, Activati
         }
 
         case ACT_SOFTMAX_CEL: {
-            /* 
-             * Softmax + Cross-Entropy shortcut:
-             * When paired with Cross-Entropy loss, dZ = A - Y (handled at loss layer).
-             * For general output gradients dA, pass gradient through directly.
+            /*
+             * Softmax + Cross-Entropy uses a fused backward pass.
+             *
+             * The loss function computes:
+             *
+             *     dZ = (A - Y) / batch_size
+             *
+             * Therefore, dA is already the gradient with respect
+             * to the logits and is passed through unchanged.
              */
             for (usize i = 0; i < total; i++) {
                 dZ->data[i] = dA->data[i];
             }
+
             break;
         }
-
+                              
         case ACT_NONE:
         default: {
             /* Linear activation pass-through */

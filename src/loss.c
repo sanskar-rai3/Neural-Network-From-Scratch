@@ -114,3 +114,23 @@ void loss_cross_entropy_backward(Matrix *d_prediction, const Matrix *prediction,
             / (float)n;
     }
 }
+
+void loss_cross_entropy_softmax_backward(Matrix *dZ, const Matrix *prediction, const Matrix *target) {
+    assert(dZ);
+    assert(prediction);
+    assert(target);
+
+    assert(dZ->rows == prediction->rows);
+    assert(dZ->cols == prediction->cols);
+
+    assert(prediction->rows == target->rows);
+    assert(prediction->cols == target->cols);
+
+    usize n = matrix_size(prediction);
+
+    for (usize i = 0; i < n; i++) {
+        dZ->data[i] =
+            (prediction->data[i] - target->data[i])
+            / (float)prediction->rows;
+    }
+}

@@ -31,16 +31,13 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
         return;
     }
 
-    /* Set nearest-neighbor scaling before creating textures to keep pixels sharp */
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 
-    /* Initialize SDL Video Subsystem */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
         return;
     }
 
-    /* Create Window */
     SDL_Window *window = SDL_CreateWindow(
         window_title,
         SDL_WINDOWPOS_CENTERED,
@@ -55,7 +52,6 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
         return;
     }
 
-    /* Create Renderer */
     SDL_Renderer *renderer = SDL_CreateRenderer(
         window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
     );
@@ -66,7 +62,6 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
         return;
     }
 
-    /* Create 28x28 Streaming Texture in 32-bit RGBA Format */
     SDL_Texture *texture = SDL_CreateTexture(
         renderer,
         SDL_PIXELFORMAT_RGBA8888,
@@ -79,6 +74,7 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
         SDL_Quit();
+        return;
     }
 
     /* -------------------------------------------------------------------------
@@ -101,9 +97,6 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
     /* Update the streaming texture with raw pixel array */
     SDL_UpdateTexture(texture, NULL, pixels, IMAGE_SIZE * sizeof(uint32_t));
 
-    /* -------------------------------------------------------------------------
-     * Render Loop
-     * ----------------------------------------------------------------------- */
     bool running = true;
     SDL_Event event;
 
@@ -114,18 +107,13 @@ void render_mnist_sample(const Matrix *sample, const char *window_title) {
             }
         }
 
-        /* Clear Screen */
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        /* Copy texture to fill full scaled window dimensions */
         SDL_RenderCopy(renderer, texture, NULL, NULL);
-
-        /* Present rendered frame */
         SDL_RenderPresent(renderer);
     }
 
-    /* Cleanup SDL Resources */
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -82,4 +82,24 @@ void loss_mse_backward(Matrix *d_prediction, const Matrix *prediction, const Mat
  */
 void loss_cross_entropy_backward(Matrix *d_prediction, const Matrix *prediction, const Matrix *target);
 
+/**
+ * @brief Computes the gradient of the combined Softmax + Cross-Entropy loss
+ *        with respect to the logits before the Softmax activation.
+ *
+ * Combining Softmax and Cross-Entropy simplifies the gradient to:
+ *
+ *     dL/dZ = (prediction - target) / batch_size
+ *
+ * where prediction is the Softmax output and Z is the input to Softmax.
+ *
+ * This fused form is numerically and computationally preferable to
+ * separately computing the Softmax and Cross-Entropy derivatives.
+ *
+ * @param dZ         Destination matrix for the gradient with respect
+ *                   to the Softmax input (logits).
+ * @param prediction Pointer to the Softmax output matrix.
+ * @param target     Pointer to one-hot encoded ground truth matrix.
+ */
+void loss_cross_entropy_softmax_backward( Matrix *dZ, const Matrix *prediction, const Matrix *target);
+
 #endif
