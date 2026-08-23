@@ -31,12 +31,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EPOCH         10
+#define EPOCH         5
 #define LEARNING_RATE 0.01
 
 #define INPUT_SIZE  784
 #define OUTPUT_SIZE 10
-#define HIDDEN_SIZE 128
+#define HIDDEN1_SIZE 128
+#define HIDDEN2_SIZE 64
 
 #define TRAIN_IMAGE_COUNT 60000
 #define TRAIN_IMAGE_PATH  "data/train-images-idx3-ubyte"
@@ -131,11 +132,16 @@ int main(void) {
     LayerConfig configs[] = {
         {
             .input_size  = INPUT_SIZE,
-            .output_size = HIDDEN_SIZE,
+            .output_size = HIDDEN1_SIZE,
             .activation  = ACT_RELU
         },
         {
-            .input_size  = HIDDEN_SIZE,
+            .input_size  = HIDDEN1_SIZE,
+            .output_size = HIDDEN2_SIZE,
+            .activation  = ACT_RELU
+        },
+        {
+            .input_size  = HIDDEN2_SIZE,
             .output_size = OUTPUT_SIZE,
             .activation  = ACT_SOFTMAX_CEL
         }
@@ -283,58 +289,61 @@ int main(void) {
 
     /*=====================================================================*/
 
-    /* Creating input sample */
-    Matrix pred_input;
-    if (!matrix_copy_buffer(&pred_input, 1, INPUT_SIZE, test_image_data)) {
-        fprintf(stderr, "Failed to create input matrix\n");
+    /* Testing multiple samples */
+    for (usize i = 0; i < 10; i++){
+        /* Creating input sample */
+        Matrix pred_input;
+        if (!matrix_copy_buffer(&pred_input, 1, INPUT_SIZE, test_image_data + 784 * i)) {
+            fprintf(stderr, "Failed to create input matrix\n");
 
-        optimizer_destroy(&optimizer);
-        network_destroy(&nn);
+            optimizer_destroy(&optimizer);
+            network_destroy(&nn);
 
-        free(train_image_data);
-        free(train_label_data);
-        free(test_image_data);
-        free(test_label_data);
+            free(train_image_data);
+            free(train_label_data);
+            free(test_image_data);
+            free(test_label_data);
 
-        return 1;
+            return 1;
+        }
+
+        /* Prediction output */
+        Matrix pred_output;
+
+        if (!matrix_create(&pred_output, 1, OUTPUT_SIZE)) {
+            fprintf(stderr, "Failed to create prediction matrix\n");
+
+            matrix_destroy(&X);
+            optimizer_destroy(&optimizer);
+            network_destroy(&nn);
+
+            free(train_image_data);
+            free(train_label_data);
+            free(test_image_data);
+            free(test_label_data);
+
+            return 1;
+        }
+
+        /* Forward pass */
+        network_forward(&pred_output, &nn, &pred_input);
+
+        /* Print all the values of output neuron */
+        for (usize i = 0; i < 10; i++) {
+            printf("%f |", pred_output.data[i]);
+        }
+        putchar('\n');
+
+        /* Get predicted class */
+        usize predicted = argmax(&pred_output);
+
+        printf("\n==========Prediction==========\n");
+        printf("Actual:     %u\n", test_label_data[i]);
+        printf("Predicted:  %zu\n", predicted);
+        printf("Confidence: %.2f%%\n", pred_output.data[predicted] * 100.0f);
+
+        render_mnist_sample(&pred_input, "Sample");
     }
-
-    /* Prediction output */
-    Matrix pred_output;
-
-    if (!matrix_create(&pred_output, 1, OUTPUT_SIZE)) {
-        fprintf(stderr, "Failed to create prediction matrix\n");
-
-        matrix_destroy(&X);
-        optimizer_destroy(&optimizer);
-        network_destroy(&nn);
-
-        free(train_image_data);
-        free(train_label_data);
-        free(test_image_data);
-        free(test_label_data);
-
-        return 1;
-    }
-
-    /* Forward pass */
-    network_forward(&pred_output, &nn, &pred_input);
-
-    /* Print all the values of output neuron */
-    for (usize i = 0; i < 10; i++) {
-        printf("%f |", pred_output.data[i]);
-    }
-    putchar('\n');
-
-    /* Get predicted class */
-    usize predicted = argmax(&pred_output);
-
-    printf("\n=== Prediction ===\n");
-    printf("Actual:     %u\n", test_label_data[0]);
-    printf("Predicted:  %zu\n", predicted);
-    printf("Confidence: %.2f%%\n", pred_output.data[predicted] * 100.0f);
-
-    render_mnist_sample(&pred_input, "Sample");
 
     /* Clean up */
     free(train_image_data);
