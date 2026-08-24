@@ -1,0 +1,67 @@
+\doxysection{Dense Struct Reference}
+\hypertarget{structDense}{}\label{structDense}\index{Dense@{Dense}}
+
+
+Fully connected (\doxylink{structDense}{Dense}) layer structure containing weights and biases.  
+
+
+
+
+{\ttfamily \+\#include $<$dense.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} \doxymbox{\hyperlink{structDense_add89562607a2052425e425a7ab3557db}{weights}}
+\item 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} \doxymbox{\hyperlink{structDense_aae6e9675b344109e090344a6f3835bc6}{bias}}
+\item 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} \doxymbox{\hyperlink{structDense_abfeb8207a88250643e9596f890a2c36a}{input\+\_\+cache}}
+\item 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} \doxymbox{\hyperlink{structDense_aa9bfe446ee0ced7418e5efd31d35a0aa}{d\+\_\+weights}}
+\item 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} \doxymbox{\hyperlink{structDense_af01bfce9bea3925bf72d34551ed7a0ea}{d\+\_\+bias}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Fully connected (\doxylink{structDense}{Dense}) layer structure containing weights and biases. 
+
+\label{structDense_doc-variable-members}
+\Hypertarget{structDense_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structDense_aae6e9675b344109e090344a6f3835bc6}\index{Dense@{Dense}!bias@{bias}}
+\index{bias@{bias}!Dense@{Dense}}
+\doxysubsubsection{\texorpdfstring{bias}{bias}}
+{\footnotesize\ttfamily \label{structDense_aae6e9675b344109e090344a6f3835bc6} 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} Dense::\+bias}
+
+Bias matrix: (1 x output\+\_\+size) \Hypertarget{structDense_af01bfce9bea3925bf72d34551ed7a0ea}\index{Dense@{Dense}!d\_bias@{d\_bias}}
+\index{d\_bias@{d\_bias}!Dense@{Dense}}
+\doxysubsubsection{\texorpdfstring{d\_bias}{d\_bias}}
+{\footnotesize\ttfamily \label{structDense_af01bfce9bea3925bf72d34551ed7a0ea} 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} Dense::\+d\+\_\+bias}
+
+Gradient d\+L/\+db: same shape as bias \Hypertarget{structDense_aa9bfe446ee0ced7418e5efd31d35a0aa}\index{Dense@{Dense}!d\_weights@{d\_weights}}
+\index{d\_weights@{d\_weights}!Dense@{Dense}}
+\doxysubsubsection{\texorpdfstring{d\_weights}{d\_weights}}
+{\footnotesize\ttfamily \label{structDense_aa9bfe446ee0ced7418e5efd31d35a0aa} 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} Dense::\+d\+\_\+weights}
+
+Gradient d\+L/\+dW: same shape as weights \Hypertarget{structDense_abfeb8207a88250643e9596f890a2c36a}\index{Dense@{Dense}!input\_cache@{input\_cache}}
+\index{input\_cache@{input\_cache}!Dense@{Dense}}
+\doxysubsubsection{\texorpdfstring{input\_cache}{input\_cache}}
+{\footnotesize\ttfamily \label{structDense_abfeb8207a88250643e9596f890a2c36a} 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} Dense::\+input\+\_\+cache}
+
+Input X: (batch\+\_\+size x input\+\_\+size) \Hypertarget{structDense_add89562607a2052425e425a7ab3557db}\index{Dense@{Dense}!weights@{weights}}
+\index{weights@{weights}!Dense@{Dense}}
+\doxysubsubsection{\texorpdfstring{weights}{weights}}
+{\footnotesize\ttfamily \label{structDense_add89562607a2052425e425a7ab3557db} 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} Dense::\+weights}
+
+Weight matrix: (input\+\_\+size x output\+\_\+size) 
+
+The documentation for this struct was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\doxymbox{\hyperlink{dense_8h}{dense.\+h}}\end{DoxyCompactItemize}

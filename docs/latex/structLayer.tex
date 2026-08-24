@@ -1,0 +1,51 @@
+\doxysection{Layer Struct Reference}
+\hypertarget{structLayer}{}\label{structLayer}\index{Layer@{Layer}}
+
+
+High-\/level neural network layer combining a \doxylink{structDense}{Dense} layer with an activation function.  
+
+
+
+
+{\ttfamily \+\#include $<$layer.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{structDense}{Dense}} \doxymbox{\hyperlink{structLayer_a118a0cdadb536c7c2d214f3fea07f0c8}{dense}}
+\item 
+\doxymbox{\hyperlink{activation_8h_abda2c109ffc1dc92ebde0f4802c37b1f}{Activation\+Type}} \doxymbox{\hyperlink{structLayer_a1f4fcb33ef4cedc363b288adf9c7dee4}{activation}}
+\item 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} \doxymbox{\hyperlink{structLayer_ae19d07d4681d341e034ae4d0cdb75fa7}{z\+\_\+cache}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+High-\/level neural network layer combining a \doxylink{structDense}{Dense} layer with an activation function. 
+
+\label{structLayer_doc-variable-members}
+\Hypertarget{structLayer_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structLayer_a1f4fcb33ef4cedc363b288adf9c7dee4}\index{Layer@{Layer}!activation@{activation}}
+\index{activation@{activation}!Layer@{Layer}}
+\doxysubsubsection{\texorpdfstring{activation}{activation}}
+{\footnotesize\ttfamily \label{structLayer_a1f4fcb33ef4cedc363b288adf9c7dee4} 
+\doxymbox{\hyperlink{activation_8h_abda2c109ffc1dc92ebde0f4802c37b1f}{Activation\+Type}} Layer::\+activation}
+
+Activation function applied post-\/linear transformation \Hypertarget{structLayer_a118a0cdadb536c7c2d214f3fea07f0c8}\index{Layer@{Layer}!dense@{dense}}
+\index{dense@{dense}!Layer@{Layer}}
+\doxysubsubsection{\texorpdfstring{dense}{dense}}
+{\footnotesize\ttfamily \label{structLayer_a118a0cdadb536c7c2d214f3fea07f0c8} 
+\doxymbox{\hyperlink{structDense}{Dense}} Layer::\+dense}
+
+Underlying fully connected dense layer (weights \& biases) \Hypertarget{structLayer_ae19d07d4681d341e034ae4d0cdb75fa7}\index{Layer@{Layer}!z\_cache@{z\_cache}}
+\index{z\_cache@{z\_cache}!Layer@{Layer}}
+\doxysubsubsection{\texorpdfstring{z\_cache}{z\_cache}}
+{\footnotesize\ttfamily \label{structLayer_ae19d07d4681d341e034ae4d0cdb75fa7} 
+\doxymbox{\hyperlink{structMatrix}{Matrix}} Layer::\+z\+\_\+cache}
+
+Cached pre-\/activation values used during backpropagation. 
+
+The documentation for this struct was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+include/\doxymbox{\hyperlink{layer_8h}{layer.\+h}}\end{DoxyCompactItemize}

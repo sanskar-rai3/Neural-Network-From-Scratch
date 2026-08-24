@@ -1,0 +1,64 @@
+\doxysection{dense.\+h}
+\hypertarget{dense_8h_source}{}\label{dense_8h_source}\index{include/dense.h@{include/dense.h}}
+\doxymbox{\hyperlink{dense_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Neural\ Network\ From\ Scratch\ in\ C}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ Copyright\ (C)\ 2026\ Sanskar\ Rai\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ along\ with\ this\ program.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifndef\ DENSE\_H}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ DENSE\_H}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{common_8h}{common.h}}"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{matrix_8h}{matrix.h}}"{}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structDense}{Dense}}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ \doxymbox{\hyperlink{structDense_add89562607a2052425e425a7ab3557db}{weights}};\ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ \doxymbox{\hyperlink{structDense_aae6e9675b344109e090344a6f3835bc6}{bias}};\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{comment}{/*\ Cached\ values\ from\ the\ forward\ pass\ */}}
+\DoxyCodeLine{00034\ \ \ \ \ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ \doxymbox{\hyperlink{structDense_abfeb8207a88250643e9596f890a2c36a}{input\_cache}};\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{comment}{/*\ Gradients\ computed\ during\ the\ backward\ pass\ */}}
+\DoxyCodeLine{00037\ \ \ \ \ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ \doxymbox{\hyperlink{structDense_aa9bfe446ee0ced7418e5efd31d35a0aa}{d\_weights}};\ \ \ }
+\DoxyCodeLine{00038\ \ \ \ \ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ \doxymbox{\hyperlink{structDense_af01bfce9bea3925bf72d34551ed7a0ea}{d\_bias}};\ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \}\ \doxymbox{\hyperlink{structDense}{Dense}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00042\ \textcolor{comment}{\ *\ Creation\ \&\ Destruction}}
+\DoxyCodeLine{00043\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{dense_8h_aa463d0b683f8be80355bd0939497a428}{dense\_init}}(\doxymbox{\hyperlink{structDense}{Dense}}\ *layer,\ \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}\ input\_size,\ \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}\ output\_size);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{dense_8h_a13b2b23a1556f5e50de2ab1372929bfe}{dense\_destroy}}(\doxymbox{\hyperlink{structDense}{Dense}}\ *layer);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ *\ \ Forward\ Pass}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00077\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{dense_8h_a6e844fad4d040e1537d4887b284d186b}{dense\_forward}}(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *output,\ \doxymbox{\hyperlink{structDense}{Dense}}\ *layer,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *input);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00080\ \textcolor{comment}{\ *\ \ Backward\ Pass}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00102\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{dense_8h_aaa31cb76c387047e7759e32dac4b01fe}{dense\_backward}}(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *d\_input,\ \doxymbox{\hyperlink{structDense}{Dense}}\ *layer,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *dZ);}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ DENSE\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

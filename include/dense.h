@@ -101,4 +101,4 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input);
  */
 void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ);
 
-#endif
+#endif /* DENSE_H */

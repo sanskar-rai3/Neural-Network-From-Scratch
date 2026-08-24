@@ -288,4 +288,4 @@ void matrix_add_row_inplace(Matrix *mat, const Matrix *row);
  */
 void matrix_apply_function(Matrix *mat, float (*func)(float));
 
-#endif
+#endif /* MATRIX_H */

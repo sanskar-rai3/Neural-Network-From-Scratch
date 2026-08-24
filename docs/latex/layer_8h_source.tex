@@ -1,0 +1,73 @@
+\doxysection{layer.\+h}
+\hypertarget{layer_8h_source}{}\label{layer_8h_source}\index{include/layer.h@{include/layer.h}}
+\doxymbox{\hyperlink{layer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Neural\ Network\ From\ Scratch\ in\ C}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{*\ Copyright\ (C)\ 2026\ Sanskar\ Rai\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ along\ with\ this\ program.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifndef\ LAYER\_H}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ LAYER\_H}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{common_8h}{common.h}}"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{dense_8h}{dense.h}}"{}}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{activation_8h}{activation.h}}"{}}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *\ Types\ \&\ Configuration}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structLayer}{Layer}}\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \doxymbox{\hyperlink{structDense}{Dense}}\ \doxymbox{\hyperlink{structLayer_a118a0cdadb536c7c2d214f3fea07f0c8}{dense}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ \doxymbox{\hyperlink{activation_8h_abda2c109ffc1dc92ebde0f4802c37b1f}{ActivationType}}\ \doxymbox{\hyperlink{structLayer_a1f4fcb33ef4cedc363b288adf9c7dee4}{activation}};\ }
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ \doxymbox{\hyperlink{structLayer_ae19d07d4681d341e034ae4d0cdb75fa7}{z\_cache}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \}\ \doxymbox{\hyperlink{structLayer}{Layer}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structLayerConfig}{LayerConfig}}\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}\ \doxymbox{\hyperlink{structLayerConfig_ac39a3b2399ed144fc559c231710e8800}{input\_size}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}\ \doxymbox{\hyperlink{structLayerConfig_a11aeb0a3b7950a13293f77d19bbe1a18}{output\_size}};\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \ \ \ \ \doxymbox{\hyperlink{activation_8h_abda2c109ffc1dc92ebde0f4802c37b1f}{ActivationType}}\ \doxymbox{\hyperlink{structLayerConfig_a4a71165cf5ff9c70fb8f7aeab0570dc5}{activation}};\ }
+\DoxyCodeLine{00049\ \}\ \doxymbox{\hyperlink{structLayerConfig}{LayerConfig}};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00053\ \textcolor{comment}{\ *\ Creation\ \&\ Destruction}}
+\DoxyCodeLine{00054\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{layer_8h_a43e68610dae7a5ef5218dd01b399bda9}{layer\_init}}(\doxymbox{\hyperlink{structLayer}{Layer}}\ *layer,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structLayerConfig}{LayerConfig}}\ *config);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{layer_8h_ab989ba5a74d4bce391bd1d343673e946}{layer\_destroy}}(\doxymbox{\hyperlink{structLayer}{Layer}}\ *layer);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ *\ Forward\ Pass}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00084\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{layer_8h_a6b762bd63a5cb2d174ffd1a6ed776e2f}{layer\_forward}}(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *output,\ \doxymbox{\hyperlink{structLayer}{Layer}}\ *layer,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *input);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ *\ \ Backward\ Pass}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00107\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{layer_8h_a4187f4df202eca45773599270e2f4ca0}{layer\_backward}}(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *d\_input,\ \doxymbox{\hyperlink{structLayer}{Layer}}\ *layer,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *d\_output);}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ LAYER\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

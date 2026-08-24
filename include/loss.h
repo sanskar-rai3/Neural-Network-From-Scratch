@@ -25,7 +25,7 @@
 
 /*==============================================================================
  * Forward pass
- *=============1===============================================================*/
+ *=============================================================================*/
 
 /**
  * @brief Computes the Mean Squared Error (MSE) loss between predictions and targets.
@@ -102,4 +102,4 @@ void loss_cross_entropy_backward(Matrix *d_prediction, const Matrix *prediction,
  */
 void loss_cross_entropy_softmax_backward( Matrix *dZ, const Matrix *prediction, const Matrix *target);
 
-#endif
+#endif /* LOSS_H */

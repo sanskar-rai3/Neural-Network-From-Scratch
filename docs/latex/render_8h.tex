@@ -1,0 +1,63 @@
+\doxysection{include/\+render.h File Reference}
+\hypertarget{render_8h}{}\label{render_8h}\index{include/render.h@{include/render.h}}
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}matrix.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{render_8h_a03231544d56f41bf8432d385c56ac927}{IMAGE\+\_\+\+SIZE}}~28
+\item 
+\+\#define \doxymbox{\hyperlink{render_8h_adb1f1d5b685f5a444190abe4ac18d972}{SCALE\+\_\+\+FACTOR}}~15
+\item 
+\+\#define \doxymbox{\hyperlink{render_8h_ab3f68d59e815ea166f8c983bc6e85c5b}{WINDOW\+\_\+\+SIZE}}~(\doxymbox{\hyperlink{render_8h_a03231544d56f41bf8432d385c56ac927}{IMAGE\+\_\+\+SIZE}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{render_8h_adb1f1d5b685f5a444190abe4ac18d972}{SCALE\+\_\+\+FACTOR}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{render_8h_a2de304e5eb821f50f9956ace01fdc03e}{render\+\_\+mnist\+\_\+sample}} (const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}sample, const char \texorpdfstring{$\ast$}{*}window\+\_\+title)
+\begin{DoxyCompactList}\small\item\em Displays a single 28x28 MNIST matrix sample in an SDL2 window. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{render_8h_doc-define-members}
+\Hypertarget{render_8h_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{render_8h_a03231544d56f41bf8432d385c56ac927}\index{render.h@{render.h}!IMAGE\_SIZE@{IMAGE\_SIZE}}
+\index{IMAGE\_SIZE@{IMAGE\_SIZE}!render.h@{render.h}}
+\doxysubsubsection{\texorpdfstring{IMAGE\_SIZE}{IMAGE\_SIZE}}
+{\footnotesize\ttfamily \label{render_8h_a03231544d56f41bf8432d385c56ac927} 
+\+\#define IMAGE\+\_\+\+SIZE~28}
+
+\Hypertarget{render_8h_adb1f1d5b685f5a444190abe4ac18d972}\index{render.h@{render.h}!SCALE\_FACTOR@{SCALE\_FACTOR}}
+\index{SCALE\_FACTOR@{SCALE\_FACTOR}!render.h@{render.h}}
+\doxysubsubsection{\texorpdfstring{SCALE\_FACTOR}{SCALE\_FACTOR}}
+{\footnotesize\ttfamily \label{render_8h_adb1f1d5b685f5a444190abe4ac18d972} 
+\+\#define SCALE\+\_\+\+FACTOR~15}
+
+\Hypertarget{render_8h_ab3f68d59e815ea166f8c983bc6e85c5b}\index{render.h@{render.h}!WINDOW\_SIZE@{WINDOW\_SIZE}}
+\index{WINDOW\_SIZE@{WINDOW\_SIZE}!render.h@{render.h}}
+\doxysubsubsection{\texorpdfstring{WINDOW\_SIZE}{WINDOW\_SIZE}}
+{\footnotesize\ttfamily \label{render_8h_ab3f68d59e815ea166f8c983bc6e85c5b} 
+\+\#define WINDOW\+\_\+\+SIZE~(\doxymbox{\hyperlink{render_8h_a03231544d56f41bf8432d385c56ac927}{IMAGE\+\_\+\+SIZE}} \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{render_8h_adb1f1d5b685f5a444190abe4ac18d972}{SCALE\+\_\+\+FACTOR}})}
+
+
+
+\label{render_8h_doc-func-members}
+\Hypertarget{render_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{render_8h_a2de304e5eb821f50f9956ace01fdc03e}\index{render.h@{render.h}!render\_mnist\_sample@{render\_mnist\_sample}}
+\index{render\_mnist\_sample@{render\_mnist\_sample}!render.h@{render.h}}
+\doxysubsubsection{\texorpdfstring{render\_mnist\_sample()}{render\_mnist\_sample()}}
+{\footnotesize\ttfamily \label{render_8h_a2de304e5eb821f50f9956ace01fdc03e} 
+void render\+\_\+mnist\+\_\+sample (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{sample}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{window\+\_\+title}{}\end{DoxyParamCaption})}
+
+
+
+Displays a single 28x28 MNIST matrix sample in an SDL2 window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sample} & \doxylink{structMatrix}{Matrix} pointer containing normalized 1x784 image data (0.\+0 to 1.\+0). \\
+\hline
+{\em window\+\_\+title} & Title bar text for the window. \\
+\hline
+\end{DoxyParams}

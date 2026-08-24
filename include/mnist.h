@@ -109,4 +109,4 @@ void mnist_read_label_data(FILE *file, u8 *data, usize count);
  */
 void mnist_read_image_data_normalized(FILE *file, float *data, usize count);
 
-#endif
+#endif /* MNIST_H */

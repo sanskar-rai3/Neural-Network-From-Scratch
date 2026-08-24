@@ -1,0 +1,35 @@
+\doxysection{src/\+render.c File Reference}
+\hypertarget{render_8c}{}\label{render_8c}\index{src/render.c@{src/render.c}}
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}render.\+h"{}}\newline
+{\ttfamily \+\#include "{}matrix.\+h"{}}\newline
+{\ttfamily \+\#include $<$SDL2/\+\+SDL.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{render_8c_a2de304e5eb821f50f9956ace01fdc03e}{render\+\_\+mnist\+\_\+sample}} (const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}sample, const char \texorpdfstring{$\ast$}{*}window\+\_\+title)
+\begin{DoxyCompactList}\small\item\em Displays a single 28x28 MNIST matrix sample in an SDL2 window. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{render_8c_doc-func-members}
+\Hypertarget{render_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{render_8c_a2de304e5eb821f50f9956ace01fdc03e}\index{render.c@{render.c}!render\_mnist\_sample@{render\_mnist\_sample}}
+\index{render\_mnist\_sample@{render\_mnist\_sample}!render.c@{render.c}}
+\doxysubsubsection{\texorpdfstring{render\_mnist\_sample()}{render\_mnist\_sample()}}
+{\footnotesize\ttfamily \label{render_8c_a2de304e5eb821f50f9956ace01fdc03e} 
+void render\+\_\+mnist\+\_\+sample (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{sample}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{window\+\_\+title}{}\end{DoxyParamCaption})}
+
+
+
+Displays a single 28x28 MNIST matrix sample in an SDL2 window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sample} & \doxylink{structMatrix}{Matrix} pointer containing normalized 1x784 image data (0.\+0 to 1.\+0). \\
+\hline
+{\em window\+\_\+title} & Title bar text for the window. \\
+\hline
+\end{DoxyParams}

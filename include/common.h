@@ -47,4 +47,4 @@ typedef uint32_t u32;
  */
 typedef size_t usize;
 
-#endif
+#endif /* COMMON_H */

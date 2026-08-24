@@ -33,16 +33,16 @@ typedef struct Network Network;
  * @brief Specifies the optimization algorithm used to update parameters.
  */
 typedef enum OptimizerType {
-    OPT_NULL = 0,  /* No optimization algorithm. */
-    OPT_SGD        /* Stochastic Gradient Descent. */
+    OPT_NULL = 0,  /**< No optimization algorithm. */
+    OPT_SGD        /**< Stochastic Gradient Descent. */
 } OptimizerType;
 
 /**
  * @brief Configuration for a neural network optimizer.
  */
 typedef struct Optimizer {
-    OptimizerType type; /* Optimization algorithm to use. */
-    float learning_rate; /* Step size used for parameter updates. */
+    OptimizerType type;  /**< Optimization algorithm to use. */
+    float learning_rate; /**< Step size used for parameter updates. */
 } Optimizer;
 
 /*==============================================================================
@@ -82,4 +82,4 @@ void optimizer_destroy(Optimizer *optimizer);
  */
 void optimizer_step(Optimizer *optimizer, Network *network);
 
-#endif
+#endif /* OPTIMIZER_H */

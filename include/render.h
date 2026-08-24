@@ -35,4 +35,4 @@
  */
 void render_mnist_sample(const Matrix *sample, const char *window_title);
 
-#endif
+#endif /* RENDER_H */

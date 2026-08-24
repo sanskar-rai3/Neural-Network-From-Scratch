@@ -1,0 +1,62 @@
+\doxysection{optimizer.\+h}
+\hypertarget{optimizer_8h_source}{}\label{optimizer_8h_source}\index{include/optimizer.h@{include/optimizer.h}}
+\doxymbox{\hyperlink{optimizer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Neural\ Network\ From\ Scratch\ in\ C}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ Copyright\ (C)\ 2026\ Sanskar\ Rai\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ along\ with\ this\ program.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifndef\ OPTIMIZER\_H}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ OPTIMIZER\_H}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{common_8h}{common.h}}"{}}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{comment}{/*\ Forward\ declaration\ to\ avoid\ including\ nn.h\ here.\ */}}
+\DoxyCodeLine{00026\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structNetwork}{Network}}\ \doxymbox{\hyperlink{structNetwork}{Network}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Types}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \doxymbox{\hyperlink{optimizer_8h_a6bae71413b0c9ee3fdd2b0cb2abe9d1d}{OptimizerType}}\ \{}
+\DoxyCodeLine{00036\ \ \ \ \ \doxymbox{\hyperlink{optimizer_8h_a6bae71413b0c9ee3fdd2b0cb2abe9d1daed41ce88261cf7833cf66344287ee2e0}{OPT\_NULL}}\ =\ 0,\ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \doxymbox{\hyperlink{optimizer_8h_a6bae71413b0c9ee3fdd2b0cb2abe9d1da115c8dca91ae1f81461fb6c4e4ef130a}{OPT\_SGD}}\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \}\ \doxymbox{\hyperlink{optimizer_8h_a6bae71413b0c9ee3fdd2b0cb2abe9d1d}{OptimizerType}};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ \doxymbox{\hyperlink{optimizer_8h_a6bae71413b0c9ee3fdd2b0cb2abe9d1d}{OptimizerType}}\ \doxymbox{\hyperlink{structOptimizer_ae898519672dd0949924aeaf66651c90c}{type}};\ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structOptimizer_aff01ec380d9bb0482f4e00e7f5971f3f}{learning\_rate}};\ }
+\DoxyCodeLine{00046\ \}\ \doxymbox{\hyperlink{structOptimizer}{Optimizer}};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ Creation\ \&\ Destruction}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00059\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{optimizer_8h_abde2b641ebd6e26aed9ac258f9540367}{optimizer\_init}}(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer,\ \textcolor{keywordtype}{float}\ learning\_rate,\ \doxymbox{\hyperlink{optimizer_8h_a6bae71413b0c9ee3fdd2b0cb2abe9d1d}{OptimizerType}}\ type);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{optimizer_8h_afd2781c512bbf1ffad7457fb3af421d8}{optimizer\_destroy}}(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ Optimization}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00083\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{optimizer_8h_abedf89c2c0480b8f8c0a085b6ee843e1}{optimizer\_step}}(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer,\ \doxymbox{\hyperlink{structNetwork}{Network}}\ *network);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ OPTIMIZER\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

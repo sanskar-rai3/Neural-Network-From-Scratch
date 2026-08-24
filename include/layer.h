@@ -32,19 +32,20 @@
  * @brief High-level neural network layer combining a Dense layer with an activation function.
  */
 typedef struct Layer {
-    Dense dense;               /* Underlying fully connected dense layer (weights & biases) */
-    ActivationType activation; /* Activation function applied post-linear transformation */
+    Dense dense;               /**< Underlying fully connected dense layer (weights & biases) */
+    ActivationType activation; /**< Activation function applied post-linear transformation */
 
-    Matrix z_cache;
+    Matrix z_cache;            /**< Cached pre-activation values used during backpropagation. */
 } Layer;
 
 /**
  * @brief Configuration parameters used to initialize a Layer.
  */
 typedef struct LayerConfig {
-    usize input_size;          /* Number of input features */
-    usize output_size;         /* Number of output neurons/features */
-    ActivationType activation; /* Type of activation function to apply */
+    usize input_size;          /**< Number of input features */
+    usize output_size;         /**< Number of output neurons/features */
+
+    ActivationType activation; /**< Type of activation function to apply */
 } LayerConfig;
 
 
@@ -105,4 +106,4 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input);
  */
 void layer_backward(Matrix *d_input, Layer *layer, const Matrix *d_output);
 
-#endif
+#endif /* LAYER_H */

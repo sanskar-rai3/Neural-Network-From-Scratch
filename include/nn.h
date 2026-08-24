@@ -32,8 +32,8 @@
  * @brief Sequential neural network model composed of stacked layers.
  */
 typedef struct Network {
-    Layer *layers;      /* Dynamic array of sequential Layer structures */
-    usize  layer_count; /* Total number of layers in the network */
+    Layer *layers;      /**< Dynamic array of sequential Layer structures */
+    usize  layer_count; /**< Total number of layers in the network */
 } Network;
 
 
@@ -90,4 +90,4 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
  */
 void network_backward(Network *network, const Matrix *d_output);
 
-#endif
+#endif /* NETWORK_H */

@@ -1,0 +1,162 @@
+\doxysection{include/\+mnist.h File Reference}
+\hypertarget{mnist_8h}{}\label{mnist_8h}\index{include/mnist.h@{include/mnist.h}}
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structMNIST__IMAGE__HEADER}{MNIST\+\_\+\+IMAGE\+\_\+\+HEADER}}
+\begin{DoxyCompactList}\small\item\em Represents the file header structure for MNIST image binary files. \end{DoxyCompactList}\item 
+struct \doxymbox{\hyperlink{structMNIST__LABEL__HEADER}{MNIST\+\_\+\+LABEL\+\_\+\+HEADER}}
+\begin{DoxyCompactList}\small\item\em Represents the file header structure for MNIST label binary files. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct MNIST\+\_\+\+IMAGE\+\_\+\+HEADER \doxymbox{\hyperlink{mnist_8h_aee5771db20ffa3c2c764584af1efb41d}{MNIST\+\_\+\+IMAGE\+\_\+\+HEADER}}
+\begin{DoxyCompactList}\small\item\em Represents the file header structure for MNIST image binary files. \end{DoxyCompactList}\item 
+typedef struct MNIST\+\_\+\+LABEL\+\_\+\+HEADER \doxymbox{\hyperlink{mnist_8h_aaedc80c6e7eed472c9248f971795f4ba}{MNIST\+\_\+\+LABEL\+\_\+\+HEADER}}
+\begin{DoxyCompactList}\small\item\em Represents the file header structure for MNIST label binary files. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{mnist_8h_ab0c4b3c8802c44981cbf87d7e8568658}{mnist\+\_\+read\+\_\+image\+\_\+header}} (FILE \texorpdfstring{$\ast$}{*}file, \doxymbox{\hyperlink{structMNIST__IMAGE__HEADER}{MNIST\+\_\+\+IMAGE\+\_\+\+HEADER}} \texorpdfstring{$\ast$}{*}header)
+\begin{DoxyCompactList}\small\item\em Reads and parses the binary header from an MNIST image file. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{mnist_8h_a59ee7cc440cc953543aa2d8e5192f075}{mnist\+\_\+read\+\_\+label\+\_\+header}} (FILE \texorpdfstring{$\ast$}{*}file, \doxymbox{\hyperlink{structMNIST__LABEL__HEADER}{MNIST\+\_\+\+LABEL\+\_\+\+HEADER}} \texorpdfstring{$\ast$}{*}header)
+\begin{DoxyCompactList}\small\item\em Reads and parses the binary header from an MNIST label file. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{mnist_8h_a4289e19210104c1c079e6e50b1a6ef18}{mnist\+\_\+read\+\_\+image\+\_\+data}} (FILE \texorpdfstring{$\ast$}{*}file, \doxymbox{\hyperlink{common_8h_a92c50087ca0e64fa93fc59402c55f8ca}{u8}} \texorpdfstring{$\ast$}{*}data, \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}} count)
+\begin{DoxyCompactList}\small\item\em Reads raw image pixel bytes from an open MNIST image file. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{mnist_8h_ae85cccae4cbeadd678c8de4684ad2b46}{mnist\+\_\+read\+\_\+label\+\_\+data}} (FILE \texorpdfstring{$\ast$}{*}file, \doxymbox{\hyperlink{common_8h_a92c50087ca0e64fa93fc59402c55f8ca}{u8}} \texorpdfstring{$\ast$}{*}data, \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}} count)
+\begin{DoxyCompactList}\small\item\em Reads label byte values from an open MNIST label file. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{mnist_8h_a400e96cb4f8171f6240287fdf74e88ef}{mnist\+\_\+read\+\_\+image\+\_\+data\+\_\+normalized}} (FILE \texorpdfstring{$\ast$}{*}file, float \texorpdfstring{$\ast$}{*}data, \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}} count)
+\begin{DoxyCompactList}\small\item\em Reads image pixel bytes and normalizes them into float values in \+[0.\+0, 1.\+0]. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{mnist_8h_doc-typedef-members}
+\Hypertarget{mnist_8h_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{mnist_8h_aee5771db20ffa3c2c764584af1efb41d}\index{mnist.h@{mnist.h}!MNIST\_IMAGE\_HEADER@{MNIST\_IMAGE\_HEADER}}
+\index{MNIST\_IMAGE\_HEADER@{MNIST\_IMAGE\_HEADER}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{MNIST\_IMAGE\_HEADER}{MNIST\_IMAGE\_HEADER}}
+{\footnotesize\ttfamily \label{mnist_8h_aee5771db20ffa3c2c764584af1efb41d} 
+typedef struct MNIST\+\_\+\+IMAGE\+\_\+\+HEADER MNIST\+\_\+\+IMAGE\+\_\+\+HEADER}
+
+
+
+Represents the file header structure for MNIST image binary files. 
+
+\Hypertarget{mnist_8h_aaedc80c6e7eed472c9248f971795f4ba}\index{mnist.h@{mnist.h}!MNIST\_LABEL\_HEADER@{MNIST\_LABEL\_HEADER}}
+\index{MNIST\_LABEL\_HEADER@{MNIST\_LABEL\_HEADER}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{MNIST\_LABEL\_HEADER}{MNIST\_LABEL\_HEADER}}
+{\footnotesize\ttfamily \label{mnist_8h_aaedc80c6e7eed472c9248f971795f4ba} 
+typedef struct MNIST\+\_\+\+LABEL\+\_\+\+HEADER MNIST\+\_\+\+LABEL\+\_\+\+HEADER}
+
+
+
+Represents the file header structure for MNIST label binary files. 
+
+
+
+\label{mnist_8h_doc-func-members}
+\Hypertarget{mnist_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{mnist_8h_a4289e19210104c1c079e6e50b1a6ef18}\index{mnist.h@{mnist.h}!mnist\_read\_image\_data@{mnist\_read\_image\_data}}
+\index{mnist\_read\_image\_data@{mnist\_read\_image\_data}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{mnist\_read\_image\_data()}{mnist\_read\_image\_data()}}
+{\footnotesize\ttfamily \label{mnist_8h_a4289e19210104c1c079e6e50b1a6ef18} 
+void mnist\+\_\+read\+\_\+image\+\_\+data (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{\doxymbox{\hyperlink{common_8h_a92c50087ca0e64fa93fc59402c55f8ca}{u8}} \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{\doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}}]{count}{}\end{DoxyParamCaption})}
+
+
+
+Reads raw image pixel bytes from an open MNIST image file. 
+
+Reads (count \texorpdfstring{$\ast$}{*} 28 \texorpdfstring{$\ast$}{*} 28) raw byte values (0 to 255) into the target buffer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & Pointer to the open binary file stream. \\
+\hline
+{\em data} & Pointer to the allocated byte buffer to fill. \\
+\hline
+{\em count} & Number of images to read. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{mnist_8h_a400e96cb4f8171f6240287fdf74e88ef}\index{mnist.h@{mnist.h}!mnist\_read\_image\_data\_normalized@{mnist\_read\_image\_data\_normalized}}
+\index{mnist\_read\_image\_data\_normalized@{mnist\_read\_image\_data\_normalized}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{mnist\_read\_image\_data\_normalized()}{mnist\_read\_image\_data\_normalized()}}
+{\footnotesize\ttfamily \label{mnist_8h_a400e96cb4f8171f6240287fdf74e88ef} 
+void mnist\+\_\+read\+\_\+image\+\_\+data\+\_\+normalized (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{float \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{\doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}}]{count}{}\end{DoxyParamCaption})}
+
+
+
+Reads image pixel bytes and normalizes them into float values in \+[0.\+0, 1.\+0]. 
+
+Reads pixel data and converts each pixel via (pixel\+\_\+byte / 255.\+0f).
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & Pointer to the open binary file stream. \\
+\hline
+{\em data} & Pointer to the allocated float buffer to fill (size: count \texorpdfstring{$\ast$}{*} 784). \\
+\hline
+{\em count} & Number of images to read and normalize. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{mnist_8h_ab0c4b3c8802c44981cbf87d7e8568658}\index{mnist.h@{mnist.h}!mnist\_read\_image\_header@{mnist\_read\_image\_header}}
+\index{mnist\_read\_image\_header@{mnist\_read\_image\_header}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{mnist\_read\_image\_header()}{mnist\_read\_image\_header()}}
+{\footnotesize\ttfamily \label{mnist_8h_ab0c4b3c8802c44981cbf87d7e8568658} 
+void mnist\+\_\+read\+\_\+image\+\_\+header (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{\doxymbox{\hyperlink{structMNIST__IMAGE__HEADER}{MNIST\+\_\+\+IMAGE\+\_\+\+HEADER}} \texorpdfstring{$\ast$}{*}}]{header}{}\end{DoxyParamCaption})}
+
+
+
+Reads and parses the binary header from an MNIST image file. 
+
+Automatically handles big-\/endian to host-\/endian byte conversion.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & Pointer to the open binary file stream. \\
+\hline
+{\em header} & Pointer to the \doxylink{structMNIST__IMAGE__HEADER}{MNIST\+\_\+\+IMAGE\+\_\+\+HEADER} structure to populate. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{mnist_8h_ae85cccae4cbeadd678c8de4684ad2b46}\index{mnist.h@{mnist.h}!mnist\_read\_label\_data@{mnist\_read\_label\_data}}
+\index{mnist\_read\_label\_data@{mnist\_read\_label\_data}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{mnist\_read\_label\_data()}{mnist\_read\_label\_data()}}
+{\footnotesize\ttfamily \label{mnist_8h_ae85cccae4cbeadd678c8de4684ad2b46} 
+void mnist\+\_\+read\+\_\+label\+\_\+data (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{\doxymbox{\hyperlink{common_8h_a92c50087ca0e64fa93fc59402c55f8ca}{u8}} \texorpdfstring{$\ast$}{*}}]{data}{, }\item[{\doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}}]{count}{}\end{DoxyParamCaption})}
+
+
+
+Reads label byte values from an open MNIST label file. 
+
+Reads \textquotesingle{}count\textquotesingle{} raw byte values (0 to 9) into the target buffer.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & Pointer to the open binary file stream. \\
+\hline
+{\em data} & Pointer to the allocated byte buffer to fill. \\
+\hline
+{\em count} & Number of labels to read. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{mnist_8h_a59ee7cc440cc953543aa2d8e5192f075}\index{mnist.h@{mnist.h}!mnist\_read\_label\_header@{mnist\_read\_label\_header}}
+\index{mnist\_read\_label\_header@{mnist\_read\_label\_header}!mnist.h@{mnist.h}}
+\doxysubsubsection{\texorpdfstring{mnist\_read\_label\_header()}{mnist\_read\_label\_header()}}
+{\footnotesize\ttfamily \label{mnist_8h_a59ee7cc440cc953543aa2d8e5192f075} 
+void mnist\+\_\+read\+\_\+label\+\_\+header (\begin{DoxyParamCaption}\item[{FILE \texorpdfstring{$\ast$}{*}}]{file}{, }\item[{\doxymbox{\hyperlink{structMNIST__LABEL__HEADER}{MNIST\+\_\+\+LABEL\+\_\+\+HEADER}} \texorpdfstring{$\ast$}{*}}]{header}{}\end{DoxyParamCaption})}
+
+
+
+Reads and parses the binary header from an MNIST label file. 
+
+Automatically handles big-\/endian to host-\/endian byte conversion.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file} & Pointer to the open binary file stream. \\
+\hline
+{\em header} & Pointer to the \doxylink{structMNIST__LABEL__HEADER}{MNIST\+\_\+\+LABEL\+\_\+\+HEADER} structure to populate. \\
+\hline
+\end{DoxyParams}

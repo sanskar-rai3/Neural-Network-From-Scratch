@@ -1,0 +1,105 @@
+\doxysection{src/\+dense.c File Reference}
+\hypertarget{dense_8c}{}\label{dense_8c}\index{src/dense.c@{src/dense.c}}
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}dense.\+h"{}}\newline
+{\ttfamily \+\#include "{}matrix.\+h"{}}\newline
+{\ttfamily \+\#include $<$assert.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \doxymbox{\hyperlink{dense_8c_aa463d0b683f8be80355bd0939497a428}{dense\+\_\+init}} (\doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}layer, \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}} input\+\_\+size, \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}} output\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Initializes a dense layer with allocated weights and biases. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{dense_8c_a13b2b23a1556f5e50de2ab1372929bfe}{dense\+\_\+destroy}} (\doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}layer)
+\begin{DoxyCompactList}\small\item\em Frees all memory associated with a dense layer\textquotesingle{}s weights and biases. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{dense_8c_a6e844fad4d040e1537d4887b284d186b}{dense\+\_\+forward}} (\doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}output, \doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}layer, const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}input)
+\begin{DoxyCompactList}\small\item\em Performs a forward pass through the dense layer: output = (input \texorpdfstring{$\ast$}{*} weights) + bias. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{dense_8c_aaa31cb76c387047e7759e32dac4b01fe}{dense\+\_\+backward}} (\doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}d\+\_\+input, \doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}layer, const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}dZ)
+\begin{DoxyCompactList}\small\item\em Performs a backward pass through the dense layer, computing the gradients with respect to the weights, bias, and input. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{dense_8c_doc-func-members}
+\Hypertarget{dense_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{dense_8c_aaa31cb76c387047e7759e32dac4b01fe}\index{dense.c@{dense.c}!dense\_backward@{dense\_backward}}
+\index{dense\_backward@{dense\_backward}!dense.c@{dense.c}}
+\doxysubsubsection{\texorpdfstring{dense\_backward()}{dense\_backward()}}
+{\footnotesize\ttfamily \label{dense_8c_aaa31cb76c387047e7759e32dac4b01fe} 
+void dense\+\_\+backward (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{d\+\_\+input}{, }\item[{\doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}}]{layer}{, }\item[{const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{dZ}{}\end{DoxyParamCaption})}
+
+
+
+Performs a backward pass through the dense layer, computing the gradients with respect to the weights, bias, and input. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em d\+\_\+input} & Destination matrix for the gradient with respect to the input (d\+L/\+d\+Input). Must be pre-\/allocated with shape (batch\+\_\+size x input\+\_\+size). \\
+\hline
+{\em d\+\_\+weights} & Destination matrix for the gradient with respect to the weights (d\+L/\+d\+Weights). Must be pre-\/allocated with the same shape as the layer\textquotesingle{}s weights. \\
+\hline
+{\em d\+\_\+bias} & Destination matrix for the gradient with respect to the bias (d\+L/\+d\+Bias). Must be pre-\/allocated with the same shape as the layer\textquotesingle{}s bias. \\
+\hline
+{\em layer} & Pointer to the initialized \doxylink{structDense}{Dense} layer. \\
+\hline
+{\em input} & Input matrix from the forward pass, of shape (batch\+\_\+size x input\+\_\+size). \\
+\hline
+{\em d\+\_\+output} & Gradient with respect to the dense layer\textquotesingle{}s output (d\+L/\+d\+Output), of shape (batch\+\_\+size x output\+\_\+size). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{dense_8c_a13b2b23a1556f5e50de2ab1372929bfe}\index{dense.c@{dense.c}!dense\_destroy@{dense\_destroy}}
+\index{dense\_destroy@{dense\_destroy}!dense.c@{dense.c}}
+\doxysubsubsection{\texorpdfstring{dense\_destroy()}{dense\_destroy()}}
+{\footnotesize\ttfamily \label{dense_8c_a13b2b23a1556f5e50de2ab1372929bfe} 
+void dense\+\_\+destroy (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}}]{layer}{}\end{DoxyParamCaption})}
+
+
+
+Frees all memory associated with a dense layer\textquotesingle{}s weights and biases. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em layer} & Pointer to the \doxylink{structDense}{Dense} layer to destroy. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{dense_8c_a6e844fad4d040e1537d4887b284d186b}\index{dense.c@{dense.c}!dense\_forward@{dense\_forward}}
+\index{dense\_forward@{dense\_forward}!dense.c@{dense.c}}
+\doxysubsubsection{\texorpdfstring{dense\_forward()}{dense\_forward()}}
+{\footnotesize\ttfamily \label{dense_8c_a6e844fad4d040e1537d4887b284d186b} 
+void dense\+\_\+forward (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{\doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}}]{layer}{, }\item[{const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{input}{}\end{DoxyParamCaption})}
+
+
+
+Performs a forward pass through the dense layer: output = (input \texorpdfstring{$\ast$}{*} weights) + bias. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Destination matrix to store the result. Must be pre-\/allocated with shape (batch\+\_\+size x output\+\_\+size). \\
+\hline
+{\em layer} & Pointer to the initialized \doxylink{structDense}{Dense} layer. \\
+\hline
+{\em input} & Input matrix of shape (batch\+\_\+size x input\+\_\+size). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{dense_8c_aa463d0b683f8be80355bd0939497a428}\index{dense.c@{dense.c}!dense\_init@{dense\_init}}
+\index{dense\_init@{dense\_init}!dense.c@{dense.c}}
+\doxysubsubsection{\texorpdfstring{dense\_init()}{dense\_init()}}
+{\footnotesize\ttfamily \label{dense_8c_aa463d0b683f8be80355bd0939497a428} 
+int dense\+\_\+init (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structDense}{Dense}} \texorpdfstring{$\ast$}{*}}]{layer}{, }\item[{\doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}}]{input\+\_\+size}{, }\item[{\doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}}]{output\+\_\+size}{}\end{DoxyParamCaption})}
+
+
+
+Initializes a dense layer with allocated weights and biases. 
+
+Weights are typically initialized using He or Xavier uniform initialization, and biases are zero-\/initialized.
+
+
+\begin{DoxyParams}{Parameters}
+{\em layer} & Pointer to the \doxylink{structDense}{Dense} layer structure to initialize. \\
+\hline
+{\em input\+\_\+size} & Number of input features. \\
+\hline
+{\em output\+\_\+size} & Number of output features/\+neurons. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 on success, 0 on failure. 
+\end{DoxyReturn}

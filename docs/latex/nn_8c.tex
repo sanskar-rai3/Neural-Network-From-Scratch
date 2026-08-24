@@ -1,0 +1,100 @@
+\doxysection{src/\+nn.c File Reference}
+\hypertarget{nn_8c}{}\label{nn_8c}\index{src/nn.c@{src/nn.c}}
+{\ttfamily \+\#include "{}common.\+h"{}}\newline
+{\ttfamily \+\#include "{}nn.\+h"{}}\newline
+{\ttfamily \+\#include "{}layer.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \+\#include $<$assert.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \doxymbox{\hyperlink{nn_8c_a1d9fafc30cbfcb2550216e53885bc555}{network\+\_\+init}} (\doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}network, const \doxymbox{\hyperlink{structLayerConfig}{Layer\+Config}} \texorpdfstring{$\ast$}{*}configs, \doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}} layer\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Allocates and initializes a sequential neural network from layer configurations. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{nn_8c_a498bc9e27d4de4a56475ddd0118bd385}{network\+\_\+destroy}} (\doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}network)
+\begin{DoxyCompactList}\small\item\em Frees all dynamic memory owned by the network and its constituent layers. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{nn_8c_aaea353dd4c4a6fc67adca3c95c3302d4}{network\+\_\+forward}} (\doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}output, const \doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}network, const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}input)
+\begin{DoxyCompactList}\small\item\em Performs a forward pass through all layers sequentially. \end{DoxyCompactList}\item 
+void \doxymbox{\hyperlink{nn_8c_afe3103799c6c5cbeb48d3d61d511a845}{network\+\_\+backward}} (\doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}network, const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}d\+\_\+output)
+\begin{DoxyCompactList}\small\item\em Performs a backward pass through all layers in reverse order. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\label{nn_8c_doc-func-members}
+\Hypertarget{nn_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{nn_8c_afe3103799c6c5cbeb48d3d61d511a845}\index{nn.c@{nn.c}!network\_backward@{network\_backward}}
+\index{network\_backward@{network\_backward}!nn.c@{nn.c}}
+\doxysubsubsection{\texorpdfstring{network\_backward()}{network\_backward()}}
+{\footnotesize\ttfamily \label{nn_8c_afe3103799c6c5cbeb48d3d61d511a845} 
+void network\+\_\+backward (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}}]{network}{, }\item[{const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{d\+\_\+output}{}\end{DoxyParamCaption})}
+
+
+
+Performs a backward pass through all layers in reverse order. 
+
+Propagates the output gradient backward through every layer, computing gradients for each layer\textquotesingle{}s weights and biases.
+
+
+\begin{DoxyParams}{Parameters}
+{\em network} & Pointer to the initialized \doxylink{structNetwork}{Network}. \\
+\hline
+{\em d\+\_\+output} & Gradient of the loss with respect to the network output (d\+L/\+dA), with shape (batch\+\_\+size x output\+\_\+size). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{nn_8c_a498bc9e27d4de4a56475ddd0118bd385}\index{nn.c@{nn.c}!network\_destroy@{network\_destroy}}
+\index{network\_destroy@{network\_destroy}!nn.c@{nn.c}}
+\doxysubsubsection{\texorpdfstring{network\_destroy()}{network\_destroy()}}
+{\footnotesize\ttfamily \label{nn_8c_a498bc9e27d4de4a56475ddd0118bd385} 
+void network\+\_\+destroy (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}}]{network}{}\end{DoxyParamCaption})}
+
+
+
+Frees all dynamic memory owned by the network and its constituent layers. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em network} & Pointer to the \doxylink{structNetwork}{Network} to destroy. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{nn_8c_aaea353dd4c4a6fc67adca3c95c3302d4}\index{nn.c@{nn.c}!network\_forward@{network\_forward}}
+\index{network\_forward@{network\_forward}!nn.c@{nn.c}}
+\doxysubsubsection{\texorpdfstring{network\_forward()}{network\_forward()}}
+{\footnotesize\ttfamily \label{nn_8c_aaea353dd4c4a6fc67adca3c95c3302d4} 
+void network\+\_\+forward (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{output}{, }\item[{const \doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}}]{network}{, }\item[{const \doxymbox{\hyperlink{structMatrix}{Matrix}} \texorpdfstring{$\ast$}{*}}]{input}{}\end{DoxyParamCaption})}
+
+
+
+Performs a forward pass through all layers sequentially. 
+
+Computes: output = Layer\+\_\+N(... Layer\+\_\+2(\+Layer\+\_\+1(input)))
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Destination matrix to store the final output (batch\+\_\+size x final\+\_\+output\+\_\+size). \\
+\hline
+{\em network} & Pointer to the initialized \doxylink{structNetwork}{Network}. \\
+\hline
+{\em input} & Input matrix (batch\+\_\+size x initial\+\_\+input\+\_\+size). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{nn_8c_a1d9fafc30cbfcb2550216e53885bc555}\index{nn.c@{nn.c}!network\_init@{network\_init}}
+\index{network\_init@{network\_init}!nn.c@{nn.c}}
+\doxysubsubsection{\texorpdfstring{network\_init()}{network\_init()}}
+{\footnotesize\ttfamily \label{nn_8c_a1d9fafc30cbfcb2550216e53885bc555} 
+int network\+\_\+init (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structNetwork}{Network}} \texorpdfstring{$\ast$}{*}}]{network}{, }\item[{const \doxymbox{\hyperlink{structLayerConfig}{Layer\+Config}} \texorpdfstring{$\ast$}{*}}]{configs}{, }\item[{\doxymbox{\hyperlink{common_8h_a5148c9c1252e19e12def2814f71690e3}{usize}}}]{layer\+\_\+count}{}\end{DoxyParamCaption})}
+
+
+
+Allocates and initializes a sequential neural network from layer configurations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em network} & Pointer to the \doxylink{structNetwork}{Network} structure to initialize. \\
+\hline
+{\em configs} & Array of \doxylink{structLayerConfig}{Layer\+Config} structures defining each layer. \\
+\hline
+{\em layer\+\_\+count} & Number of layers to create. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 on success, 0 on failure. 
+\end{DoxyReturn}
