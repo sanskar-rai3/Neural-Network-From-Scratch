@@ -1,0 +1,986 @@
+\chapter{Neural Network From Scratch in C }
+\hypertarget{index}{}\label{index}\index{Neural Network From Scratch in C@{Neural Network From Scratch in C}}
+\label{index_mainpage}%
+\Hypertarget{index_mainpage}%
+
+
+A feed-\/forward neural network implemented entirely in C, without machine-\/learning frameworks.
+
+The purpose of this project is to understand how neural networks work internally by implementing the underlying mathematics and components directly rather than hiding them behind high-\/level libraries.
+
+The network currently supports matrix operations, MNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-\/layer networks, SGD optimization, MNIST training, inference, accuracy evaluation, and sample rendering.\hypertarget{index_autotoc_md0}{}\doxysection{\texorpdfstring{Overview}{Overview}}\label{index_autotoc_md0}
+The basic data flow through the network is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{MNIST\ image}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Input\ matrix}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Dense\ layer}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Activation}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Dense\ layer}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Softmax}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Class\ probabilities}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Loss}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Backpropagation}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Parameter\ update}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md1}{}\doxysection{\texorpdfstring{Matrix Library}{Matrix Library}}\label{index_autotoc_md1}
+The neural network is built on top of a custom matrix implementation.
+
+Matrices use row-\/major storage.
+
+For a matrix with rows and cols, the element at {\ttfamily (row, col)} is stored at:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{mat-\/>data[row\ *\ mat-\/>cols\ +\ col]}
+
+\end{DoxyCode}
+
+
+The matrix library provides operations including:
+
+
+\begin{DoxyItemize}
+\item \doxylink{structMatrix}{Matrix} creation and destruction
+\item Element access
+\item \doxylink{structMatrix}{Matrix} copying
+\item \doxylink{structMatrix}{Matrix} addition and subtraction
+\item In-\/place arithmetic
+\item Scalar multiplication
+\item Hadamard product
+\item \doxylink{structMatrix}{Matrix} multiplication
+\item Transposition
+\item Element-\/wise operations
+\item Random initialization
+\item \doxylink{structMatrix}{Matrix} filling
+\end{DoxyItemize}\hypertarget{index_autotoc_md2}{}\doxysubsection{\texorpdfstring{Matrix Multiplication}{Matrix Multiplication}}\label{index_autotoc_md2}
+For two matrices:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{A\ =\ m\ x\ n}
+\DoxyCodeLine{B\ =\ n\ x\ p}
+
+\end{DoxyCode}
+
+
+the result is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{C\ =\ m\ x\ p}
+
+\end{DoxyCode}
+
+
+Each element is calculated as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{C[i][j]\ =\ sum(A[i][k]\ *\ B[k][j])}
+
+\end{DoxyCode}
+
+
+\doxylink{structMatrix}{Matrix} multiplication is the primary operation used by dense layers.\hypertarget{index_autotoc_md3}{}\doxysection{\texorpdfstring{Dense Layers}{Dense Layers}}\label{index_autotoc_md3}
+A dense layer performs an affine transformation:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Z\ =\ XW\ +\ b}
+
+\end{DoxyCode}
+
+
+where:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily X} = input
+\item {\ttfamily W} = weights
+\item {\ttfamily b} = bias
+\item {\ttfamily Z} = output before activation
+\end{DoxyItemize}
+
+For example:
+
+
+\begin{DoxyTable}{2}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}&\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Shape  \\
+Input  &64 x 784  \\
+Weights  &784 x 128  \\
+Bias  &1 x 128  \\
+Output  &64 x 128  \\
+\end{DoxyTable}
+
+
+The same operation therefore processes an entire batch of samples at once.
+
+Weights and biases are initialized when the layer is created.
+
+During training, the layer also stores the information required for backpropagation.\hypertarget{index_autotoc_md4}{}\doxysection{\texorpdfstring{Activation Functions}{Activation Functions}}\label{index_autotoc_md4}
+The network supports several activation functions:
+
+
+\begin{DoxyItemize}
+\item Re\+LU
+\item Leaky Re\+LU
+\item Tanh
+\item Sigmoid
+\item Softmax
+\item Linear / None
+\end{DoxyItemize}
+
+Activations are applied to the output of dense layers.\hypertarget{index_autotoc_md5}{}\doxysubsection{\texorpdfstring{Re\+LU}{Re\+LU}}\label{index_autotoc_md5}
+Re\+LU is defined as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{f(x)\ =\ max(0,\ x)}
+
+\end{DoxyCode}
+
+
+It is primarily used in hidden layers.\hypertarget{index_autotoc_md6}{}\doxysubsection{\texorpdfstring{Leaky Re\+LU}{Leaky Re\+LU}}\label{index_autotoc_md6}
+Leaky Re\+LU is defined as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{f(x)\ =\ 0.01x\ \ \ \ if\ x\ <\ 0}
+\DoxyCodeLine{\ \ \ \ \ \ \ x\ \ \ \ \ \ \ \ if\ x\ >=\ 0}
+
+\end{DoxyCode}
+
+
+It allows a small gradient to pass through negative values.\hypertarget{index_autotoc_md7}{}\doxysubsection{\texorpdfstring{Sigmoid}{Sigmoid}}\label{index_autotoc_md7}
+Sigmoid is defined as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sigma(x)\ =\ 1\ /\ (1\ +\ exp(-\/x))}
+
+\end{DoxyCode}
+
+
+Its output is in the range:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{0\ <\ sigma(x)\ <\ 1}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md8}{}\doxysubsection{\texorpdfstring{Tanh}{Tanh}}\label{index_autotoc_md8}
+Tanh is defined as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{tanh(x)}
+
+\end{DoxyCode}
+
+
+Its output is in the range:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{-\/1\ <\ tanh(x)\ <\ 1}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md9}{}\doxysubsection{\texorpdfstring{Softmax}{Softmax}}\label{index_autotoc_md9}
+Softmax converts a vector of logits into a probability distribution.
+
+For a vector {\ttfamily z}:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{softmax(z\_i)\ =\ exp(z\_i)\ /\ sum(exp(z\_j))}
+
+\end{DoxyCode}
+
+
+The implementation subtracts the maximum logit before exponentiation:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{exp(z\_i\ -\/\ max(z))}
+
+\end{DoxyCode}
+
+
+This improves numerical stability and prevents unnecessarily large exponentials.
+
+For the MNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.\hypertarget{index_autotoc_md10}{}\doxysection{\texorpdfstring{Layers and Network}{Layers and Network}}\label{index_autotoc_md10}
+A {\ttfamily \doxylink{structLayer}{Layer}} combines a dense layer with an activation function.
+
+Conceptually:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Layer}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ +-\/-\/\ Dense}
+\DoxyCodeLine{\ \ |\ \ \ \ \ |}
+\DoxyCodeLine{\ \ |\ \ \ \ \ +-\/-\/\ Weights}
+\DoxyCodeLine{\ \ |\ \ \ \ \ +-\/-\/\ Biases}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ +-\/-\/\ Activation}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ +-\/-\/\ Cached\ values}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ +-\/-\/\ Input}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ +-\/-\/\ Z}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ +-\/-\/\ Gradients}
+
+\end{DoxyCode}
+
+
+A {\ttfamily \doxylink{structNetwork}{Network}} contains multiple layers.
+
+The architecture is configured using {\ttfamily \doxylink{structLayerConfig}{Layer\+Config}} structures instead of hardcoding each layer.
+
+For example:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{784\ -\/>\ 128\ -\/>\ 64\ -\/>\ 10}
+
+\end{DoxyCode}
+
+
+can be configured as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Layer\ 0:}
+\DoxyCodeLine{\ \ \ \ input\_size\ \ =\ 784}
+\DoxyCodeLine{\ \ \ \ output\_size\ =\ 128}
+\DoxyCodeLine{\ \ \ \ activation\ \ =\ ReLU}
+\DoxyCodeLine{}
+\DoxyCodeLine{Layer\ 1:}
+\DoxyCodeLine{\ \ \ \ input\_size\ \ =\ 128}
+\DoxyCodeLine{\ \ \ \ output\_size\ =\ 64}
+\DoxyCodeLine{\ \ \ \ activation\ \ =\ ReLU}
+\DoxyCodeLine{}
+\DoxyCodeLine{Layer\ 2:}
+\DoxyCodeLine{\ \ \ \ input\_size\ \ =\ 64}
+\DoxyCodeLine{\ \ \ \ output\_size\ =\ 10}
+\DoxyCodeLine{\ \ \ \ activation\ \ =\ Softmax\ +\ Cross-\/Entropy}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md11}{}\doxysection{\texorpdfstring{Forward Propagation}{Forward Propagation}}\label{index_autotoc_md11}
+For each layer, the forward pass is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{X}
+\DoxyCodeLine{|}
+\DoxyCodeLine{v}
+\DoxyCodeLine{Z\ =\ XW\ +\ b}
+\DoxyCodeLine{|}
+\DoxyCodeLine{v}
+\DoxyCodeLine{A\ =\ activation(Z)}
+\DoxyCodeLine{|}
+\DoxyCodeLine{v}
+\DoxyCodeLine{next\ layer}
+
+\end{DoxyCode}
+
+
+For a complete network:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Input}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Dense}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{ReLU}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Dense}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{ReLU}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Dense}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Softmax}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Prediction}
+
+\end{DoxyCode}
+
+
+The final output is a matrix where each row represents one sample and each column represents a class probability.\hypertarget{index_autotoc_md12}{}\doxysection{\texorpdfstring{Loss Functions}{Loss Functions}}\label{index_autotoc_md12}
+The project implements Mean Squared Error and Cross-\/\+Entropy.\hypertarget{index_autotoc_md13}{}\doxysubsection{\texorpdfstring{Mean Squared Error}{Mean Squared Error}}\label{index_autotoc_md13}
+MSE is defined as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{L\ =\ (1\ /\ n)\ *\ sum((prediction\_i\ -\/\ target\_i)\string^2)}
+
+\end{DoxyCode}
+
+
+Its derivative with respect to the prediction is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dL/dA\ =\ 2(A\ -\/\ Y)\ /\ n}
+
+\end{DoxyCode}
+
+
+MSE is useful for testing and understanding gradients, but it is not the preferred loss function for multi-\/class classification.\hypertarget{index_autotoc_md14}{}\doxysubsection{\texorpdfstring{Cross-\/\+Entropy}{Cross-\/\+Entropy}}\label{index_autotoc_md14}
+For a prediction vector {\ttfamily P} and one-\/hot target {\ttfamily Y}:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{L\ =\ -\/sum(Y\_i\ *\ log(P\_i))}
+
+\end{DoxyCode}
+
+
+For a one-\/hot encoded target, only the probability assigned to the correct class contributes to the loss.
+
+For example:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Prediction:}
+\DoxyCodeLine{\ \ \ \ [0.01,\ 0.02,\ 0.90,\ 0.01,\ ...]}
+\DoxyCodeLine{}
+\DoxyCodeLine{Target:}
+\DoxyCodeLine{\ \ \ \ [0,\ 0,\ 1,\ 0,\ ...]}
+
+\end{DoxyCode}
+
+
+The loss is approximately:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{-\/log(0.90)}
+
+\end{DoxyCode}
+
+
+The implementation clamps probabilities before taking the logarithm to avoid {\ttfamily log(0)}.\hypertarget{index_autotoc_md15}{}\doxysubsection{\texorpdfstring{Softmax + Cross-\/\+Entropy}{Softmax + Cross-\/\+Entropy}}\label{index_autotoc_md15}
+The network has a combined backward path for softmax followed by cross-\/entropy.
+
+For:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{A\ =\ softmax(Z)}
+
+\end{DoxyCode}
+
+
+and cross-\/entropy loss, the derivative simplifies to:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dZ\ =\ A\ -\/\ Y}
+
+\end{DoxyCode}
+
+
+When training with a batch, the gradient is averaged:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dZ\ =\ (A\ -\/\ Y)\ /\ batch\_size}
+
+\end{DoxyCode}
+
+
+This avoids explicitly constructing the full softmax Jacobian and is both simpler and numerically appropriate for classification.\hypertarget{index_autotoc_md16}{}\doxysection{\texorpdfstring{Backpropagation}{Backpropagation}}\label{index_autotoc_md16}
+Backpropagation calculates how much each parameter contributed to the loss.
+
+The network traverses its layers in reverse order.
+
+The general flow is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Loss}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Output\ layer}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Hidden\ layer}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Hidden\ layer}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Input}
+
+\end{DoxyCode}
+
+
+For a dense layer:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Z\ =\ XW\ +\ b}
+
+\end{DoxyCode}
+
+
+Given {\ttfamily dZ}, the gradients are:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dW\ =\ X\string^T\ dZ}
+\DoxyCodeLine{}
+\DoxyCodeLine{db\ =\ sum(dZ)}
+\DoxyCodeLine{}
+\DoxyCodeLine{dX\ =\ dZ\ W\string^T}
+
+\end{DoxyCode}
+
+
+Where:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily dW} = gradient of the weights
+\item {\ttfamily db} = gradient of the biases
+\item {\ttfamily dX} = gradient passed to the previous layer
+\end{DoxyItemize}
+
+The {\ttfamily dX} calculated by one layer becomes the {\ttfamily dA} input gradient for the previous layer.
+
+Activation functions then transform that gradient according to their derivatives.\hypertarget{index_autotoc_md17}{}\doxysubsection{\texorpdfstring{Activation Backward Pass}{Activation Backward Pass}}\label{index_autotoc_md17}
+For Re\+LU:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dZ\ =\ dA\ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ Z\ >\ 0}
+\DoxyCodeLine{\ \ \ \ \ 0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ otherwise}
+
+\end{DoxyCode}
+
+
+For Leaky Re\+LU:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dZ\ =\ dA\ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ Z\ >\ 0}
+\DoxyCodeLine{\ \ \ \ \ 0.01\ *\ dA\ \ \ \ \ \ \ otherwise}
+
+\end{DoxyCode}
+
+
+For sigmoid:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{s\ =\ sigmoid(Z)}
+\DoxyCodeLine{}
+\DoxyCodeLine{dZ\ =\ dA\ *\ s\ *\ (1\ -\/\ s)}
+
+\end{DoxyCode}
+
+
+For tanh:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{t\ =\ tanh(Z)}
+\DoxyCodeLine{}
+\DoxyCodeLine{dZ\ =\ dA\ *\ (1\ -\/\ t\string^2)}
+
+\end{DoxyCode}
+
+
+For the Softmax + Cross-\/\+Entropy combination:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{dZ\ =\ dA}
+
+\end{DoxyCode}
+
+
+where {\ttfamily dA} has already been calculated as:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{prediction\ -\/\ target}
+
+\end{DoxyCode}
+
+
+This is why the final activation can use a specialized backward path for cross-\/entropy.\hypertarget{index_autotoc_md18}{}\doxysection{\texorpdfstring{Optimization}{Optimization}}\label{index_autotoc_md18}
+The project currently implements Stochastic Gradient Descent (SGD).
+
+The basic update rule is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{W\ =\ W\ -\/\ learning\_rate\ *\ dW}
+\DoxyCodeLine{}
+\DoxyCodeLine{b\ =\ b\ -\/\ learning\_rate\ *\ db}
+
+\end{DoxyCode}
+
+
+The optimizer is responsible for applying these updates to every trainable layer in the network.
+
+The learning rate controls the size of each parameter update.
+
+
+\begin{DoxyItemize}
+\item A learning rate that is too large can cause unstable training.
+\item A learning rate that is too small can make training unnecessarily slow.
+\end{DoxyItemize}\hypertarget{index_autotoc_md19}{}\doxysection{\texorpdfstring{Mini-\/\+Batch Training}{Mini-\/\+Batch Training}}\label{index_autotoc_md19}
+The network can train using batches of samples rather than processing the entire dataset at once.
+
+For a batch:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily X} = batch of input samples
+\item {\ttfamily Y} = batch of targets
+\end{DoxyItemize}
+
+The network performs:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{X}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Forward\ pass}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Predictions}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Loss}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Backward\ pass}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{Gradients}
+\DoxyCodeLine{\ \ |}
+\DoxyCodeLine{\ \ v}
+\DoxyCodeLine{SGD\ update}
+
+\end{DoxyCode}
+
+
+Using batches reduces memory requirements and allows matrix operations to process multiple samples efficiently.\hypertarget{index_autotoc_md20}{}\doxysection{\texorpdfstring{MNIST}{MNIST}}\label{index_autotoc_md20}
+The project uses the MNIST handwritten digit dataset.
+
+Each image is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{28\ x\ 28\ pixels}
+
+\end{DoxyCode}
+
+
+The image is flattened into:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{784\ values}
+
+\end{DoxyCode}
+
+
+Each pixel is normalized from:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{0\ -\/\ 255}
+
+\end{DoxyCode}
+
+
+into:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{0.0\ -\/\ 1.0}
+
+\end{DoxyCode}
+
+
+The ten output neurons correspond to digits {\ttfamily 0} through {\ttfamily 9}.
+
+The output layer produces a probability for each digit.
+
+The predicted class is the index of the largest probability.
+
+For example:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{[0.01,\ 0.02,\ 0.03,\ 0.91,\ 0.01,\ ...]}
+
+\end{DoxyCode}
+
+
+The prediction is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{3}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md21}{}\doxysubsection{\texorpdfstring{MNIST Data Loader}{MNIST Data Loader}}\label{index_autotoc_md21}
+The MNIST loader reads the original IDX binary format.
+
+MNIST image files contain:
+
+
+\begin{DoxyItemize}
+\item Magic number
+\item Number of images
+\item Number of rows
+\item Number of columns
+\item Pixel data
+\end{DoxyItemize}
+
+MNIST label files contain:
+
+
+\begin{DoxyItemize}
+\item Magic number
+\item Number of labels
+\item Label data
+\end{DoxyItemize}
+
+The loader handles the big-\/endian values stored in the IDX headers.
+
+Images can be loaded directly as normalized floating-\/point values. The normalized representation is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{pixel\ /\ 255.0}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md22}{}\doxysection{\texorpdfstring{Inference}{Inference}}\label{index_autotoc_md22}
+After training, the network can be used without performing any parameter updates.
+
+Inference consists only of:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Input\ image}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Network\ forward\ pass}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Output\ probabilities}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Argmax}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Predicted\ digit}
+
+\end{DoxyCode}
+
+
+For a single MNIST image:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Matrix\ input\ =\ 1\ x\ 784}
+
+\end{DoxyCode}
+
+
+The network produces:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Matrix\ output\ =\ 1\ x\ 10}
+
+\end{DoxyCode}
+
+
+The largest value in the output represents the predicted digit. The corresponding probability can be used as the model\textquotesingle{}s confidence estimate.\hypertarget{index_autotoc_md23}{}\doxysection{\texorpdfstring{MNIST Evaluation}{MNIST Evaluation}}\label{index_autotoc_md23}
+The test dataset can be passed through the trained network to calculate classification accuracy.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{accuracy\ =\ correct\_predictions\ /\ total\_predictions}
+
+\end{DoxyCode}
+
+
+For example:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Correct:\ 9200}
+\DoxyCodeLine{Total:\ \ \ 10000}
+\DoxyCodeLine{}
+\DoxyCodeLine{Accuracy\ =\ 92.00\%}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md24}{}\doxysection{\texorpdfstring{Rendering}{Rendering}}\label{index_autotoc_md24}
+The project includes an SDL2-\/based MNIST renderer.
+
+A normalized {\ttfamily 1 x 784} image can be displayed as a {\ttfamily 28 x 28} image.
+
+The renderer converts normalized floating-\/point values back into grayscale pixel values:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{0.0\ -\/>\ 0}
+\DoxyCodeLine{1.0\ -\/>\ 255}
+
+\end{DoxyCode}
+
+
+The predicted and actual labels can also be included in the window title. This makes it possible to visually inspect individual predictions instead of relying only on numerical accuracy.\hypertarget{index_autotoc_md25}{}\doxysection{\texorpdfstring{Memory Management}{Memory Management}}\label{index_autotoc_md25}
+The project is written in C, so memory ownership is explicit.
+
+Matrices allocate their own data and must eventually be destroyed.
+
+Typical lifetime:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\doxymbox{\hyperlink{structMatrix}{Matrix}}\ matrix\ =\ \doxymbox{\hyperlink{matrix_8h_ab1d007e352457dea76460d586d8fdd96}{matrix\_empty}}();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\doxymbox{\hyperlink{matrix_8h_ab669e8f773d286720387a29d707bae8f}{matrix\_create}}(...);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{/*\ use\ matrix\ */}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\doxymbox{\hyperlink{matrix_8h_a5c12de24213ab8c5fbfde4ff68ca4f64}{matrix\_destroy}}(\&matrix);}
+
+\end{DoxyCode}
+
+
+The same principle applies to:
+
+
+\begin{DoxyItemize}
+\item \doxylink{structNetwork}{Network} layers
+\item Optimizers
+\item MNIST image buffers
+\item MNIST label buffers
+\end{DoxyItemize}
+
+The project uses explicit cleanup rather than relying on automatic memory management.\hypertarget{index_autotoc_md26}{}\doxysection{\texorpdfstring{Error Handling}{Error Handling}}\label{index_autotoc_md26}
+The project uses assertions for programmer errors and explicit return values for operations that can legitimately fail.
+
+For example, matrix allocation functions can return failure:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{if}\ (!\doxymbox{\hyperlink{matrix_8h_ab669e8f773d286720387a29d707bae8f}{matrix\_create}}(...))\ \{}
+\DoxyCodeLine{\ \ \ \ ...}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Assertions are used to verify assumptions such as:
+
+
+\begin{DoxyItemize}
+\item Valid pointers
+\item Compatible matrix dimensions
+\item Valid matrix sizes
+\item Valid labels
+\item Valid layer configurations
+\end{DoxyItemize}
+
+Assertions can be disabled for release builds using {\ttfamily NDEBUG}.\hypertarget{index_autotoc_md27}{}\doxysection{\texorpdfstring{Building}{Building}}\label{index_autotoc_md27}
+The project uses CMake.
+
+Configure the build:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ -\/S\ .\ -\/B\ build}
+
+\end{DoxyCode}
+
+
+Build the project:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ -\/-\/build\ build}
+
+\end{DoxyCode}
+
+
+Run the executable from the project root so that the relative MNIST paths resolve correctly:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./nn}
+
+\end{DoxyCode}
+
+
+The exact executable location depends on the CMake configuration.\hypertarget{index_autotoc_md28}{}\doxysection{\texorpdfstring{MNIST Dataset}{MNIST Dataset}}\label{index_autotoc_md28}
+The expected MNIST files are:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{data/train-\/images-\/idx3-\/ubyte}
+\DoxyCodeLine{data/train-\/labels-\/idx1-\/ubyte}
+\DoxyCodeLine{data/t10k-\/images-\/idx3-\/ubyte}
+\DoxyCodeLine{data/t10k-\/labels-\/idx1-\/ubyte}
+
+\end{DoxyCode}
+
+
+The project also includes a script for downloading the dataset:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{script/download\_mnist.sh}
+
+\end{DoxyCode}
+
+
+Run:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./script/download\_mnist.sh}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md29}{}\doxysection{\texorpdfstring{Design Philosophy}{Design Philosophy}}\label{index_autotoc_md29}
+This project intentionally avoids machine-\/learning frameworks.
+
+The goal is not to reproduce the performance or feature set of libraries such as Py\+Torch or Tensor\+Flow.
+
+The goal is to understand what those libraries are doing underneath.
+
+The important operations are implemented directly:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Matrix\ multiplication}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Dense\ transformation}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Activation}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Loss}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Gradient\ calculation}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Backpropagation}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Parameter\ update}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Learning}
+
+\end{DoxyCode}
+
+
+This makes the mathematical relationship between the forward pass, loss, gradients, and parameter updates explicit.\hypertarget{index_autotoc_md30}{}\doxysection{\texorpdfstring{Current MNIST Network}{Current MNIST Network}}\label{index_autotoc_md30}
+A typical MNIST configuration is:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Input}
+\DoxyCodeLine{\ \ \ \ 784}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Dense}
+\DoxyCodeLine{\ \ \ \ 784\ -\/>\ 128}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{ReLU}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Dense}
+\DoxyCodeLine{\ \ \ \ 128\ -\/>\ 10}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Softmax\ +\ Cross-\/Entropy}
+\DoxyCodeLine{\ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ v}
+\DoxyCodeLine{Output}
+\DoxyCodeLine{\ \ \ \ 10\ probabilities}
+
+\end{DoxyCode}
+
+
+The network learns to map the 784 pixel values of an MNIST image to a probability distribution over the ten digit classes.\hypertarget{index_autotoc_md31}{}\doxysection{\texorpdfstring{Project Goal}{Project Goal}}\label{index_autotoc_md31}
+The ultimate goal is to build a complete neural-\/network training system in C while understanding every major component involved.
+
+The project is intentionally developed from the bottom up:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Low-\/level\ matrix\ operations}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{Neural\ network\ layers}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{Forward\ propagation}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{Loss\ functions}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{Backpropagation}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{Optimization}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{MNIST\ training}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ |}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ v}
+\DoxyCodeLine{Evaluation\ and\ inference}
+
+\end{DoxyCode}
+
+
+The emphasis is on understanding the implementation and mathematics rather than simply obtaining a working classifier. 

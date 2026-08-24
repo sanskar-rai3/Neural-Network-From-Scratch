@@ -25,6 +25,7 @@
 var NAVTREE =
 [
   [ "Neural Network From Scratch", "index.html", [
+    [ "Neural Network From Scratch in C", "index.html", "index" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
@@ -49,7 +50,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"activation_8c.html"
+"activation_8c.html",
+"structNetwork.html"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

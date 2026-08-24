@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['weights_0',['weights',['../structDense.html#add89562607a2052425e425a7ab3557db',1,'Dense']]],
-  ['window_5fsize_1',['WINDOW_SIZE',['../render_8h.html#ab3f68d59e815ea166f8c983bc6e85c5b',1,'render.h']]]
+  ['scale_5ffactor_0',['SCALE_FACTOR',['../render_8h.html#adb1f1d5b685f5a444190abe4ac18d972',1,'render.h']]],
+  ['scratch_20in_20c_1',['Neural Network From Scratch in C',['../index.html',1,'']]],
+  ['sigmoid_2',['Sigmoid',['../index.html#autotoc_md7',1,'']]],
+  ['softmax_3',['Softmax',['../index.html#autotoc_md9',1,'']]],
+  ['softmax_20cross_20entropy_4',['Softmax + Cross-Entropy',['../index.html#autotoc_md15',1,'']]],
+  ['squared_20error_5',['Mean Squared Error',['../index.html#autotoc_md13',1,'']]]
 ];
