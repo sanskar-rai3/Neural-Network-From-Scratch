@@ -343,9 +343,20 @@ int main(void) {
         printf("Confidence: %.2f%%\n", pred_output.data[predicted] * 100.0f);
 
         render_mnist_sample(&pred_input, "Sample");
+
+        matrix_destroy(&pred_input);
+        matrix_destroy(&pred_output);
     }
 
     /* Clean up */
+    matrix_destroy(&X);
+    matrix_destroy(&Y);
+    matrix_destroy(&prediction);
+    matrix_destroy(&d_output);
+
+    optimizer_destroy(&optimizer);
+    network_destroy(&nn);
+
     free(train_image_data);
     free(train_label_data);
     free(test_image_data);
