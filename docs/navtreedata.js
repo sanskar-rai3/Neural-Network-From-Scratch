@@ -50,8 +50,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"activation_8c.html",
-"structNetwork.html"
+"activation_8h.html"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

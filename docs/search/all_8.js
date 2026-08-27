@@ -4,6 +4,5 @@ var searchData=
   ['in_20c_1',['Neural Network From Scratch in C',['../index.html',1,'']]],
   ['inference_2',['Inference',['../index.html#autotoc_md22',1,'']]],
   ['input_5fcache_3',['input_cache',['../structDense.html#abfeb8207a88250643e9596f890a2c36a',1,'Dense']]],
-  ['input_5fsize_4',['INPUT_SIZE',['../main_8c.html#abcf72cd23bdafb47b19023d91b4c107d',1,'main.c']]],
-  ['input_5fsize_5',['input_size',['../structLayerConfig.html#ac39a3b2399ed144fc559c231710e8800',1,'LayerConfig']]]
+  ['input_5fsize_4',['input_size',['../structLayerConfig.html#ac39a3b2399ed144fc559c231710e8800',1,'LayerConfig']]]
 ];

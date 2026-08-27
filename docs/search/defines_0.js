@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['epoch_0',['EPOCH',['../main_8c.html#a0ac447c7f69530e0caadc891c59d7244',1,'main.c']]]
+  ['image_5fsize_0',['IMAGE_SIZE',['../render_8h.html#a03231544d56f41bf8432d385c56ac927',1,'render.h']]]
 ];
