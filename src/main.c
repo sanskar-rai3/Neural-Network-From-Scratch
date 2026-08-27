@@ -34,10 +34,12 @@
 #define EPOCH         5
 #define LEARNING_RATE 0.01
 
-#define INPUT_SIZE  784
-#define OUTPUT_SIZE 10
+#define INPUT_SIZE   784
+#define OUTPUT_SIZE  10
 #define HIDDEN1_SIZE 128
 #define HIDDEN2_SIZE 64
+
+#define BATCH_SIZE 60
 
 #define TRAIN_IMAGE_COUNT 60000
 #define TRAIN_IMAGE_PATH  "data/train-images-idx3-ubyte"
@@ -48,10 +50,12 @@
 #define TEST_LABEL_PATH  "data/t10k-labels-idx1-ubyte"
 
 /* Helper functions */
-void label_to_one_hot(Matrix *target, u8 label) {
+void labels_to_one_hot(Matrix *target, const u8 *labels) {
     matrix_fill(target, 0.0f);
 
-    target->data[label] = 1.0f;
+    for (usize i = 0; i < target->rows; i++) {
+        target->data[i * target->cols + labels[i]] = 1.0f;
+    }
 }
 
 int argmax(const Matrix *prediction) {
@@ -167,10 +171,10 @@ int main(void) {
     /* Creating training matrices */
     Matrix X, Y, prediction, d_output;
 
-    if (!matrix_create(&X, 1, INPUT_SIZE) ||
-        !matrix_create(&Y, 1, OUTPUT_SIZE) ||
-        !matrix_create(&prediction, 1, OUTPUT_SIZE) ||
-        !matrix_create(&d_output, 1, OUTPUT_SIZE)) {
+    if (!matrix_create(&X, BATCH_SIZE, INPUT_SIZE) ||
+        !matrix_create(&Y, BATCH_SIZE, OUTPUT_SIZE) ||
+        !matrix_create(&prediction, BATCH_SIZE, OUTPUT_SIZE) ||
+        !matrix_create(&d_output, BATCH_SIZE, OUTPUT_SIZE)) {
 
         fprintf(stderr, "Failed to allocate training matrices\n");
 
@@ -192,13 +196,21 @@ int main(void) {
     for (usize epoch = 0; epoch < EPOCH; epoch++) {
         float epoch_loss = 0.0f;
 
-        for (usize sample = 0; sample < TRAIN_IMAGE_COUNT; sample++) {
-            for (usize i = 0; i < INPUT_SIZE; i++) {
-                X.data[i] = train_image_data[sample * INPUT_SIZE + i];
+        for (usize batch = 0; batch < TRAIN_IMAGE_COUNT / BATCH_SIZE; batch++) {
+            usize start = batch * BATCH_SIZE;
+
+            /* Fill batch input */
+            for (usize i = 0; i < BATCH_SIZE; i++) {
+                for (usize j = 0; j < INPUT_SIZE; j++) {
+                    X.data[i * INPUT_SIZE + j] =
+                        train_image_data[
+                            (start + i) * INPUT_SIZE + j
+                        ];
+                }
             }
 
             /* Convert label to one hot */
-            label_to_one_hot(&Y, train_label_data[sample]);
+            labels_to_one_hot(&Y, train_label_data + start);
 
             /* Forward pass */
             network_forward(&prediction, &nn, &X);
@@ -221,7 +233,7 @@ int main(void) {
             optimizer_step(&optimizer, &nn);
         }
 
-        epoch_loss /= (float)TRAIN_IMAGE_COUNT;
+        epoch_loss /= (float)(TRAIN_IMAGE_COUNT / (1.0f * BATCH_SIZE));
 
         printf("epoch: %2zu | loss: %.6f\n", epoch + 1, epoch_loss);
     }
