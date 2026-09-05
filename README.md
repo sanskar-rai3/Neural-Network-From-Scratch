@@ -23,22 +23,40 @@ Run from the project root so relative MNIST paths resolve:
 ./nn
 ```
 
-## MNIST Dataset
+## EMNIST Dataset
+
+The download script supports the following datasets:
+
+* `balanced`
+* `byclass`
+* `bymerge`
+* `digits`
+* `letters`
+* `mnist`
+
+For example, to download the **Balanced** dataset:
+
+```bash
+./script/download_emnist.sh balanced
+```
 
 Expected files:
 
 ```
-data/train-images-idx3-ubyte
-data/train-labels-idx1-ubyte
-data/t10k-images-idx3-ubyte
-data/t10k-labels-idx1-ubyte
+data/balanced/
+├── emnist-balanced-train-images-idx3-ubyte
+├── emnist-balanced-train-labels-idx1-ubyte
+├── emnist-balanced-test-images-idx3-ubyte
+└── emnist-balanced-test-labels-idx1-ubyte
 ```
 
-Download with:
+To download **ByClass**:
 
 ```bash
-./script/download_mnist.sh
+./script/download_emnist.sh byclass
 ```
+
+The EMNIST archive is downloaded only once and reused when downloading additional datasets.
 
 ## License
  
