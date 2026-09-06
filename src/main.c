@@ -31,23 +31,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EPOCH         5
+#define EPOCH         20
 #define LEARNING_RATE 0.01
 
 #define INPUT_SIZE   784
-#define OUTPUT_SIZE  10
-#define HIDDEN1_SIZE 128
-#define HIDDEN2_SIZE 64
+#define HIDDEN1_SIZE 256
+#define HIDDEN2_SIZE 128
+#define OUTPUT_SIZE  62
 
-#define BATCH_SIZE 60
+#define BATCH_SIZE 64
 
-#define TRAIN_IMAGE_COUNT 60000
-#define TRAIN_IMAGE_PATH  "data/mnist/emnist-mnist-train-images-idx3-ubyte"
-#define TRAIN_LABEL_PATH  "data/mnist/emnist-mnist-train-labels-idx1-ubyte"
+#define TRAIN_IMAGE_PATH  "data/byclass/emnist-byclass-train-images-idx3-ubyte"
+#define TRAIN_LABEL_PATH  "data/byclass/emnist-byclass-train-labels-idx1-ubyte"
 
-#define TEST_IMAGE_COUNT 10000
-#define TEST_IMAGE_PATH  "data/mnist/emnist-mnist-test-images-idx3-ubyte"
-#define TEST_LABEL_PATH  "data/mnist/emnist-mnist-test-labels-idx1-ubyte"
+#define TEST_IMAGE_PATH  "data/byclass/emnist-byclass-test-images-idx3-ubyte"
+#define TEST_LABEL_PATH  "data/byclass/emnist-byclass-test-labels-idx1-ubyte"
 
 /* Helper functions */
 void labels_to_one_hot(Matrix *target, const u8 *labels) {
@@ -86,13 +84,15 @@ int main(void) {
     }
 
     /* Reading mnist train headers */
-    EMNIST_IMAGE_HEADER image_header;
-    EMNIST_LABEL_HEADER label_header;
+    EMNIST_IMAGE_HEADER train_image_header;
+    EMNIST_LABEL_HEADER train_label_header;
 
-    emnist_read_image_header(train_image, &image_header);
-    emnist_read_label_header(train_label, &label_header);
+    emnist_read_image_header(train_image, &train_image_header);
+    emnist_read_label_header(train_label, &train_label_header);
 
-    if (image_header.count != label_header.count) {
+    const usize TRAIN_IMAGE_COUNT = train_image_header.count;
+
+    if (train_image_header.count != train_label_header.count) {
         fprintf(stderr, "Image/label count mismatch in training data\n");
 
         fclose(train_image);
@@ -261,6 +261,8 @@ int main(void) {
     emnist_read_image_header(test_image, &test_image_header);
     emnist_read_label_header(test_label, &test_label_header);
 
+    const usize TEST_IMAGE_COUNT = test_image_header.count;
+
     if (test_image_header.count != test_label_header.count) {
         fprintf(stderr, "Test image/label count mismatch\n");
 
@@ -301,64 +303,57 @@ int main(void) {
 
     /*=====================================================================*/
 
-    /* Testing multiple samples */
-    for (usize i = 0; i < 10; i++){
-        /* Creating input sample */
-        Matrix pred_input;
-        if (!matrix_copy_buffer(&pred_input, 1, INPUT_SIZE, test_image_data + 784 * i)) {
-            fprintf(stderr, "Failed to create input matrix\n");
+    /* Testing Model Accuracy */
+    usize correct = 0;
 
-            optimizer_destroy(&optimizer);
-            network_destroy(&nn);
+    Matrix pred_input;
+    Matrix pred_output;
 
-            free(train_image_data);
-            free(train_label_data);
-            free(test_image_data);
-            free(test_label_data);
+    if (!matrix_create(&pred_input, 1, INPUT_SIZE) ||
+        !matrix_create(&pred_output, 1, OUTPUT_SIZE)) {
 
-            return 1;
-        }
+        fprintf(stderr, "Failed to allocate test matrices\n");
 
-        /* Prediction output */
-        Matrix pred_output;
+        matrix_destroy(&pred_input);
+        matrix_destroy(&pred_output);
 
-        if (!matrix_create(&pred_output, 1, OUTPUT_SIZE)) {
-            fprintf(stderr, "Failed to create prediction matrix\n");
+        optimizer_destroy(&optimizer);
+        network_destroy(&nn);
 
-            matrix_destroy(&X);
-            optimizer_destroy(&optimizer);
-            network_destroy(&nn);
+        free(train_image_data);
+        free(train_label_data);
+        free(test_image_data);
+        free(test_label_data);
 
-            free(train_image_data);
-            free(train_label_data);
-            free(test_image_data);
-            free(test_label_data);
+        return 1;
+    }
 
-            return 1;
+    for (usize i = 0; i < TEST_IMAGE_COUNT; i++) {
+        /* Copy one image into input */
+        for (usize j = 0; j < INPUT_SIZE; j++) {
+            pred_input.data[j] = test_image_data[i * INPUT_SIZE + j];
         }
 
         /* Forward pass */
         network_forward(&pred_output, &nn, &pred_input);
 
-        /* Print all the values of output neuron */
-        for (usize i = 0; i < 10; i++) {
-            printf("%f |", pred_output.data[i]);
-        }
-        putchar('\n');
-
         /* Get predicted class */
         usize predicted = argmax(&pred_output);
 
-        printf("\n==========Prediction==========\n");
-        printf("Actual:     %u\n", test_label_data[i]);
-        printf("Predicted:  %zu\n", predicted);
-        printf("Confidence: %.2f%%\n", pred_output.data[predicted] * 100.0f);
-
-        render_emnist_sample(&pred_input, "Sample");
-
-        matrix_destroy(&pred_input);
-        matrix_destroy(&pred_output);
+        /* Compare */
+        if (predicted == test_label_data[i]) {
+            correct++;
+        }
     }
+
+    float accuracy = (float)correct / (float)TEST_IMAGE_COUNT * 100.0f;
+
+    printf("\n========== Test Accuracy ==========\n");
+    printf("Correct:   %zu / %zu\n", correct, TEST_IMAGE_COUNT);
+    printf("Accuracy:  %.2f%%\n", accuracy);
+
+    matrix_destroy(&pred_input);
+    matrix_destroy(&pred_output);
 
     /* Clean up */
     matrix_destroy(&X);
