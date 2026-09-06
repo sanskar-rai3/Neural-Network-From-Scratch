@@ -61,7 +61,7 @@ static u32 read_be(FILE *file) {
 
 void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header) {
     if (!file || !header) {
-        fprintf(stderr, "Error: Invalid argument passed to mnist_read_image_header\n");
+        fprintf(stderr, "Error: Invalid argument passed to emnist_read_image_header\n");
         exit(EXIT_FAILURE);
     }
 
@@ -83,7 +83,7 @@ void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header) {
 
 void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header) {
     if (!file || !header) {
-        fprintf(stderr, "Error: Invalid argument passed to mnist_read_label_header\n");
+        fprintf(stderr, "Error: Invalid argument passed to emnist_read_label_header\n");
         exit(EXIT_FAILURE);
     }
 
@@ -102,13 +102,13 @@ void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header) {
 
 void emnist_read_image_data(FILE *file, u8 *data, usize count) {
     if (!file || !data || count == 0) {
-        fprintf(stderr, "Error: Invalid argument passed to mnist_read_image_data\n");
+        fprintf(stderr, "Error: Invalid argument passed to emnist_read_image_data\n");
         exit(EXIT_FAILURE);
     }
 
     /* Each image contains 28 * 28 = 784 byte pixels */
     usize total_pixels = count * 28 * 28;
-    size_t bytes_read = fread(data, sizeof(u8), total_pixels, file);
+    usize bytes_read = fread(data, sizeof(u8), total_pixels, file);
     if (bytes_read != total_pixels) {
         fprintf(stderr, "Error: Failed to read full image data\n");
         exit(EXIT_FAILURE);
@@ -117,11 +117,11 @@ void emnist_read_image_data(FILE *file, u8 *data, usize count) {
 
 void emnist_read_label_data(FILE *file, u8 *data, usize count) {
     if (!file || !data || count == 0) {
-        fprintf(stderr, "Error: Invalid argument passed to mnist_read_label_data\n");
+        fprintf(stderr, "Error: Invalid argument passed to emnist_read_label_data\n");
         exit(EXIT_FAILURE);
     }
 
-    size_t bytes_read = fread(data, sizeof(u8), count, file);
+    usize bytes_read = fread(data, sizeof(u8), count, file);
     if (bytes_read != count) {
         fprintf(stderr, "Error: Failed to read full label data\n");
         exit(EXIT_FAILURE);
@@ -130,7 +130,7 @@ void emnist_read_label_data(FILE *file, u8 *data, usize count) {
 
 void emnist_read_image_data_normalized(FILE *file, float *data, usize count) {
     if (!file || !data || count == 0) {
-        fprintf(stderr, "Error: Invalid argument passed to mnist_read_image_data_normalized\n");
+        fprintf(stderr, "Error: Invalid argument passed to emnist_read_image_data_normalized\n");
         exit(EXIT_FAILURE);
     }
 
