@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RENDER_H
-#define RENDER_H
+#ifndef EMNIST_RENDERER_H
+#define EMNIST_RENDERER_H
 
 #include "common.h"
 #include "matrix.h"
@@ -33,6 +33,6 @@
  * @param sample Matrix pointer containing normalized 1x784 image data (0.0 to 1.0).
  * @param window_title Title bar text for the window.
  */
-void render_mnist_sample(const Matrix *sample, const char *window_title);
+void render_emnist_sample(const Matrix *sample, const char *window_title);
 
-#endif /* RENDER_H */
+#endif /* EMNIST_RENDERER_H */

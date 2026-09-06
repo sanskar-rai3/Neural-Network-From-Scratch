@@ -18,14 +18,14 @@
  */
 
 #include "common.h"
-#include "render.h"
+#include "emnist_renderer.h"
 #include "matrix.h"
 
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
 
-void render_mnist_sample(const Matrix *sample, const char *window_title) {
+void render_emnist_sample(const Matrix *sample, const char *window_title) {
     if (!sample || sample->cols != 784) {
         fprintf(stderr, "Error: Invalid sample matrix for rendering (expected 1x784)\n");
         return;

@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MNIST_H
-#define MNIST_H
+#ifndef EMNIST_LOADER_H
+#define EMNIST_LOADER_H
 
 #include "common.h"
 
@@ -31,20 +31,20 @@
 /**
  * @brief Represents the file header structure for MNIST image binary files.
  */
-typedef struct MNIST_IMAGE_HEADER {
+typedef struct EMNIST_IMAGE_HEADER {
     int   magic; /**< Magic number identifier (0x00000803 / 2051 in big-endian) */
     usize count; /**< Total number of images in the dataset file */
     int   rows;  /**< Number of pixel rows per image (typically 28) */
     int   cols;  /**< Number of pixel columns per image (typically 28) */
-} MNIST_IMAGE_HEADER;
+} EMNIST_IMAGE_HEADER;
 
 /**
  * @brief Represents the file header structure for MNIST label binary files.
  */
-typedef struct MNIST_LABEL_HEADER {
+typedef struct EMNIST_LABEL_HEADER {
     int   magic; /**< Magic number identifier (0x00000801 / 2049 in big-endian) */
     usize count; /**< Total number of labels in the dataset file */
-} MNIST_LABEL_HEADER;
+} EMNIST_LABEL_HEADER;
 
 
 /*==============================================================================
@@ -59,7 +59,7 @@ typedef struct MNIST_LABEL_HEADER {
  * @param file   Pointer to the open binary file stream.
  * @param header Pointer to the MNIST_IMAGE_HEADER structure to populate.
  */
-void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header);
+void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header);
 
 /**
  * @brief Reads and parses the binary header from an MNIST label file.
@@ -69,7 +69,7 @@ void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header);
  * @param file   Pointer to the open binary file stream.
  * @param header Pointer to the MNIST_LABEL_HEADER structure to populate.
  */
-void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header);
+void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header);
 
 
 /*==============================================================================
@@ -85,7 +85,7 @@ void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header);
  * @param data  Pointer to the allocated byte buffer to fill.
  * @param count Number of images to read.
  */
-void mnist_read_image_data(FILE *file, u8 *data, usize count);
+void emnist_read_image_data(FILE *file, u8 *data, usize count);
 
 /**
  * @brief Reads label byte values from an open MNIST label file.
@@ -96,7 +96,7 @@ void mnist_read_image_data(FILE *file, u8 *data, usize count);
  * @param data  Pointer to the allocated byte buffer to fill.
  * @param count Number of labels to read.
  */
-void mnist_read_label_data(FILE *file, u8 *data, usize count);
+void emnist_read_label_data(FILE *file, u8 *data, usize count);
 
 /**
  * @brief Reads image pixel bytes and normalizes them into float values in [0.0, 1.0].
@@ -107,6 +107,6 @@ void mnist_read_label_data(FILE *file, u8 *data, usize count);
  * @param data  Pointer to the allocated float buffer to fill (size: count * 784).
  * @param count Number of images to read and normalize.
  */
-void mnist_read_image_data_normalized(FILE *file, float *data, usize count);
+void emnist_read_image_data_normalized(FILE *file, float *data, usize count);
 
-#endif /* MNIST_H */
+#endif /* EMNIST_LOADER_H */

@@ -25,8 +25,8 @@
 #include "loss.h"
 #include "matrix.h"
 
-#include "mnist.h"
-#include "render.h"
+#include "emnist_loader.h"
+#include "emnist_renderer.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,12 +42,12 @@
 #define BATCH_SIZE 60
 
 #define TRAIN_IMAGE_COUNT 60000
-#define TRAIN_IMAGE_PATH  "data/train-images-idx3-ubyte"
-#define TRAIN_LABEL_PATH  "data/train-labels-idx1-ubyte"
+#define TRAIN_IMAGE_PATH  "data/mnist/emnist-mnist-train-images-idx3-ubyte"
+#define TRAIN_LABEL_PATH  "data/mnist/emnist-mnist-train-labels-idx1-ubyte"
 
 #define TEST_IMAGE_COUNT 10000
-#define TEST_IMAGE_PATH  "data/t10k-images-idx3-ubyte"
-#define TEST_LABEL_PATH  "data/t10k-labels-idx1-ubyte"
+#define TEST_IMAGE_PATH  "data/mnist/emnist-mnist-test-images-idx3-ubyte"
+#define TEST_LABEL_PATH  "data/mnist/emnist-mnist-test-labels-idx1-ubyte"
 
 /* Helper functions */
 void labels_to_one_hot(Matrix *target, const u8 *labels) {
@@ -86,11 +86,11 @@ int main(void) {
     }
 
     /* Reading mnist train headers */
-    MNIST_IMAGE_HEADER image_header;
-    MNIST_LABEL_HEADER label_header;
+    EMNIST_IMAGE_HEADER image_header;
+    EMNIST_LABEL_HEADER label_header;
 
-    mnist_read_image_header(train_image, &image_header);
-    mnist_read_label_header(train_label, &label_header);
+    emnist_read_image_header(train_image, &image_header);
+    emnist_read_label_header(train_label, &label_header);
 
     if (image_header.count != label_header.count) {
         fprintf(stderr, "Image/label count mismatch in training data\n");
@@ -123,8 +123,8 @@ int main(void) {
     }
 
     /* Reading mnist train data */
-    mnist_read_image_data_normalized(train_image, train_image_data, TRAIN_IMAGE_COUNT);   
-    mnist_read_label_data(train_label, train_label_data, TRAIN_IMAGE_COUNT);
+    emnist_read_image_data_normalized(train_image, train_image_data, TRAIN_IMAGE_COUNT);   
+    emnist_read_label_data(train_label, train_label_data, TRAIN_IMAGE_COUNT);
 
     /* Closing mnist train files */
     fclose(train_image);
@@ -255,11 +255,11 @@ int main(void) {
     }
 
     /* Reading mnist test headers */
-    MNIST_IMAGE_HEADER test_image_header;
-    MNIST_LABEL_HEADER test_label_header;
+    EMNIST_IMAGE_HEADER test_image_header;
+    EMNIST_LABEL_HEADER test_label_header;
 
-    mnist_read_image_header(test_image, &test_image_header);
-    mnist_read_label_header(test_label, &test_label_header);
+    emnist_read_image_header(test_image, &test_image_header);
+    emnist_read_label_header(test_label, &test_label_header);
 
     if (test_image_header.count != test_label_header.count) {
         fprintf(stderr, "Test image/label count mismatch\n");
@@ -292,8 +292,8 @@ int main(void) {
     }
 
     /* Reading mnist test data */
-    mnist_read_image_data_normalized(test_image, test_image_data, TEST_IMAGE_COUNT);
-    mnist_read_label_data(test_label, test_label_data, TEST_IMAGE_COUNT);
+    emnist_read_image_data_normalized(test_image, test_image_data, TEST_IMAGE_COUNT);
+    emnist_read_label_data(test_label, test_label_data, TEST_IMAGE_COUNT);
 
     /* Closing mnist test files */
     fclose(test_image);
@@ -354,7 +354,7 @@ int main(void) {
         printf("Predicted:  %zu\n", predicted);
         printf("Confidence: %.2f%%\n", pred_output.data[predicted] * 100.0f);
 
-        render_mnist_sample(&pred_input, "Sample");
+        render_emnist_sample(&pred_input, "Sample");
 
         matrix_destroy(&pred_input);
         matrix_destroy(&pred_output);

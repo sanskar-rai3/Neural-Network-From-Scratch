@@ -18,7 +18,7 @@
  */
 
 #include "common.h"
-#include "mnist.h"
+#include "emnist_loader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,7 +59,7 @@ static u32 read_be(FILE *file) {
  * Reading Headers
  *============================================================================*/
 
-void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header) {
+void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header) {
     if (!file || !header) {
         fprintf(stderr, "Error: Invalid argument passed to mnist_read_image_header\n");
         exit(EXIT_FAILURE);
@@ -81,7 +81,7 @@ void mnist_read_image_header(FILE *file, MNIST_IMAGE_HEADER *header) {
     }
 }
 
-void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header) {
+void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header) {
     if (!file || !header) {
         fprintf(stderr, "Error: Invalid argument passed to mnist_read_label_header\n");
         exit(EXIT_FAILURE);
@@ -100,7 +100,7 @@ void mnist_read_label_header(FILE *file, MNIST_LABEL_HEADER *header) {
  * Reading Data
  *============================================================================*/
 
-void mnist_read_image_data(FILE *file, u8 *data, usize count) {
+void emnist_read_image_data(FILE *file, u8 *data, usize count) {
     if (!file || !data || count == 0) {
         fprintf(stderr, "Error: Invalid argument passed to mnist_read_image_data\n");
         exit(EXIT_FAILURE);
@@ -115,7 +115,7 @@ void mnist_read_image_data(FILE *file, u8 *data, usize count) {
     }
 }
 
-void mnist_read_label_data(FILE *file, u8 *data, usize count) {
+void emnist_read_label_data(FILE *file, u8 *data, usize count) {
     if (!file || !data || count == 0) {
         fprintf(stderr, "Error: Invalid argument passed to mnist_read_label_data\n");
         exit(EXIT_FAILURE);
@@ -128,7 +128,7 @@ void mnist_read_label_data(FILE *file, u8 *data, usize count) {
     }
 }
 
-void mnist_read_image_data_normalized(FILE *file, float *data, usize count) {
+void emnist_read_image_data_normalized(FILE *file, float *data, usize count) {
     if (!file || !data || count == 0) {
         fprintf(stderr, "Error: Invalid argument passed to mnist_read_image_data_normalized\n");
         exit(EXIT_FAILURE);
@@ -141,7 +141,7 @@ void mnist_read_image_data_normalized(FILE *file, float *data, usize count) {
         exit(EXIT_FAILURE);
     }
 
-    mnist_read_image_data(file, pixels, count);
+    emnist_read_image_data(file, pixels, count);
 
     for (usize i = 0; i < total_pixels; i++) {
         data[i] = (float)pixels[i] / 255.0f;
