@@ -80,7 +80,7 @@ void render_emnist_sample(const Matrix *sample, const char *window_title) {
     /* -------------------------------------------------------------------------
      * Convert Normalized Floats (0.0 - 1.0) to RGBA8888 Pixel Buffer
      * ----------------------------------------------------------------------- */
-    uint32_t pixels[IMAGE_SIZE * IMAGE_SIZE];
+    u32 pixels[IMAGE_SIZE * IMAGE_SIZE];
 
     for (int i = 0; i < IMAGE_SIZE * IMAGE_SIZE; i++) {
         /* Clamp normalized value to [0, 255] byte value */
@@ -88,14 +88,14 @@ void render_emnist_sample(const Matrix *sample, const char *window_title) {
         if (val < 0.0f) val = 0.0f;
         if (val > 1.0f) val = 1.0f;
         
-        uint8_t gray = (uint8_t)(val * 255.0f);
+        u8 gray = (u8)(val * 255.0f);
 
         /* Map gray value into RGBA channels: 0xRRGGBBAA */
         pixels[i] = (gray << 24) | (gray << 16) | (gray << 8) | 0xFF;
     }
 
     /* Update the streaming texture with raw pixel array */
-    SDL_UpdateTexture(texture, NULL, pixels, IMAGE_SIZE * sizeof(uint32_t));
+    SDL_UpdateTexture(texture, NULL, pixels, IMAGE_SIZE * sizeof(u32));
 
     bool running = true;
     SDL_Event event;
