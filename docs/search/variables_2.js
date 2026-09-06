@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['cols_0',['cols',['../structMatrix.html#aff5a435785e059205cd66638d55306d2',1,'Matrix::cols'],['../structMNIST__IMAGE__HEADER.html#ac3674785826fa70f52e60e47161a42fb',1,'MNIST_IMAGE_HEADER::cols']]],
-  ['count_1',['count',['../structMNIST__IMAGE__HEADER.html#a0d99dbae537ce8207c0ee0a6ccaa22df',1,'MNIST_IMAGE_HEADER::count'],['../structMNIST__LABEL__HEADER.html#a6919bc80fc5022a87fc60678880ce827',1,'MNIST_LABEL_HEADER::count']]]
+  ['cols_0',['cols',['../structEMNIST__IMAGE__HEADER.html#ade08149c816fe34b3dc72ecd04697ce4',1,'EMNIST_IMAGE_HEADER::cols'],['../structMatrix.html#aff5a435785e059205cd66638d55306d2',1,'Matrix::cols']]],
+  ['count_1',['count',['../structEMNIST__IMAGE__HEADER.html#a52ebb952de44d9f72939ecaa269ad87a',1,'EMNIST_IMAGE_HEADER::count'],['../structEMNIST__LABEL__HEADER.html#a31603c1db23f7d938a228739eff727b1',1,'EMNIST_LABEL_HEADER::count']]]
 ];

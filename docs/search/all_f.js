@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['scale_5ffactor_0',['SCALE_FACTOR',['../render_8h.html#adb1f1d5b685f5a444190abe4ac18d972',1,'render.h']]],
+  ['scale_5ffactor_0',['SCALE_FACTOR',['../emnist__renderer_8h.html#adb1f1d5b685f5a444190abe4ac18d972',1,'emnist_renderer.h']]],
   ['scratch_20in_20c_1',['Neural Network From Scratch in C',['../index.html',1,'']]],
   ['sigmoid_2',['Sigmoid',['../index.html#autotoc_md7',1,'']]],
   ['softmax_3',['Softmax',['../index.html#autotoc_md9',1,'']]],

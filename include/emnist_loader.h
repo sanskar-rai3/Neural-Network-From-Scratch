@@ -29,7 +29,7 @@
  *============================================================================*/
 
 /**
- * @brief Represents the file header structure for MNIST image binary files.
+ * @brief Represents the file header structure for EMNIST image binary files.
  */
 typedef struct EMNIST_IMAGE_HEADER {
     int   magic; /**< Magic number identifier (0x00000803 / 2051 in big-endian) */
@@ -39,7 +39,7 @@ typedef struct EMNIST_IMAGE_HEADER {
 } EMNIST_IMAGE_HEADER;
 
 /**
- * @brief Represents the file header structure for MNIST label binary files.
+ * @brief Represents the file header structure for EMNIST label binary files.
  */
 typedef struct EMNIST_LABEL_HEADER {
     int   magic; /**< Magic number identifier (0x00000801 / 2049 in big-endian) */
@@ -52,22 +52,22 @@ typedef struct EMNIST_LABEL_HEADER {
  *============================================================================*/
 
 /**
- * @brief Reads and parses the binary header from an MNIST image file.
+ * @brief Reads and parses the binary header from an EMNIST image file.
  * 
  * Automatically handles big-endian to host-endian byte conversion.
  *
  * @param file   Pointer to the open binary file stream.
- * @param header Pointer to the MNIST_IMAGE_HEADER structure to populate.
+ * @param header Pointer to the EMNIST_IMAGE_HEADER structure to populate.
  */
 void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header);
 
 /**
- * @brief Reads and parses the binary header from an MNIST label file.
+ * @brief Reads and parses the binary header from an EMNIST label file.
  * 
  * Automatically handles big-endian to host-endian byte conversion.
  *
  * @param file   Pointer to the open binary file stream.
- * @param header Pointer to the MNIST_LABEL_HEADER structure to populate.
+ * @param header Pointer to the EMNIST_LABEL_HEADER structure to populate.
  */
 void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header);
 
@@ -77,7 +77,7 @@ void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header);
  *============================================================================*/
 
 /**
- * @brief Reads raw image pixel bytes from an open MNIST image file.
+ * @brief Reads raw image pixel bytes from an open EMNIST image file.
  *
  * Reads (count * 28 * 28) raw byte values (0 to 255) into the target buffer.
  *
@@ -88,7 +88,7 @@ void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header);
 void emnist_read_image_data(FILE *file, u8 *data, usize count);
 
 /**
- * @brief Reads label byte values from an open MNIST label file.
+ * @brief Reads label byte values from an open EMNIST label file.
  *
  * Reads 'count' raw byte values (0 to 9) into the target buffer.
  *

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['optimizer_5fdestroy_0',['optimizer_destroy',['../optimizer_8h.html#afd2781c512bbf1ffad7457fb3af421d8',1,'optimizer.h']]],
-  ['optimizer_5finit_1',['optimizer_init',['../optimizer_8h.html#abde2b641ebd6e26aed9ac258f9540367',1,'optimizer.h']]],
-  ['optimizer_5fstep_2',['optimizer_step',['../optimizer_8h.html#abedf89c2c0480b8f8c0a085b6ee843e1',1,'optimizer.h']]]
+  ['network_5fbackward_0',['network_backward',['../nn_8h.html#afe3103799c6c5cbeb48d3d61d511a845',1,'nn.h']]],
+  ['network_5fdestroy_1',['network_destroy',['../nn_8h.html#a498bc9e27d4de4a56475ddd0118bd385',1,'nn.h']]],
+  ['network_5fforward_2',['network_forward',['../nn_8h.html#aaea353dd4c4a6fc67adca3c95c3302d4',1,'nn.h']]],
+  ['network_5finit_3',['network_init',['../nn_8h.html#a1d9fafc30cbfcb2550216e53885bc555',1,'nn.h']]]
 ];

@@ -28,7 +28,7 @@
 #define WINDOW_SIZE (IMAGE_SIZE * SCALE_FACTOR)
 
 /**
- * @brief Displays a single 28x28 MNIST matrix sample in an SDL2 window.
+ * @brief Displays a single 28x28 EMNIST matrix sample in an SDL2 window.
  * 
  * @param sample Matrix pointer containing normalized 1x784 image data (0.0 to 1.0).
  * @param window_title Title bar text for the window.

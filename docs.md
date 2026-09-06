@@ -4,14 +4,14 @@ A feed-forward neural network implemented entirely in C, without machine-learnin
 
 The purpose of this project is to understand how neural networks work internally by implementing the underlying mathematics and components directly rather than hiding them behind high-level libraries.
 
-The network currently supports matrix operations, MNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-layer networks, SGD optimization, MNIST training, inference, accuracy evaluation, and sample rendering.
+The network currently supports matrix operations, EMNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-layer networks, SGD optimization, EMNIST training, inference, accuracy evaluation, and sample rendering.
 
 ## Overview
 
 The basic data flow through the network is:
 
 ```
-MNIST image
+EMNIST image
     |
     v
 Input matrix
@@ -201,7 +201,7 @@ exp(z_i - max(z))
 
 This improves numerical stability and prevents unnecessarily large exponentials.
 
-For the MNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.
+For the EMNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.
 
 ## Layers and Network
 
@@ -233,7 +233,7 @@ The architecture is configured using `LayerConfig` structures instead of hardcod
 For example:
 
 ```
-784 -> 128 -> 64 -> 10
+784 -> 128 -> 64 -> $(class_size)
 ```
 
 can be configured as:
@@ -251,7 +251,7 @@ Layer 1:
 
 Layer 2:
     input_size  = 64
-    output_size = 10
+    output_size = $(class_size)
     activation  = Softmax + Cross-Entropy
 ```
 
@@ -523,9 +523,9 @@ SGD update
 
 Using batches reduces memory requirements and allows matrix operations to process multiple samples efficiently.
 
-## MNIST
+## EMNIST
 
-The project uses the MNIST handwritten digit dataset.
+The project uses the EMNIST handwritten dataset.
 
 Each image is:
 
@@ -551,13 +551,11 @@ into:
 0.0 - 1.0
 ```
 
-The ten output neurons correspond to digits `0` through `9`.
-
 The output layer produces a probability for each digit.
 
 The predicted class is the index of the largest probability.
 
-For example:
+For example(for mnist):
 
 ```
 [0.01, 0.02, 0.03, 0.91, 0.01, ...]
@@ -569,11 +567,11 @@ The prediction is:
 3
 ```
 
-### MNIST Data Loader
+### EMNIST Data Loader
 
-The MNIST loader reads the original IDX binary format.
+The EMNIST loader reads the original IDX binary format.
 
-MNIST image files contain:
+EMNIST image files contain:
 
 - Magic number
 - Number of images
@@ -581,7 +579,7 @@ MNIST image files contain:
 - Number of columns
 - Pixel data
 
-MNIST label files contain:
+EMNIST label files contain:
 
 - Magic number
 - Number of labels
@@ -617,7 +615,7 @@ Argmax
 Predicted digit
 ```
 
-For a single MNIST image:
+For a single EMNIST image:
 
 ```
 Matrix input = 1 x 784
@@ -626,12 +624,12 @@ Matrix input = 1 x 784
 The network produces:
 
 ```
-Matrix output = 1 x 10
+Matrix output = 1 x $(class_size)
 ```
 
 The largest value in the output represents the predicted digit. The corresponding probability can be used as the model's confidence estimate.
 
-## MNIST Evaluation
+## EMNIST Evaluation
 
 The test dataset can be passed through the trained network to calculate classification accuracy.
 
@@ -650,7 +648,7 @@ Accuracy = 92.00%
 
 ## Rendering
 
-The project includes an SDL2-based MNIST renderer.
+The project includes an SDL2-based EMNIST renderer.
 
 A normalized `1 x 784` image can be displayed as a `28 x 28` image.
 
@@ -685,8 +683,8 @@ The same principle applies to:
 
 - Network layers
 - Optimizers
-- MNIST image buffers
-- MNIST label buffers
+- EMNIST image buffers
+- EMNIST label buffers
 
 The project uses explicit cleanup rather than relying on automatic memory management.
 
@@ -728,7 +726,7 @@ Build the project:
 cmake --build build
 ```
 
-Run the executable from the project root so that the relative MNIST paths resolve correctly:
+Run the executable from the project root so that the relative EMNIST paths resolve correctly:
 
 ```bash
 ./nn
@@ -736,27 +734,18 @@ Run the executable from the project root so that the relative MNIST paths resolv
 
 The exact executable location depends on the CMake configuration.
 
-## MNIST Dataset
-
-The expected MNIST files are:
-
-```
-data/train-images-idx3-ubyte
-data/train-labels-idx1-ubyte
-data/t10k-images-idx3-ubyte
-data/t10k-labels-idx1-ubyte
-```
+## EMNIST Dataset
 
 The project also includes a script for downloading the dataset:
 
 ```
-script/download_mnist.sh
+script/download_emnist.sh
 ```
 
 Run:
 
 ```bash
-./script/download_mnist.sh
+./script/download_emnist.sh $(emnist_type)
 ```
 
 ## Design Philosophy
@@ -796,9 +785,9 @@ Learning
 
 This makes the mathematical relationship between the forward pass, loss, gradients, and parameter updates explicit.
 
-## Current MNIST Network
+## Current EMNIST Network
 
-A typical MNIST configuration is:
+A typical EMNIST configuration is:
 
 ```
 Input
@@ -813,17 +802,16 @@ ReLU
     |
     v
 Dense
-    128 -> 10
+    128 -> $(class_size)
     |
     v
 Softmax + Cross-Entropy
     |
     v
 Output
-    10 probabilities
 ```
 
-The network learns to map the 784 pixel values of an MNIST image to a probability distribution over the ten digit classes.
+The network learns to map the 784 pixel values of an EMNIST image to a probability distribution over the ten digit classes.
 
 ## Project Goal
 
@@ -850,7 +838,7 @@ Backpropagation
 Optimization
         |
         v
-MNIST training
+EMNIST training
         |
         v
 Evaluation and inference

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['network_0',['Network',['../nn_8h.html#a5e783e42eddc16b9eb807fe441e845e9',1,'nn.h']]]
+  ['matrix_0',['Matrix',['../matrix_8h.html#a9570374e3dbc873595100dae1e584459',1,'matrix.h']]]
 ];

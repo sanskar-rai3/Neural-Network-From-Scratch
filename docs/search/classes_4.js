@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['optimizer_0',['Optimizer',['../structOptimizer.html',1,'']]]
+  ['network_0',['Network',['../structNetwork.html',1,'']]]
 ];

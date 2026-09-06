@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['magic_0',['magic',['../structMNIST__IMAGE__HEADER.html#aaee0d83c7af1fd366a69bc2b380a94ae',1,'MNIST_IMAGE_HEADER::magic'],['../structMNIST__LABEL__HEADER.html#a6b3c222c50049229f57e3b291dfb1c92',1,'MNIST_LABEL_HEADER::magic']]],
+  ['magic_0',['magic',['../structEMNIST__IMAGE__HEADER.html#ae0413bf89d0fb1fc57056859312eb5b7',1,'EMNIST_IMAGE_HEADER::magic'],['../structEMNIST__LABEL__HEADER.html#a7f5722a152769354d53fdaac617dd40c',1,'EMNIST_LABEL_HEADER::magic']]],
   ['management_1',['Memory Management',['../index.html#autotoc_md25',1,'']]],
   ['matrix_2',['Matrix',['../structMatrix.html',1,'Matrix'],['../matrix_8h.html#a9570374e3dbc873595100dae1e584459',1,'Matrix:&#160;matrix.h']]],
   ['matrix_20library_3',['Matrix Library',['../index.html#autotoc_md1',1,'']]],
@@ -38,13 +38,5 @@ var searchData=
   ['mnist_20dataset_35',['MNIST Dataset',['../index.html#autotoc_md28',1,'']]],
   ['mnist_20evaluation_36',['MNIST Evaluation',['../index.html#autotoc_md23',1,'']]],
   ['mnist_20network_37',['Current MNIST Network',['../index.html#autotoc_md30',1,'']]],
-  ['mnist_2eh_38',['mnist.h',['../mnist_8h.html',1,'']]],
-  ['mnist_5fimage_5fheader_39',['MNIST_IMAGE_HEADER',['../structMNIST__IMAGE__HEADER.html',1,'MNIST_IMAGE_HEADER'],['../mnist_8h.html#aee5771db20ffa3c2c764584af1efb41d',1,'MNIST_IMAGE_HEADER:&#160;mnist.h']]],
-  ['mnist_5flabel_5fheader_40',['MNIST_LABEL_HEADER',['../structMNIST__LABEL__HEADER.html',1,'MNIST_LABEL_HEADER'],['../mnist_8h.html#aaedc80c6e7eed472c9248f971795f4ba',1,'MNIST_LABEL_HEADER:&#160;mnist.h']]],
-  ['mnist_5fread_5fimage_5fdata_41',['mnist_read_image_data',['../mnist_8h.html#a4289e19210104c1c079e6e50b1a6ef18',1,'mnist.h']]],
-  ['mnist_5fread_5fimage_5fdata_5fnormalized_42',['mnist_read_image_data_normalized',['../mnist_8h.html#a400e96cb4f8171f6240287fdf74e88ef',1,'mnist.h']]],
-  ['mnist_5fread_5fimage_5fheader_43',['mnist_read_image_header',['../mnist_8h.html#ab0c4b3c8802c44981cbf87d7e8568658',1,'mnist.h']]],
-  ['mnist_5fread_5flabel_5fdata_44',['mnist_read_label_data',['../mnist_8h.html#ae85cccae4cbeadd678c8de4684ad2b46',1,'mnist.h']]],
-  ['mnist_5fread_5flabel_5fheader_45',['mnist_read_label_header',['../mnist_8h.html#a59ee7cc440cc953543aa2d8e5192f075',1,'mnist.h']]],
-  ['multiplication_46',['Matrix Multiplication',['../index.html#autotoc_md2',1,'']]]
+  ['multiplication_38',['Matrix Multiplication',['../index.html#autotoc_md2',1,'']]]
 ];

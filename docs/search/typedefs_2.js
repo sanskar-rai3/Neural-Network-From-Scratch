@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['layer_0',['Layer',['../layer_8h.html#a0a0b68a32dcbcdb0bdcdfc430c27732a',1,'layer.h']]],
-  ['layerconfig_1',['LayerConfig',['../layer_8h.html#a246a2319951a91906b22744f115d8a2d',1,'layer.h']]]
+  ['emnist_5fimage_5fheader_0',['EMNIST_IMAGE_HEADER',['../emnist__loader_8h.html#ac6b7266495e09a9c5ea643176b5c473d',1,'emnist_loader.h']]],
+  ['emnist_5flabel_5fheader_1',['EMNIST_LABEL_HEADER',['../emnist__loader_8h.html#a36e98e1791a21b37deb9bd00cbdbb249',1,'emnist_loader.h']]]
 ];

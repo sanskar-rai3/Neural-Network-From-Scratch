@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['image_5fsize_0',['IMAGE_SIZE',['../render_8h.html#a03231544d56f41bf8432d385c56ac927',1,'render.h']]],
+  ['image_5fsize_0',['IMAGE_SIZE',['../emnist__renderer_8h.html#a03231544d56f41bf8432d385c56ac927',1,'emnist_renderer.h']]],
   ['in_20c_1',['Neural Network From Scratch in C',['../index.html',1,'']]],
   ['inference_2',['Inference',['../index.html#autotoc_md22',1,'']]],
   ['input_5fcache_3',['input_cache',['../structDense.html#abfeb8207a88250643e9596f890a2c36a',1,'Dense']]],
