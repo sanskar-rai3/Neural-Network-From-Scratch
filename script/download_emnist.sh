@@ -55,6 +55,11 @@ gzip/${PREFIX}-test-images-idx3-ubyte.gz
 gzip/${PREFIX}-test-labels-idx1-ubyte.gz
 "
 
+if [ "$DATASET" != "mnist" ]; then
+    FILES="$FILES
+gzip/${PREFIX}-mapping.txt"
+fi
+
 echo "Extracting EMNIST $DATASET..."
 
 unzip -j "$ZIP" $FILES -d "$DATA_DIR"
