@@ -21,7 +21,7 @@
 #define LAYER_H
 
 #include "common.h"
-#include "dense.h"
+#include "layer/dense.h"
 #include "activation.h"
 
 /*==============================================================================
@@ -29,23 +29,49 @@
  *============================================================================*/
 
 /**
- * @brief High-level neural network layer combining a Dense layer with an activation function.
+ * @brief Enumeration of the different types of neural network layers.
+ */
+typedef enum LayerType {
+    LAYER_DENSE = 0, /**< Fully connected dense layer. */
+    LAYER_CONVO,     /**< Convolutional layer. */
+    LAYER_MPOOL      /**< Max pooling layer. */
+} LayerType;
+
+/**
+ * @brief Represents a neural network layer.
+ *
+ * A Layer contains the parameters and state required to perform
+ * forward and backward propagation for a specific layer type.
  */
 typedef struct Layer {
-    Dense dense;               /**< Underlying fully connected dense layer (weights & biases) */
-    ActivationType activation; /**< Activation function applied post-linear transformation */
+    LayerType layer_type; /**< Type of the neural network layer. */
 
-    Matrix z_cache;            /**< Cached pre-activation values used during backpropagation. */
+    union {
+        Dense dense; /**< Dense layer parameters and state. */
+        // Convolutional convolutional;
+        // MPool mpool;
+    };
+
+    ActivationType activation; /**< Activation function applied to the layer output. */
+
+    Matrix z_cache; /**< Cached pre-activation values used during backpropagation. */
 } Layer;
 
 /**
- * @brief Configuration parameters used to initialize a Layer.
+ * @brief Configuration parameters used to initialize a neural network layer.
+ *
+ * The configuration stored in the union depends on the specified layer type.
  */
 typedef struct LayerConfig {
-    usize input_size;          /**< Number of input features */
-    usize output_size;         /**< Number of output neurons/features */
+    LayerType layer_type; /**< Type of the layer to initialize. */
 
-    ActivationType activation; /**< Type of activation function to apply */
+    union {
+        DenseConfig dense_config; /**< Configuration for a dense layer. */
+        // ConvoConfig convo_config;
+        // MPoolConfig mpool_config;
+    };
+
+    ActivationType activation; /**< Activation function to apply to the layer output. */
 } LayerConfig;
 
 

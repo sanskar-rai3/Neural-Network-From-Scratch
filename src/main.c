@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EPOCH         20
+#define EPOCH         1
 #define LEARNING_RATE 0.01
 
 #define INPUT_SIZE   784
@@ -41,11 +41,11 @@
 
 #define BATCH_SIZE 64
 
-#define TRAIN_IMAGE_PATH  "data/byclass/emnist-byclass-train-images-idx3-ubyte"
-#define TRAIN_LABEL_PATH  "data/byclass/emnist-byclass-train-labels-idx1-ubyte"
+#define TRAIN_IMAGE_PATH  "data/mnist/emnist-mnist-train-images-idx3-ubyte"
+#define TRAIN_LABEL_PATH  "data/mnist/emnist-mnist-train-labels-idx1-ubyte"
 
-#define TEST_IMAGE_PATH  "data/byclass/emnist-byclass-test-images-idx3-ubyte"
-#define TEST_LABEL_PATH  "data/byclass/emnist-byclass-test-labels-idx1-ubyte"
+#define TEST_IMAGE_PATH  "data/mnist/emnist-mnist-test-images-idx3-ubyte"
+#define TEST_LABEL_PATH  "data/mnist/emnist-mnist-test-labels-idx1-ubyte"
 
 /* Helper functions */
 void labels_to_one_hot(Matrix *target, const u8 *labels) {
@@ -135,19 +135,28 @@ int main(void) {
     /* Configuring layers */
     LayerConfig configs[] = {
         {
-            .input_size  = INPUT_SIZE,
-            .output_size = HIDDEN1_SIZE,
-            .activation  = ACT_RELU
+            .layer_type  = LAYER_DENSE,
+
+            .dense_config.input_size  = INPUT_SIZE,
+            .dense_config.output_size = HIDDEN1_SIZE,
+            
+            .activation = ACT_RELU
         },
         {
-            .input_size  = HIDDEN1_SIZE,
-            .output_size = HIDDEN2_SIZE,
-            .activation  = ACT_RELU
+            .layer_type = LAYER_DENSE,
+
+            .dense_config.input_size  = HIDDEN1_SIZE,
+            .dense_config.output_size = HIDDEN2_SIZE,
+
+            .activation = ACT_RELU
         },
         {
-            .input_size  = HIDDEN2_SIZE,
-            .output_size = OUTPUT_SIZE,
-            .activation  = ACT_SOFTMAX_CEL
+            .layer_type = LAYER_DENSE,
+
+            .dense_config.input_size  = HIDDEN2_SIZE,
+            .dense_config.output_size = OUTPUT_SIZE,
+
+            .activation = ACT_SOFTMAX_CEL
         }
     };
     

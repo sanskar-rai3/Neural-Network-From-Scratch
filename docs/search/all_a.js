@@ -33,10 +33,5 @@ var searchData=
   ['mean_20squared_20error_30',['Mean Squared Error',['../index.html#autotoc_md13',1,'']]],
   ['memory_20management_31',['Memory Management',['../index.html#autotoc_md25',1,'']]],
   ['mini_20batch_20training_32',['Mini-Batch Training',['../index.html#autotoc_md19',1,'']]],
-  ['mnist_33',['MNIST',['../index.html#autotoc_md20',1,'']]],
-  ['mnist_20data_20loader_34',['MNIST Data Loader',['../index.html#autotoc_md21',1,'']]],
-  ['mnist_20dataset_35',['MNIST Dataset',['../index.html#autotoc_md28',1,'']]],
-  ['mnist_20evaluation_36',['MNIST Evaluation',['../index.html#autotoc_md23',1,'']]],
-  ['mnist_20network_37',['Current MNIST Network',['../index.html#autotoc_md30',1,'']]],
-  ['multiplication_38',['Matrix Multiplication',['../index.html#autotoc_md2',1,'']]]
+  ['multiplication_33',['Matrix Multiplication',['../index.html#autotoc_md2',1,'']]]
 ];

@@ -24,17 +24,17 @@ var index =
     ] ],
     [ "Optimization", "index.html#autotoc_md18", null ],
     [ "Mini-Batch Training", "index.html#autotoc_md19", null ],
-    [ "MNIST", "index.html#autotoc_md20", [
-      [ "MNIST Data Loader", "index.html#autotoc_md21", null ]
+    [ "EMNIST", "index.html#autotoc_md20", [
+      [ "EMNIST Data Loader", "index.html#autotoc_md21", null ]
     ] ],
     [ "Inference", "index.html#autotoc_md22", null ],
-    [ "MNIST Evaluation", "index.html#autotoc_md23", null ],
+    [ "EMNIST Evaluation", "index.html#autotoc_md23", null ],
     [ "Rendering", "index.html#autotoc_md24", null ],
     [ "Memory Management", "index.html#autotoc_md25", null ],
     [ "Error Handling", "index.html#autotoc_md26", null ],
     [ "Building", "index.html#autotoc_md27", null ],
-    [ "MNIST Dataset", "index.html#autotoc_md28", null ],
+    [ "EMNIST Dataset", "index.html#autotoc_md28", null ],
     [ "Design Philosophy", "index.html#autotoc_md29", null ],
-    [ "Current MNIST Network", "index.html#autotoc_md30", null ],
+    [ "Current EMNIST Network", "index.html#autotoc_md30", null ],
     [ "Project Goal", "index.html#autotoc_md31", null ]
 ];

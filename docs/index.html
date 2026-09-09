@@ -114,11 +114,11 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 <div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
 <p>A feed-forward neural network implemented entirely in C, without machine-learning frameworks.</p>
 <p>The purpose of this project is to understand how neural networks work internally by implementing the underlying mathematics and components directly rather than hiding them behind high-level libraries.</p>
-<p>The network currently supports matrix operations, MNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-layer networks, SGD optimization, MNIST training, inference, accuracy evaluation, and sample rendering.</p>
+<p>The network currently supports matrix operations, EMNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-layer networks, SGD optimization, EMNIST training, inference, accuracy evaluation, and sample rendering.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md0"></a>
 Overview</h1>
 <p>The basic data flow through the network is:</p>
-<div class="fragment"><div class="line">MNIST image</div>
+<div class="fragment"><div class="line">EMNIST image</div>
 <div class="line">    |</div>
 <div class="line">    v</div>
 <div class="line">Input matrix</div>
@@ -247,7 +247,7 @@ Softmax</h2>
 </div><!-- fragment --><p>The implementation subtracts the maximum logit before exponentiation:</p>
 <div class="fragment"><div class="line">exp(z_i - max(z))</div>
 </div><!-- fragment --><p>This improves numerical stability and prevents unnecessarily large exponentials.</p>
-<p>For the MNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.</p>
+<p>For the EMNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Layers and Network</h1>
 <p>A <span class="tt"><a class="el" href="structLayer.html" title="High-level neural network layer combining a Dense layer with an activation function.">Layer</a></span> combines a dense layer with an activation function.</p>
@@ -269,7 +269,7 @@ Layers and Network</h1>
 </div><!-- fragment --><p>A <span class="tt"><a class="el" href="structNetwork.html" title="Sequential neural network model composed of stacked layers.">Network</a></span> contains multiple layers.</p>
 <p>The architecture is configured using <span class="tt"><a class="el" href="structLayerConfig.html" title="Configuration parameters used to initialize a Layer.">LayerConfig</a></span> structures instead of hardcoding each layer.</p>
 <p>For example:</p>
-<div class="fragment"><div class="line">784 -&gt; 128 -&gt; 64 -&gt; 10</div>
+<div class="fragment"><div class="line">784 -&gt; 128 -&gt; 64 -&gt; $(class_size)</div>
 </div><!-- fragment --><p>can be configured as:</p>
 <div class="fragment"><div class="line">Layer 0:</div>
 <div class="line">    input_size  = 784</div>
@@ -283,7 +283,7 @@ Layers and Network</h1>
 <div class="line"> </div>
 <div class="line">Layer 2:</div>
 <div class="line">    input_size  = 64</div>
-<div class="line">    output_size = 10</div>
+<div class="line">    output_size = $(class_size)</div>
 <div class="line">    activation  = Softmax + Cross-Entropy</div>
 </div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 Forward Propagation</h1>
@@ -454,8 +454,8 @@ Mini-Batch Training</h1>
 <div class="line">SGD update</div>
 </div><!-- fragment --><p>Using batches reduces memory requirements and allows matrix operations to process multiple samples efficiently.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
-MNIST</h1>
-<p>The project uses the MNIST handwritten digit dataset.</p>
+EMNIST</h1>
+<p>The project uses the EMNIST handwritten dataset.</p>
 <p>Each image is:</p>
 <div class="fragment"><div class="line">28 x 28 pixels</div>
 </div><!-- fragment --><p>The image is flattened into:</p>
@@ -464,17 +464,16 @@ MNIST</h1>
 <div class="fragment"><div class="line">0 - 255</div>
 </div><!-- fragment --><p>into:</p>
 <div class="fragment"><div class="line">0.0 - 1.0</div>
-</div><!-- fragment --><p>The ten output neurons correspond to digits <span class="tt">0</span> through <span class="tt">9</span>.</p>
-<p>The output layer produces a probability for each digit.</p>
+</div><!-- fragment --><p>The output layer produces a probability for each digit.</p>
 <p>The predicted class is the index of the largest probability.</p>
-<p>For example:</p>
+<p>For example(for mnist):</p>
 <div class="fragment"><div class="line">[0.01, 0.02, 0.03, 0.91, 0.01, ...]</div>
 </div><!-- fragment --><p>The prediction is:</p>
 <div class="fragment"><div class="line">3</div>
 </div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
-MNIST Data Loader</h2>
-<p>The MNIST loader reads the original IDX binary format.</p>
-<p>MNIST image files contain:</p>
+EMNIST Data Loader</h2>
+<p>The EMNIST loader reads the original IDX binary format.</p>
+<p>EMNIST image files contain:</p>
 <ul>
 <li>Magic number</li>
 <li>Number of images</li>
@@ -482,7 +481,7 @@ MNIST Data Loader</h2>
 <li>Number of columns</li>
 <li>Pixel data</li>
 </ul>
-<p>MNIST label files contain:</p>
+<p>EMNIST label files contain:</p>
 <ul>
 <li>Magic number</li>
 <li>Number of labels</li>
@@ -508,13 +507,13 @@ Inference</h1>
 <div class="line">    |</div>
 <div class="line">    v</div>
 <div class="line">Predicted digit</div>
-</div><!-- fragment --><p>For a single MNIST image:</p>
+</div><!-- fragment --><p>For a single EMNIST image:</p>
 <div class="fragment"><div class="line">Matrix input = 1 x 784</div>
 </div><!-- fragment --><p>The network produces:</p>
-<div class="fragment"><div class="line">Matrix output = 1 x 10</div>
+<div class="fragment"><div class="line">Matrix output = 1 x $(class_size)</div>
 </div><!-- fragment --><p>The largest value in the output represents the predicted digit. The corresponding probability can be used as the model's confidence estimate.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
-MNIST Evaluation</h1>
+EMNIST Evaluation</h1>
 <p>The test dataset can be passed through the trained network to calculate classification accuracy.</p>
 <div class="fragment"><div class="line">accuracy = correct_predictions / total_predictions</div>
 </div><!-- fragment --><p>For example:</p>
@@ -524,7 +523,7 @@ MNIST Evaluation</h1>
 <div class="line">Accuracy = 92.00%</div>
 </div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
 Rendering</h1>
-<p>The project includes an SDL2-based MNIST renderer.</p>
+<p>The project includes an SDL2-based EMNIST renderer.</p>
 <p>A normalized <span class="tt">1 x 784</span> image can be displayed as a <span class="tt">28 x 28</span> image.</p>
 <p>The renderer converts normalized floating-point values back into grayscale pixel values:</p>
 <div class="fragment"><div class="line">0.0 -&gt; 0</div>
@@ -550,8 +549,8 @@ Memory Management</h1>
 <ul>
 <li><a class="el" href="structNetwork.html" title="Sequential neural network model composed of stacked layers.">Network</a> layers</li>
 <li>Optimizers</li>
-<li>MNIST image buffers</li>
-<li>MNIST label buffers</li>
+<li>EMNIST image buffers</li>
+<li>EMNIST label buffers</li>
 </ul>
 <p>The project uses explicit cleanup rather than relying on automatic memory management.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
@@ -577,20 +576,15 @@ Building</h1>
 <div class="fragment"><div class="line">cmake -S . -B build</div>
 </div><!-- fragment --><p>Build the project:</p>
 <div class="fragment"><div class="line">cmake --build build</div>
-</div><!-- fragment --><p>Run the executable from the project root so that the relative MNIST paths resolve correctly:</p>
+</div><!-- fragment --><p>Run the executable from the project root so that the relative EMNIST paths resolve correctly:</p>
 <div class="fragment"><div class="line">./nn</div>
 </div><!-- fragment --><p>The exact executable location depends on the CMake configuration.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
-MNIST Dataset</h1>
-<p>The expected MNIST files are:</p>
-<div class="fragment"><div class="line">data/train-images-idx3-ubyte</div>
-<div class="line">data/train-labels-idx1-ubyte</div>
-<div class="line">data/t10k-images-idx3-ubyte</div>
-<div class="line">data/t10k-labels-idx1-ubyte</div>
-</div><!-- fragment --><p>The project also includes a script for downloading the dataset:</p>
-<div class="fragment"><div class="line">script/download_mnist.sh</div>
+EMNIST Dataset</h1>
+<p>The project also includes a script for downloading the dataset:</p>
+<div class="fragment"><div class="line">script/download_emnist.sh</div>
 </div><!-- fragment --><p>Run:</p>
-<div class="fragment"><div class="line">./script/download_mnist.sh</div>
+<div class="fragment"><div class="line">./script/download_emnist.sh $(emnist_type)</div>
 </div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
 Design Philosophy</h1>
 <p>This project intentionally avoids machine-learning frameworks.</p>
@@ -621,8 +615,8 @@ Design Philosophy</h1>
 <div class="line">Learning</div>
 </div><!-- fragment --><p>This makes the mathematical relationship between the forward pass, loss, gradients, and parameter updates explicit.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
-Current MNIST Network</h1>
-<p>A typical MNIST configuration is:</p>
+Current EMNIST Network</h1>
+<p>A typical EMNIST configuration is:</p>
 <div class="fragment"><div class="line">Input</div>
 <div class="line">    784</div>
 <div class="line">    |</div>
@@ -635,15 +629,14 @@ Current MNIST Network</h1>
 <div class="line">    |</div>
 <div class="line">    v</div>
 <div class="line">Dense</div>
-<div class="line">    128 -&gt; 10</div>
+<div class="line">    128 -&gt; $(class_size)</div>
 <div class="line">    |</div>
 <div class="line">    v</div>
 <div class="line">Softmax + Cross-Entropy</div>
 <div class="line">    |</div>
 <div class="line">    v</div>
 <div class="line">Output</div>
-<div class="line">    10 probabilities</div>
-</div><!-- fragment --><p>The network learns to map the 784 pixel values of an MNIST image to a probability distribution over the ten digit classes.</p>
+</div><!-- fragment --><p>The network learns to map the 784 pixel values of an EMNIST image to a probability distribution over the ten digit classes.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
 Project Goal</h1>
 <p>The ultimate goal is to build a complete neural-network training system in C while understanding every major component involved.</p>
@@ -666,7 +659,7 @@ Project Goal</h1>
 <div class="line">Optimization</div>
 <div class="line">        |</div>
 <div class="line">        v</div>
-<div class="line">MNIST training</div>
+<div class="line">EMNIST training</div>
 <div class="line">        |</div>
 <div class="line">        v</div>
 <div class="line">Evaluation and inference</div>

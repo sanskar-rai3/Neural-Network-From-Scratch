@@ -38,6 +38,14 @@ typedef struct Dense {
     Matrix d_bias;      /**< Gradient dL/db: same shape as bias */
 } Dense;
 
+/**
+ * @brief Configuration parameters for Dense Layer
+ */
+typedef struct DenseConfig {
+    usize input_size;  /**< Number of input features */
+    usize output_size; /**< Number of output features/neurons */
+} DenseConfig;
+
 /*==============================================================================
  * Creation & Destruction
  *============================================================================*/
@@ -49,11 +57,10 @@ typedef struct Dense {
  * and biases are zero-initialized.
  * 
  * @param layer       Pointer to the Dense layer structure to initialize.
- * @param input_size  Number of input features.
- * @param output_size Number of output features/neurons.
+ * @param config      Pointer to the configurations for the dense layer.
  * @return            1 on success, 0 on failure.
  */
-int dense_init(Dense *layer, usize input_size, usize output_size);
+int dense_init(Dense *layer, const DenseConfig *config);
 
 /**
  * @brief Frees all memory associated with a dense layer's weights and biases.

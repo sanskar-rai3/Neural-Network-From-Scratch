@@ -18,7 +18,7 @@
  */
 
 #include "common.h"
-#include "dense.h"
+#include "layer/dense.h"
 #include "matrix.h"
 
 #include <assert.h>
@@ -27,24 +27,23 @@
  * Creation & Destruction
  *============================================================================*/
 
-int dense_init(Dense *layer, usize input_size, usize output_size) {
+int dense_init(Dense *layer, const DenseConfig *config) {
     assert(layer);
-    assert(input_size > 0);
-    assert(output_size > 0);
+    assert(config);
 
-    if (!matrix_create(&layer->weights, input_size, output_size))
+    if (!matrix_create(&layer->weights, config->input_size, config->output_size))
         return 0;
 
-    if (!matrix_create(&layer->bias, 1, output_size))
+    if (!matrix_create(&layer->bias, 1, config->output_size))
         return 0;
 
-    if (!matrix_create(&layer->d_weights, input_size, output_size))
+    if (!matrix_create(&layer->d_weights, config->input_size, config->output_size))
         return 0;
 
-    if (!matrix_create(&layer->d_bias, 1, output_size))
+    if (!matrix_create(&layer->d_bias, 1, config->output_size))
         return 0;
 
-    matrix_he_uniform(&layer->weights, input_size);
+    matrix_he_uniform(&layer->weights, config->input_size);
     matrix_fill(&layer->bias, 0.0f);
 
     layer->input_cache = matrix_empty();

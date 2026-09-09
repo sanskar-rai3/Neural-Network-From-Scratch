@@ -14,7 +14,7 @@ var searchData=
   ['leaky_20relu_11',['Leaky ReLU',['../index.html#autotoc_md6',1,'']]],
   ['learning_5frate_12',['learning_rate',['../structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f',1,'Optimizer']]],
   ['library_13',['Matrix Library',['../index.html#autotoc_md1',1,'']]],
-  ['loader_14',['MNIST Data Loader',['../index.html#autotoc_md21',1,'']]],
+  ['loader_14',['EMNIST Data Loader',['../index.html#autotoc_md21',1,'']]],
   ['loss_20functions_15',['Loss Functions',['../index.html#autotoc_md12',1,'']]],
   ['loss_2eh_16',['loss.h',['../loss_8h.html',1,'']]],
   ['loss_5fcross_5fentropy_17',['loss_cross_entropy',['../loss_8h.html#a2551c624af45c448751168a79b15a687',1,'loss.h']]],

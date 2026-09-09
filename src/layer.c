@@ -19,7 +19,7 @@
 
 #include "common.h"
 #include "layer.h"
-#include "dense.h"
+#include "layer/dense.h"
 #include "matrix.h"
 
 #include <assert.h>
@@ -31,10 +31,8 @@
 int layer_init(Layer *layer, const LayerConfig *config) {
     assert(layer);
     assert(config);
-    assert(config->input_size > 0);
-    assert(config->output_size > 0);
 
-    if (!dense_init(&layer->dense, config->input_size, config->output_size)) {
+    if (!dense_init(&layer->dense, &config->dense_config)) {
         return 0;
     }
 

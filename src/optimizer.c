@@ -18,7 +18,7 @@
  */
 
 #include "optimizer.h"
-#include "dense.h"
+#include "layer/dense.h"
 #include "nn.h"
 
 #include <assert.h>
