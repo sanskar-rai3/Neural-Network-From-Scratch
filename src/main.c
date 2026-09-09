@@ -25,13 +25,12 @@
 #include "loss.h"
 #include "matrix.h"
 
-#include "emnist_loader.h"
-#include "emnist_renderer.h"
+#include "data-loader/emnist_loader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EPOCH         1
+#define EPOCH         5
 #define LEARNING_RATE 0.01
 
 #define INPUT_SIZE   784

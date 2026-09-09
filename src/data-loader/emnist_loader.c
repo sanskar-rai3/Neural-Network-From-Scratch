@@ -18,7 +18,7 @@
  */
 
 #include "common.h"
-#include "emnist_loader.h"
+#include "data-loader/emnist_loader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
