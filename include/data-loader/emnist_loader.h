@@ -20,6 +20,12 @@
 #ifndef EMNIST_LOADER_H
 #define EMNIST_LOADER_H
 
+#define EMNIST_ROWS 28
+#define EMNIST_COLS 28
+
+#define EMNIST_IMAGE_MAGIC 2051
+#define EMNIST_LABEL_MAGIC 2049
+
 #include "common.h"
 
 #include <stdio.h>
@@ -56,20 +62,20 @@ typedef struct EMNIST_LABEL_HEADER {
  * 
  * Automatically handles big-endian to host-endian byte conversion.
  *
- * @param file   Pointer to the open binary file stream.
  * @param header Pointer to the EMNIST_IMAGE_HEADER structure to populate.
+ * @param file   Pointer to the open binary file stream.
  */
-void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header);
+void emnist_read_image_header(EMNIST_IMAGE_HEADER *header, FILE *file);
 
 /**
  * @brief Reads and parses the binary header from an EMNIST label file.
  * 
  * Automatically handles big-endian to host-endian byte conversion.
  *
- * @param file   Pointer to the open binary file stream.
  * @param header Pointer to the EMNIST_LABEL_HEADER structure to populate.
+ * @param file   Pointer to the open binary file stream.
  */
-void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header);
+void emnist_read_label_header(EMNIST_LABEL_HEADER *header, FILE *file);
 
 
 /*==============================================================================
@@ -81,32 +87,32 @@ void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header);
  *
  * Reads (count * 28 * 28) raw byte values (0 to 255) into the target buffer.
  *
- * @param file  Pointer to the open binary file stream.
  * @param data  Pointer to the allocated byte buffer to fill.
+ * @param file  Pointer to the open binary file stream.
  * @param count Number of images to read.
  */
-void emnist_read_image_data(FILE *file, u8 *data, usize count);
+void emnist_read_image_data(u8 *data, FILE *file, usize count);
 
 /**
  * @brief Reads label byte values from an open EMNIST label file.
  *
  * Reads 'count' raw byte values (0 to 9) into the target buffer.
  *
- * @param file  Pointer to the open binary file stream.
  * @param data  Pointer to the allocated byte buffer to fill.
+ * @param file  Pointer to the open binary file stream.
  * @param count Number of labels to read.
  */
-void emnist_read_label_data(FILE *file, u8 *data, usize count);
+void emnist_read_label_data(u8 *data, FILE *file, usize count);
 
 /**
  * @brief Reads image pixel bytes and normalizes them into float values in [0.0, 1.0].
  *
  * Reads pixel data and converts each pixel via (pixel_byte / 255.0f).
  *
- * @param file  Pointer to the open binary file stream.
  * @param data  Pointer to the allocated float buffer to fill (size: count * 784).
+ * @param file  Pointer to the open binary file stream.
  * @param count Number of images to read and normalize.
  */
-void emnist_read_image_data_normalized(FILE *file, float *data, usize count);
+void emnist_read_image_data_normalized(float *data, FILE *file, usize count);
 
 #endif /* EMNIST_LOADER_H */

@@ -33,7 +33,7 @@
 #define EPOCH         5
 #define LEARNING_RATE 0.01
 
-#define INPUT_SIZE   784
+#define INPUT_SIZE   EMNIST_ROWS * EMNIST_COLS
 #define HIDDEN1_SIZE 256
 #define HIDDEN2_SIZE 128
 #define OUTPUT_SIZE  62
@@ -86,8 +86,8 @@ int main(void) {
     EMNIST_IMAGE_HEADER train_image_header;
     EMNIST_LABEL_HEADER train_label_header;
 
-    emnist_read_image_header(train_image, &train_image_header);
-    emnist_read_label_header(train_label, &train_label_header);
+    emnist_read_image_header(&train_image_header, train_image);
+    emnist_read_label_header(&train_label_header, train_label);
 
     const usize TRAIN_IMAGE_COUNT = train_image_header.count;
 
@@ -122,8 +122,8 @@ int main(void) {
     }
 
     /* Reading mnist train data */
-    emnist_read_image_data_normalized(train_image, train_image_data, TRAIN_IMAGE_COUNT);   
-    emnist_read_label_data(train_label, train_label_data, TRAIN_IMAGE_COUNT);
+    emnist_read_image_data_normalized(train_image_data, train_image, TRAIN_IMAGE_COUNT);   
+    emnist_read_label_data(train_label_data, train_label, TRAIN_IMAGE_COUNT);
 
     /* Closing mnist train files */
     fclose(train_image);
@@ -266,8 +266,8 @@ int main(void) {
     EMNIST_IMAGE_HEADER test_image_header;
     EMNIST_LABEL_HEADER test_label_header;
 
-    emnist_read_image_header(test_image, &test_image_header);
-    emnist_read_label_header(test_label, &test_label_header);
+    emnist_read_image_header(&test_image_header, test_image);
+    emnist_read_label_header(&test_label_header, test_label);
 
     const usize TEST_IMAGE_COUNT = test_image_header.count;
 
@@ -302,8 +302,8 @@ int main(void) {
     }
 
     /* Reading mnist test data */
-    emnist_read_image_data_normalized(test_image, test_image_data, TEST_IMAGE_COUNT);
-    emnist_read_label_data(test_label, test_label_data, TEST_IMAGE_COUNT);
+    emnist_read_image_data_normalized(test_image_data, test_image, TEST_IMAGE_COUNT);
+    emnist_read_label_data(test_label_data, test_label, TEST_IMAGE_COUNT);
 
     /* Closing mnist test files */
     fclose(test_image);

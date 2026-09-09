@@ -59,14 +59,14 @@ static u32 read_be(FILE *file) {
  * Reading Headers
  *============================================================================*/
 
-void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header) {
+void emnist_read_image_header(EMNIST_IMAGE_HEADER *header, FILE *file) {
     if (!file || !header) {
         fprintf(stderr, "Error: Invalid argument passed to emnist_read_image_header\n");
         exit(EXIT_FAILURE);
     }
 
     header->magic = read_be(file);
-    if (header->magic != 2051) {
+    if (header->magic != EMNIST_IMAGE_MAGIC) {
         fprintf(stderr, "Error: Invalid image file magic number (%d)\n", header->magic);
         exit(EXIT_FAILURE);
     }
@@ -81,14 +81,14 @@ void emnist_read_image_header(FILE *file, EMNIST_IMAGE_HEADER *header) {
     }
 }
 
-void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header) {
+void emnist_read_label_header(EMNIST_LABEL_HEADER *header, FILE *file) {
     if (!file || !header) {
         fprintf(stderr, "Error: Invalid argument passed to emnist_read_label_header\n");
         exit(EXIT_FAILURE);
     }
 
     header->magic = read_be(file);
-    if (header->magic != 2049) {
+    if (header->magic != EMNIST_LABEL_MAGIC) {
         fprintf(stderr, "Error: Invalid label file magic number (%d)\n", header->magic);
         exit(EXIT_FAILURE);
     }
@@ -100,7 +100,7 @@ void emnist_read_label_header(FILE *file, EMNIST_LABEL_HEADER *header) {
  * Reading Data
  *============================================================================*/
 
-void emnist_read_image_data(FILE *file, u8 *data, usize count) {
+void emnist_read_image_data(u8 *data, FILE *file, usize count) {
     if (!file || !data || count == 0) {
         fprintf(stderr, "Error: Invalid argument passed to emnist_read_image_data\n");
         exit(EXIT_FAILURE);
@@ -115,7 +115,7 @@ void emnist_read_image_data(FILE *file, u8 *data, usize count) {
     }
 }
 
-void emnist_read_label_data(FILE *file, u8 *data, usize count) {
+void emnist_read_label_data(u8 *data, FILE *file, usize count) {
     if (!file || !data || count == 0) {
         fprintf(stderr, "Error: Invalid argument passed to emnist_read_label_data\n");
         exit(EXIT_FAILURE);
@@ -128,7 +128,7 @@ void emnist_read_label_data(FILE *file, u8 *data, usize count) {
     }
 }
 
-void emnist_read_image_data_normalized(FILE *file, float *data, usize count) {
+void emnist_read_image_data_normalized(float *data, FILE *file, usize count) {
     if (!file || !data || count == 0) {
         fprintf(stderr, "Error: Invalid argument passed to emnist_read_image_data_normalized\n");
         exit(EXIT_FAILURE);
@@ -141,7 +141,7 @@ void emnist_read_image_data_normalized(FILE *file, float *data, usize count) {
         exit(EXIT_FAILURE);
     }
 
-    emnist_read_image_data(file, pixels, count);
+    emnist_read_image_data(pixels, file, count);
 
     for (usize i = 0; i < total_pixels; i++) {
         data[i] = (float)pixels[i] / 255.0f;
