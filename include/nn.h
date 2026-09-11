@@ -90,4 +90,29 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
  */
 void network_backward(Network *network, const Matrix *d_output);
 
+/*==============================================================================
+ * Saving and Loading Models 
+ *============================================================================*/
+
+/**
+ * @brief Magic number for the network data binary
+ */
+#define NN_MAGIC 0x132B5FAu
+
+/**
+ * @brief Saves all the parameter of a given network
+ *
+ * @param network Pointer to the input network
+ * @param file_name Name of the file to store the data
+ */
+void network_save(const Network *network, const char *file_name);
+
+/**
+ * @brief Loads all the data from file
+ *
+ * @param network Pointer to the output network
+ * @param file_name Name of the file to load the data from
+ */
+void network_load(Network *network, const char *file_name);
+
 #endif /* NETWORK_H */

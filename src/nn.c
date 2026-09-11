@@ -20,7 +20,9 @@
 #include "common.h"
 #include "nn.h" 
 #include "layer.h"
+#include "matrix.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -126,11 +128,7 @@ void network_backward(Network *network, const Matrix *d_output) {
      *
      * d_current = dL/dA of the final layer
      */
-    matrix_create(
-        &d_current,
-        d_output->rows,
-        d_output->cols
-    );
+    matrix_create(&d_current, d_output->rows, d_output->cols);
 
     matrix_copy(&d_current, d_output);
 
@@ -144,21 +142,13 @@ void network_backward(Network *network, const Matrix *d_output) {
          */
         Matrix d_next = matrix_empty();
 
-        matrix_create(
-            &d_next,
-            layer->dense.input_cache.rows,
-            layer->dense.input_cache.cols
-        );
+        matrix_create(&d_next, layer->dense.input_cache.rows, layer->dense.input_cache.cols);
 
         /*
          * d_current = dL/dA
          * d_next    = dL/dX
          */
-        layer_backward(
-            &d_next,
-            layer,
-            &d_current
-        );
+        layer_backward(&d_next, layer, &d_current);
 
         matrix_destroy(&d_current);
 
@@ -169,4 +159,117 @@ void network_backward(Network *network, const Matrix *d_output) {
      * d_current is now dL/dX for the entire network.
      */
     matrix_destroy(&d_current);
+}
+
+void network_save(const Network *network, const char *file_name) {
+    FILE *file = fopen(file_name, "wb");
+    if (!file) {
+        /* Error handling will be implemented later */
+    }
+
+    /* Saving the magic number */
+    const u32 magic_num = NN_MAGIC;
+    fwrite(&magic_num, sizeof(magic_num), 1, file);
+
+    fwrite(&network->layer_count, sizeof(usize), 1, file);
+
+    for (usize i = 0; i < network->layer_count; i++) {
+        Layer *layer = &network->layers[i];
+
+        /* Save the layer type and layer's activation function */
+        fwrite(&layer->layer_type, sizeof(layer->layer_type), 1, file);
+        fwrite(&layer->activation, sizeof(layer->activation), 1, file);
+
+        switch (layer->layer_type) {
+            case LAYER_DENSE: {
+                Dense *dense = &layer->dense;
+
+                /* Save matrix dimensions */
+                fwrite(&dense->weights.rows, sizeof(usize), 1, file);
+                fwrite(&dense->weights.cols, sizeof(usize), 1, file);
+
+                /* Save matrix data */
+                usize weight_count = dense->weights.rows * dense->weights.cols;
+
+                fwrite(dense->weights.data, sizeof(float), weight_count, file);
+
+                /* Bias matrix */
+                fwrite(&dense->bias.rows, sizeof(usize), 1, file);
+                fwrite(&dense->bias.cols, sizeof(usize), 1, file);
+
+                usize bias_count = dense->bias.rows * dense->bias.cols;
+
+                fwrite(dense->bias.data, sizeof(float), bias_count, file);
+
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
+}
+
+
+void network_load(Network *network, const char *file_name) {
+    FILE *file = fopen(file_name, "rb");
+    if (!file) {
+        fprintf(stderr, "no file\n");
+        exit(EXIT_FAILURE);
+    }
+
+    u32 magic_num;
+    fread(&magic_num, sizeof(u32), 1, file);
+    if (magic_num != NN_MAGIC) {
+        fprintf(stderr, "wrong magic num\n");
+        exit(EXIT_FAILURE);
+    }
+
+    fread(&network->layer_count, sizeof(usize), 1, file);
+
+    network->layers = malloc(network->layer_count * sizeof(*network->layers));
+
+    for (usize i = 0; i < network->layer_count; i++) {
+        Layer *layer = &network->layers[i];
+
+        /* Load the layer type and layer's activation */
+        fread(&layer->layer_type, sizeof(layer->layer_type), 1, file);
+        fread(&layer->activation, sizeof(layer->activation), 1, file);
+
+        layer->z_cache = matrix_empty();
+
+        switch (layer->layer_type) {
+            case LAYER_DENSE: {
+                Dense *dense = &layer->dense;
+
+                /* Load matrix dimensions */
+                fread(&dense->weights.rows, sizeof(usize), 1, file);
+                fread(&dense->weights.cols, sizeof(usize), 1, file);
+
+                /* Load matrix data */
+                usize weight_count = dense->weights.rows * dense->weights.cols;
+
+                dense->weights.data = malloc(weight_count * sizeof(float));
+                fread(dense->weights.data, sizeof(float), weight_count, file);
+
+                /* Bias matrix */
+                fread(&dense->bias.rows, sizeof(usize), 1, file);
+                fread(&dense->bias.cols, sizeof(usize), 1, file);
+
+                usize bias_count = dense->bias.rows * dense->bias.cols;
+
+                dense->bias.data = malloc(bias_count * sizeof(float));
+                fread(dense->bias.data, sizeof(float), bias_count, file);
+
+                dense->input_cache = matrix_empty();
+                dense->d_weights = matrix_empty();
+                dense->d_bias = matrix_empty();
+
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
 }

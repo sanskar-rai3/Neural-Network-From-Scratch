@@ -1,0 +1,58 @@
+\doxysection{activation.\+h}
+\hypertarget{activation_8h_source}{}\label{activation_8h_source}\index{include/activation.h@{include/activation.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Neural\ Network\ From\ Scratch\ in\ C}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ Copyright\ (C)\ 2026\ Sanskar\ Rai\ }}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ *\ This\ program\ is\ free\ software:\ you\ can\ redistribute\ it\ and/or\ modify}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ *\ it\ under\ the\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ the\ Free\ Software\ Foundation,\ either\ version\ 3\ of\ the\ License,\ or}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ (at\ your\ option)\ any\ later\ version.}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ This\ program\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ *\ MERCHANTABILITY\ or\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE.\ \ See\ the}}
+\DoxyCodeLine{00014\ \textcolor{comment}{\ *\ GNU\ General\ Public\ License\ for\ more\ details.}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ *\ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ *\ along\ with\ this\ program.\ \ If\ not,\ see\ <http://www.gnu.org/licenses/>.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifndef\ ACTIVATION\_H}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ ACTIVATION\_H}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}matrix.h"{}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Types\ \&\ Enumerations}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ ActivationType\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ ACT\_NONE\ =\ 0,\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00035\ \ \ \ \ ACT\_RELU,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00036\ \ \ \ \ ACT\_LEAKY\_RELU,\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ ACT\_TANH,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00038\ \ \ \ \ ACT\_SIGMOID,\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ ACT\_SOFTMAX\_CEL\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \}\ ActivationType;}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00044\ \textcolor{comment}{\ *\ Forward\ pass\ }}
+\DoxyCodeLine{00045\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ activation\_forward(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *mat,\ ActivationType\ activation);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ Backward\ pass\ }}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ activation\_backward(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *dZ,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *dA,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *Z,\ ActivationType\ type);}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ ACTIVATION\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

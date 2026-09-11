@@ -32,11 +32,20 @@ int layer_init(Layer *layer, const LayerConfig *config) {
     assert(layer);
     assert(config);
 
-    if (!dense_init(&layer->dense, &config->dense_config)) {
-        return 0;
-    }
+    switch (config->layer_type) {
+        case LAYER_DENSE: {
+            layer->layer_type = LAYER_DENSE;
 
-    layer->activation = config->activation;
+            if (!dense_init(&layer->dense, &config->dense_config)) {
+                return 0;
+            }
+
+            layer->activation = config->activation;
+        }
+
+        default:
+            break;
+    }
 
     layer->z_cache = matrix_empty();
 
@@ -65,42 +74,31 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
     assert(output->rows == input->rows);
     assert(output->cols == layer->dense.weights.cols);
 
-    /*
-     * Z = XW + b
-     */
-    dense_forward(
-        output,
-        &layer->dense,
-        input
-    );
+    switch (layer->layer_type) {
+        case LAYER_DENSE: {
+            /* Z = XW + b */
+            dense_forward(output, &layer->dense, input);
 
-    /*
-     * Cache Z for the backward pass.
-     */
-    if (layer->z_cache.rows != output->rows ||
-        layer->z_cache.cols != output->cols) {
+            /* Cache Z for the backward pass */
+            if (layer->z_cache.rows != output->rows ||
+                layer->z_cache.cols != output->cols) {
 
-        matrix_destroy(&layer->z_cache);
+                matrix_destroy(&layer->z_cache);
 
-        matrix_create(
-            &layer->z_cache,
-            output->rows,
-            output->cols
-        );
+                matrix_create(&layer->z_cache, output->rows, output->cols);
+            }
+
+            matrix_copy(&layer->z_cache, output);
+
+            /* A = activation(Z) */
+            activation_forward(output, layer->activation);
+
+            break;
+        }
+
+        default:
+            break;
     }
-
-    matrix_copy(
-        &layer->z_cache,
-        output
-    );
-
-    /*
-     * A = activation(Z)
-     */
-    activation_forward(
-        output,
-        layer->activation
-    );
 }
 
 /*==============================================================================
