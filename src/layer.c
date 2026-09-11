@@ -81,7 +81,8 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
 
             /* Cache Z for the backward pass */
             if (layer->z_cache.rows != output->rows ||
-                layer->z_cache.cols != output->cols) {
+                layer->z_cache.cols != output->cols ||
+                !layer->z_cache.data) {
 
                 matrix_destroy(&layer->z_cache);
 

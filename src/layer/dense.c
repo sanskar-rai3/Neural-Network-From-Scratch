@@ -77,11 +77,10 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
 
     /* Cache X for backward propagation */
     if (layer->input_cache.rows != input->rows ||
-        layer->input_cache.cols != input->cols) {
+        layer->input_cache.cols != input->cols ||
+        !layer->input_cache.data) {
         
-        if (layer->input_cache.data) {
-            matrix_destroy(&layer->input_cache);
-        }
+        matrix_destroy(&layer->input_cache);
 
         matrix_create(
             &layer->input_cache,

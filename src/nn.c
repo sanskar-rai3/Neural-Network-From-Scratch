@@ -272,8 +272,9 @@ void network_load(Network *network, const char *file_name) {
                 fread(dense->bias.data, sizeof(float), bias_count, file);
 
                 dense->input_cache = matrix_empty();
-                dense->d_weights = matrix_empty();
-                dense->d_bias = matrix_empty();
+
+                matrix_create(&dense->d_weights, dense->weights.rows, dense->weights.cols);
+                matrix_create(&dense->d_bias, dense->bias.rows, dense->bias.cols);
 
                 break;
             }
