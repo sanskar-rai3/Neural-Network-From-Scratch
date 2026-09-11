@@ -171,6 +171,9 @@ void network_save(const Network *network, const char *file_name) {
     const u32 magic_num = NN_MAGIC;
     fwrite(&magic_num, sizeof(magic_num), 1, file);
 
+    const u32 version = NN_VERSION;
+    fwrite(&version, sizeof(version), 1, file);
+
     fwrite(&network->layer_count, sizeof(usize), 1, file);
 
     for (usize i = 0; i < network->layer_count; i++) {
@@ -222,6 +225,13 @@ void network_load(Network *network, const char *file_name) {
     fread(&magic_num, sizeof(u32), 1, file);
     if (magic_num != NN_MAGIC) {
         fprintf(stderr, "wrong magic num\n");
+        exit(EXIT_FAILURE);
+    }
+
+    u32 version;
+    fread(&version, sizeof(u32), 1, file);
+    if (version != NN_VERSION) {
+        fprintf(stderr, "Wrong version of nn\n");
         exit(EXIT_FAILURE);
     }
 
