@@ -130,45 +130,45 @@ int main(void) {
     /*=====================================================================*/
 
     /* Configuring layers */
-    // LayerConfig configs[] = {
-    //     {
-    //         .layer_type  = LAYER_DENSE,
-    //
-    //         .dense_config.input_size  = INPUT_SIZE,
-    //         .dense_config.output_size = HIDDEN1_SIZE,
-    //         
-    //         .activation = ACT_RELU
-    //     },
-    //     {
-    //         .layer_type = LAYER_DENSE,
-    //
-    //         .dense_config.input_size  = HIDDEN1_SIZE,
-    //         .dense_config.output_size = HIDDEN2_SIZE,
-    //
-    //         .activation = ACT_RELU
-    //     },
-    //     {
-    //         .layer_type = LAYER_DENSE,
-    //
-    //         .dense_config.input_size  = HIDDEN2_SIZE,
-    //         .dense_config.output_size = OUTPUT_SIZE,
-    //
-    //         .activation = ACT_SOFTMAX_CEL
-    //     }
-    // };
+    LayerConfig configs[] = {
+        {
+            .layer_type  = LAYER_DENSE,
+
+            .dense_config.input_size  = INPUT_SIZE,
+            .dense_config.output_size = HIDDEN1_SIZE,
+            
+            .activation = ACT_RELU
+        },
+        {
+            .layer_type = LAYER_DENSE,
+
+            .dense_config.input_size  = HIDDEN1_SIZE,
+            .dense_config.output_size = HIDDEN2_SIZE,
+
+            .activation = ACT_RELU
+        },
+        {
+            .layer_type = LAYER_DENSE,
+
+            .dense_config.input_size  = HIDDEN2_SIZE,
+            .dense_config.output_size = OUTPUT_SIZE,
+
+            .activation = ACT_SOFTMAX_CEL
+        }
+    };
     
     /* Network initialization */
     Network nn;
-    // if (!network_init(&nn, configs, sizeof(configs) / sizeof(configs[0]))) {
-    //     fprintf(stderr, "Error initializing network");
-    //     
-    //     free(train_image_data);
-    //     free(train_label_data);
-    //
-    //     return 1;
-    // }
+    if (!network_init(&nn, configs, sizeof(configs) / sizeof(configs[0]))) {
+        fprintf(stderr, "Error initializing network");
+        
+        free(train_image_data);
+        free(train_label_data);
 
-    network_load(&nn, "models/mnist-model-10epoch.nmf");
+        return 1;
+    }
+
+    // network_load(&nn, "models/mnist-model-10epoch.nmf");
 
     /* Optimizer initialization */
     Optimizer optimizer;
@@ -246,7 +246,7 @@ int main(void) {
         printf("epoch: %2zu | loss: %.6f\n", epoch + 1, epoch_loss);
     }
 
-    network_save(&nn, "models/mnist-model-15epoch.nmf");
+    // network_save(&nn, "models/mnist-model-15epoch.nmf");
 
     /*=====================================================================*/
 

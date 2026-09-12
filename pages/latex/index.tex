@@ -61,18 +61,18 @@ The matrix library provides operations including:
 
 
 \begin{DoxyItemize}
-\item \doxylink{structMatrix}{Matrix} creation and destruction
+\item Matrix creation and destruction
 \item Element access
-\item \doxylink{structMatrix}{Matrix} copying
-\item \doxylink{structMatrix}{Matrix} addition and subtraction
+\item Matrix copying
+\item Matrix addition and subtraction
 \item In-\/place arithmetic
 \item Scalar multiplication
 \item Hadamard product
-\item \doxylink{structMatrix}{Matrix} multiplication
+\item Matrix multiplication
 \item Transposition
 \item Element-\/wise operations
 \item Random initialization
-\item \doxylink{structMatrix}{Matrix} filling
+\item Matrix filling
 \end{DoxyItemize}\hypertarget{index_autotoc_md2}{}\doxysubsection{\texorpdfstring{Matrix Multiplication}{Matrix Multiplication}}\label{index_autotoc_md2}
 For two matrices:
 
@@ -102,7 +102,7 @@ Each element is calculated as:
 \end{DoxyCode}
 
 
-\doxylink{structMatrix}{Matrix} multiplication is the primary operation used by dense layers.\hypertarget{index_autotoc_md3}{}\doxysection{\texorpdfstring{Dense Layers}{Dense Layers}}\label{index_autotoc_md3}
+Matrix multiplication is the primary operation used by dense layers.\hypertarget{index_autotoc_md3}{}\doxysection{\texorpdfstring{Dense Layers}{Dense Layers}}\label{index_autotoc_md3}
 A dense layer performs an affine transformation:
 
 
@@ -230,7 +230,7 @@ The implementation subtracts the maximum logit before exponentiation:
 This improves numerical stability and prevents unnecessarily large exponentials.
 
 For the EMNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.\hypertarget{index_autotoc_md10}{}\doxysection{\texorpdfstring{Layers and Network}{Layers and Network}}\label{index_autotoc_md10}
-A {\ttfamily \doxylink{structLayer}{Layer}} combines a dense layer with an activation function.
+A {\ttfamily Layer} combines a dense layer with an activation function.
 
 Conceptually:
 
@@ -256,7 +256,7 @@ Conceptually:
 
 A {\ttfamily \doxylink{structNetwork}{Network}} contains multiple layers.
 
-The architecture is configured using {\ttfamily \doxylink{structLayerConfig}{Layer\+Config}} structures instead of hardcoding each layer.
+The architecture is configured using {\ttfamily Layer\+Config} structures instead of hardcoding each layer.
 
 For example:
 
@@ -777,7 +777,7 @@ Typical lifetime:
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\doxymbox{\hyperlink{structMatrix}{Matrix}}\ matrix\ =\ matrix\_empty();}
+\DoxyCodeLine{Matrix\ matrix\ =\ matrix\_empty();}
 \DoxyCodeLine{}
 \DoxyCodeLine{matrix\_create(...);}
 \DoxyCodeLine{}

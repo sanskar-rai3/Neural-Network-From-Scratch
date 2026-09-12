@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['network_0',['Network',['../index.html#autotoc_md30',1,'Current EMNIST Network'],['../index.html#autotoc_md10',1,'Layers and Network'],['../structNetwork.html',1,'Network']]],
-  ['network_20from_20scratch_20in_20c_1',['Neural Network From Scratch in C',['../index.html',1,'']]],
-  ['neural_20network_20from_20scratch_20in_20c_2',['Neural Network From Scratch in C',['../index.html',1,'']]]
+  ['optimization_0',['Optimization',['../index.html#autotoc_md18',1,'']]],
+  ['optimizer_1',['Optimizer',['../structOptimizer.html',1,'']]],
+  ['overview_2',['Overview',['../index.html#autotoc_md0',1,'']]]
 ];

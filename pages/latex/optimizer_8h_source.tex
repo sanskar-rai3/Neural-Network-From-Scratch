@@ -25,38 +25,39 @@
 \DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ OPTIMIZER\_H}}
 \DoxyCodeLine{00022\ }
 \DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
-\DoxyCodeLine{00024\ }
-\DoxyCodeLine{00025\ \textcolor{comment}{/*\ Forward\ declaration\ to\ avoid\ including\ nn.h\ here.\ */}}
-\DoxyCodeLine{00026\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structNetwork}{Network}}\ \doxymbox{\hyperlink{structNetwork}{Network}};}
-\DoxyCodeLine{00027\ }
-\DoxyCodeLine{00028\ \textcolor{comment}{/*==============================================================================}}
-\DoxyCodeLine{00029\ \textcolor{comment}{\ *\ Types}}
-\DoxyCodeLine{00030\ \textcolor{comment}{\ *============================================================================*/}}
-\DoxyCodeLine{00031\ }
-\DoxyCodeLine{00035\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ OptimizerType\ \{}
-\DoxyCodeLine{00036\ \ \ \ \ OPT\_NULL\ =\ 0,\ \ }
-\DoxyCodeLine{00037\ \ \ \ \ OPT\_SGD\ \ \ \ \ \ \ \ }
-\DoxyCodeLine{00038\ \}\ OptimizerType;}
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00043\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ \{}
-\DoxyCodeLine{00044\ \ \ \ \ OptimizerType\ \doxymbox{\hyperlink{structOptimizer_ae898519672dd0949924aeaf66651c90c}{type}};\ \ }
-\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structOptimizer_aff01ec380d9bb0482f4e00e7f5971f3f}{learning\_rate}};\ }
-\DoxyCodeLine{00046\ \}\ \doxymbox{\hyperlink{structOptimizer}{Optimizer}};}
-\DoxyCodeLine{00047\ }
-\DoxyCodeLine{00048\ \textcolor{comment}{/*==============================================================================}}
-\DoxyCodeLine{00049\ \textcolor{comment}{\ *\ Creation\ \&\ Destruction}}
-\DoxyCodeLine{00050\ \textcolor{comment}{\ *============================================================================*/}}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00059\ \textcolor{keywordtype}{void}\ optimizer\_init(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer,\ \textcolor{keywordtype}{float}\ learning\_rate,\ OptimizerType\ type);}
-\DoxyCodeLine{00060\ }
-\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ optimizer\_destroy(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer);}
-\DoxyCodeLine{00067\ }
-\DoxyCodeLine{00068\ \textcolor{comment}{/*==============================================================================}}
-\DoxyCodeLine{00069\ \textcolor{comment}{\ *\ Optimization}}
-\DoxyCodeLine{00070\ \textcolor{comment}{\ *============================================================================*/}}
-\DoxyCodeLine{00071\ }
-\DoxyCodeLine{00083\ \textcolor{keywordtype}{void}\ optimizer\_step(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer,\ \doxymbox{\hyperlink{structNetwork}{Network}}\ *network);}
-\DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ OPTIMIZER\_H\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}error/error.h"{}}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/*\ Forward\ declaration\ to\ avoid\ including\ nn.h\ here.\ */}}
+\DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structNetwork}{Network}}\ \doxymbox{\hyperlink{structNetwork}{Network}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ *\ Types}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ OptimizerType\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ OPT\_NULL\ =\ 0,\ \ }
+\DoxyCodeLine{00038\ \ \ \ \ OPT\_SGD\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00039\ \}\ OptimizerType;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ OptimizerType\ \doxymbox{\hyperlink{structOptimizer_ae898519672dd0949924aeaf66651c90c}{type}};\ \ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{float}\ \doxymbox{\hyperlink{structOptimizer_aff01ec380d9bb0482f4e00e7f5971f3f}{learning\_rate}};\ }
+\DoxyCodeLine{00047\ \}\ \doxymbox{\hyperlink{structOptimizer}{Optimizer}};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00050\ \textcolor{comment}{\ *\ Creation\ \&\ Destruction}}
+\DoxyCodeLine{00051\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00060\ Outcome\ optimizer\_init(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer,\ \textcolor{keywordtype}{float}\ learning\_rate,\ OptimizerType\ type);}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00067\ \textcolor{keywordtype}{void}\ optimizer\_destroy(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer);}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{/*==============================================================================}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ *\ Optimization}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ *============================================================================*/}}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00084\ Outcome\ optimizer\_step(\doxymbox{\hyperlink{structOptimizer}{Optimizer}}\ *optimizer,\ \doxymbox{\hyperlink{structNetwork}{Network}}\ *network);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ OPTIMIZER\_H\ */}\textcolor{preprocessor}{}}
 
 \end{DoxyCode}

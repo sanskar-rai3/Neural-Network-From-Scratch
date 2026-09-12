@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['goal_0',['Project Goal',['../index.html#autotoc_md31',1,'']]]
+  ['handling_0',['Error Handling',['../index.html#autotoc_md26',1,'']]]
 ];

@@ -25,7 +25,7 @@
 \DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ ACTIVATION\_H}}
 \DoxyCodeLine{00022\ }
 \DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
-\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}matrix.h"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}math/matrix.h"{}}}
 \DoxyCodeLine{00025\ }
 \DoxyCodeLine{00026\ \textcolor{comment}{/*==============================================================================}}
 \DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Types\ \&\ Enumerations}}
@@ -45,13 +45,13 @@
 \DoxyCodeLine{00044\ \textcolor{comment}{\ *\ Forward\ pass\ }}
 \DoxyCodeLine{00045\ \textcolor{comment}{\ *============================================================================*/}}
 \DoxyCodeLine{00046\ }
-\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ activation\_forward(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *mat,\ ActivationType\ activation);}
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ activation\_forward(Matrix\ *mat,\ ActivationType\ activation);}
 \DoxyCodeLine{00057\ }
 \DoxyCodeLine{00058\ \textcolor{comment}{/*==============================================================================}}
 \DoxyCodeLine{00059\ \textcolor{comment}{\ *\ Backward\ pass\ }}
 \DoxyCodeLine{00060\ \textcolor{comment}{\ *============================================================================*/}}
 \DoxyCodeLine{00061\ }
-\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ activation\_backward(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *dZ,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *dA,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *Z,\ ActivationType\ type);}
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ activation\_backward(Matrix\ *dZ,\ \textcolor{keyword}{const}\ Matrix\ *dA,\ \textcolor{keyword}{const}\ Matrix\ *Z,\ ActivationType\ type);}
 \DoxyCodeLine{00071\ }
 \DoxyCodeLine{00072\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ ACTIVATION\_H\ */}\textcolor{preprocessor}{}}
 

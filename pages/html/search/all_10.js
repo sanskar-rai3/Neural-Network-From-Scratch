@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['scratch_20in_20c_0',['Neural Network From Scratch in C',['../index.html',1,'']]],
-  ['sigmoid_1',['Sigmoid',['../index.html#autotoc_md7',1,'']]],
-  ['softmax_2',['Softmax',['../index.html#autotoc_md9',1,'']]],
-  ['softmax_20cross_20entropy_3',['Softmax + Cross-Entropy',['../index.html#autotoc_md15',1,'']]],
-  ['squared_20error_4',['Mean Squared Error',['../index.html#autotoc_md13',1,'']]]
+  ['tanh_0',['Tanh',['../index.html#autotoc_md8',1,'']]],
+  ['training_1',['Mini-Batch Training',['../index.html#autotoc_md19',1,'']]],
+  ['type_2',['type',['../structOptimizer.html#ae898519672dd0949924aeaf66651c90c',1,'Optimizer']]]
 ];

@@ -154,18 +154,18 @@ Matrix Library</h1>
 <div class="fragment"><div class="line">mat-&gt;data[row * mat-&gt;cols + col]</div>
 </div><!-- fragment --><p>The matrix library provides operations including:</p>
 <ul>
-<li><a class="el" href="structMatrix.html" title="2D Dense Matrix structure stored in row-major order.">Matrix</a> creation and destruction</li>
+<li>Matrix creation and destruction</li>
 <li>Element access</li>
-<li><a class="el" href="structMatrix.html" title="2D Dense Matrix structure stored in row-major order.">Matrix</a> copying</li>
-<li><a class="el" href="structMatrix.html" title="2D Dense Matrix structure stored in row-major order.">Matrix</a> addition and subtraction</li>
+<li>Matrix copying</li>
+<li>Matrix addition and subtraction</li>
 <li>In-place arithmetic</li>
 <li>Scalar multiplication</li>
 <li>Hadamard product</li>
-<li><a class="el" href="structMatrix.html" title="2D Dense Matrix structure stored in row-major order.">Matrix</a> multiplication</li>
+<li>Matrix multiplication</li>
 <li>Transposition</li>
 <li>Element-wise operations</li>
 <li>Random initialization</li>
-<li><a class="el" href="structMatrix.html" title="2D Dense Matrix structure stored in row-major order.">Matrix</a> filling</li>
+<li>Matrix filling</li>
 </ul>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
 Matrix Multiplication</h2>
@@ -176,7 +176,7 @@ Matrix Multiplication</h2>
 <div class="fragment"><div class="line">C = m x p</div>
 </div><!-- fragment --><p>Each element is calculated as:</p>
 <div class="fragment"><div class="line">C[i][j] = sum(A[i][k] * B[k][j])</div>
-</div><!-- fragment --><p><a class="el" href="structMatrix.html" title="2D Dense Matrix structure stored in row-major order.">Matrix</a> multiplication is the primary operation used by dense layers.</p>
+</div><!-- fragment --><p>Matrix multiplication is the primary operation used by dense layers.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
 Dense Layers</h1>
 <p>A dense layer performs an affine transformation:</p>
@@ -250,7 +250,7 @@ Softmax</h2>
 <p>For the EMNIST output layer, softmax produces ten probabilities corresponding to the ten digit classes.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Layers and Network</h1>
-<p>A <span class="tt"><a class="el" href="structLayer.html" title="Represents a neural network layer.">Layer</a></span> combines a dense layer with an activation function.</p>
+<p>A <span class="tt">Layer</span> combines a dense layer with an activation function.</p>
 <p>Conceptually:</p>
 <div class="fragment"><div class="line">Layer</div>
 <div class="line">  |</div>
@@ -267,7 +267,7 @@ Layers and Network</h1>
 <div class="line">        +-- Z</div>
 <div class="line">        +-- Gradients</div>
 </div><!-- fragment --><p>A <span class="tt"><a class="el" href="structNetwork.html" title="Sequential neural network model composed of stacked layers.">Network</a></span> contains multiple layers.</p>
-<p>The architecture is configured using <span class="tt"><a class="el" href="structLayerConfig.html" title="Configuration parameters used to initialize a neural network layer.">LayerConfig</a></span> structures instead of hardcoding each layer.</p>
+<p>The architecture is configured using <span class="tt">LayerConfig</span> structures instead of hardcoding each layer.</p>
 <p>For example:</p>
 <div class="fragment"><div class="line">784 -&gt; 128 -&gt; 64 -&gt; $(class_size)</div>
 </div><!-- fragment --><p>can be configured as:</p>
@@ -534,14 +534,13 @@ Memory Management</h1>
 <p>The project is written in C, so memory ownership is explicit.</p>
 <p>Matrices allocate their own data and must eventually be destroyed.</p>
 <p>Typical lifetime:</p>
-<div class="fragment"><div class="line"><a class="code hl_struct" href="structMatrix.html">Matrix</a> matrix = matrix_empty();</div>
+<div class="fragment"><div class="line">Matrix matrix = matrix_empty();</div>
 <div class="line"> </div>
 <div class="line">matrix_create(...);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">/* use matrix */</span></div>
 <div class="line"> </div>
 <div class="line">matrix_destroy(&amp;matrix);</div>
-<div class="ttc" id="astructMatrix_html"><div class="ttname"><a href="structMatrix.html">Matrix</a></div><div class="ttdoc">2D Dense Matrix structure stored in row-major order.</div><div class="ttdef"><b>Definition</b> matrix.h:32</div></div>
 </div><!-- fragment --><p>The same principle applies to:</p>
 <ul>
 <li><a class="el" href="structNetwork.html" title="Sequential neural network model composed of stacked layers.">Network</a> layers</li>

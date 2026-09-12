@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['_5bunion_5d_2e_5f_5funnamed0_5f_5f_0',['[union].__unnamed0__',['../unionLayer_1_1_0funion_0e_8____unnamed0____.html',1,'Layer::[union].__unnamed0__'],['../unionLayerConfig_1_1_0funion_0e_8____unnamed0____.html',1,'LayerConfig::[union].__unnamed0__']]]
+  ['activation_20backward_20pass_0',['Activation Backward Pass',['../index.html#autotoc_md17',1,'']]],
+  ['activation_20functions_1',['Activation Functions',['../index.html#autotoc_md4',1,'']]],
+  ['and_20network_2',['Layers and Network',['../index.html#autotoc_md10',1,'']]]
 ];

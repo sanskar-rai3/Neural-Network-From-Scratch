@@ -134,45 +134,46 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('optimizer_8h_s
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define OPTIMIZER_H</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;common.h&quot;</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">/* Forward declaration to avoid including nn.h here. */</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structNetwork.html">Network</a> <a class="code hl_struct" href="structNetwork.html">Network</a>;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">/*==============================================================================</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> * Types</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> *============================================================================*/</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">typedef</span> <span class="keyword">enum</span> OptimizerType {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    OPT_NULL = 0,  </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    OPT_SGD        </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>} OptimizerType;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span></div>
-<div class="foldopen" id="foldopen00043" data-start="{" data-end="};">
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="structOptimizer.html">   43</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structOptimizer.html">Optimizer</a> {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structOptimizer.html#ae898519672dd0949924aeaf66651c90c">   44</a></span>    OptimizerType <a class="code hl_variable" href="structOptimizer.html#ae898519672dd0949924aeaf66651c90c">type</a>;  </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f">   45</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f">learning_rate</a>; </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>} <a class="code hl_struct" href="structOptimizer.html">Optimizer</a>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;error/error.h&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">/* Forward declaration to avoid including nn.h here. */</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structNetwork.html">Network</a> <a class="code hl_struct" href="structNetwork.html">Network</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">/*==============================================================================</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment"> * Types</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> *============================================================================*/</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">typedef</span> <span class="keyword">enum</span> OptimizerType {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    OPT_NULL = 0,  </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    OPT_SGD        </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>} OptimizerType;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="};">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structOptimizer.html">   44</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structOptimizer.html">Optimizer</a> {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structOptimizer.html#ae898519672dd0949924aeaf66651c90c">   45</a></span>    OptimizerType <a class="code hl_variable" href="structOptimizer.html#ae898519672dd0949924aeaf66651c90c">type</a>;  </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f">   46</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f">learning_rate</a>; </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>} <a class="code hl_struct" href="structOptimizer.html">Optimizer</a>;</div>
 </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">/*==============================================================================</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * Creation &amp; Destruction</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> *============================================================================*/</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keywordtype">void</span> optimizer_init(<a class="code hl_struct" href="structOptimizer.html">Optimizer</a> *optimizer, <span class="keywordtype">float</span> learning_rate, OptimizerType type);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keywordtype">void</span> optimizer_destroy(<a class="code hl_struct" href="structOptimizer.html">Optimizer</a> *optimizer);</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">/*==============================================================================</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * Optimization</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> *============================================================================*/</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keywordtype">void</span> optimizer_step(<a class="code hl_struct" href="structOptimizer.html">Optimizer</a> *optimizer, <a class="code hl_struct" href="structNetwork.html">Network</a> *network);</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="preprocessor">#endif </span><span class="comment">/* OPTIMIZER_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="astructNetwork_html"><div class="ttname"><a href="structNetwork.html">Network</a></div><div class="ttdoc">Sequential neural network model composed of stacked layers.</div><div class="ttdef"><b>Definition</b> nn.h:34</div></div>
-<div class="ttc" id="astructOptimizer_html"><div class="ttname"><a href="structOptimizer.html">Optimizer</a></div><div class="ttdoc">Configuration for a neural network optimizer.</div><div class="ttdef"><b>Definition</b> optimizer.h:43</div></div>
-<div class="ttc" id="astructOptimizer_html_ae898519672dd0949924aeaf66651c90c"><div class="ttname"><a href="structOptimizer.html#ae898519672dd0949924aeaf66651c90c">Optimizer::type</a></div><div class="ttdeci">OptimizerType type</div><div class="ttdef"><b>Definition</b> optimizer.h:44</div></div>
-<div class="ttc" id="astructOptimizer_html_aff01ec380d9bb0482f4e00e7f5971f3f"><div class="ttname"><a href="structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f">Optimizer::learning_rate</a></div><div class="ttdeci">float learning_rate</div><div class="ttdef"><b>Definition</b> optimizer.h:45</div></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">/*==============================================================================</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * Creation &amp; Destruction</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> *============================================================================*/</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>Outcome optimizer_init(<a class="code hl_struct" href="structOptimizer.html">Optimizer</a> *optimizer, <span class="keywordtype">float</span> learning_rate, OptimizerType type);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keywordtype">void</span> optimizer_destroy(<a class="code hl_struct" href="structOptimizer.html">Optimizer</a> *optimizer);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">/*==============================================================================</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * Optimization</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> *============================================================================*/</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>Outcome optimizer_step(<a class="code hl_struct" href="structOptimizer.html">Optimizer</a> *optimizer, <a class="code hl_struct" href="structNetwork.html">Network</a> *network);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="preprocessor">#endif </span><span class="comment">/* OPTIMIZER_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="astructNetwork_html"><div class="ttname"><a href="structNetwork.html">Network</a></div><div class="ttdoc">Sequential neural network model composed of stacked layers.</div><div class="ttdef"><b>Definition</b> nn.h:35</div></div>
+<div class="ttc" id="astructOptimizer_html"><div class="ttname"><a href="structOptimizer.html">Optimizer</a></div><div class="ttdoc">Configuration for a neural network optimizer.</div><div class="ttdef"><b>Definition</b> optimizer.h:44</div></div>
+<div class="ttc" id="astructOptimizer_html_ae898519672dd0949924aeaf66651c90c"><div class="ttname"><a href="structOptimizer.html#ae898519672dd0949924aeaf66651c90c">Optimizer::type</a></div><div class="ttdeci">OptimizerType type</div><div class="ttdef"><b>Definition</b> optimizer.h:45</div></div>
+<div class="ttc" id="astructOptimizer_html_aff01ec380d9bb0482f4e00e7f5971f3f"><div class="ttname"><a href="structOptimizer.html#aff01ec380d9bb0482f4e00e7f5971f3f">Optimizer::learning_rate</a></div><div class="ttdeci">float learning_rate</div><div class="ttdef"><b>Definition</b> optimizer.h:46</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

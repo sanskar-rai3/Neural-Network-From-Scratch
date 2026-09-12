@@ -134,28 +134,27 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('loss_8h_source
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define LOSS_H</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;common.h&quot;</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;matrix.h&quot;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;math/matrix.h&quot;</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">/*==============================================================================</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * Forward pass</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> *=============================================================================*/</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keywordtype">float</span> loss_mse(<span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *target);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keywordtype">float</span> loss_mse(<span class="keyword">const</span> Matrix *prediction, <span class="keyword">const</span> Matrix *target);</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keywordtype">float</span> loss_cross_entropy(<span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *target);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keywordtype">float</span> loss_cross_entropy(<span class="keyword">const</span> Matrix *prediction, <span class="keyword">const</span> Matrix *target);</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment">/*==============================================================================</span></div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * Loss Backward Pass</span></div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> *============================================================================*/</span></div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="keywordtype">void</span> loss_mse_backward(<a class="code hl_struct" href="structMatrix.html">Matrix</a> *d_prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *target);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="keywordtype">void</span> loss_mse_backward(Matrix *d_prediction, <span class="keyword">const</span> Matrix *prediction, <span class="keyword">const</span> Matrix *target);</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keywordtype">void</span> loss_cross_entropy_backward(<a class="code hl_struct" href="structMatrix.html">Matrix</a> *d_prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *target);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keywordtype">void</span> loss_cross_entropy_backward(Matrix *d_prediction, <span class="keyword">const</span> Matrix *prediction, <span class="keyword">const</span> Matrix *target);</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keywordtype">void</span> loss_cross_entropy_softmax_backward( <a class="code hl_struct" href="structMatrix.html">Matrix</a> *dZ, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *prediction, <span class="keyword">const</span> <a class="code hl_struct" href="structMatrix.html">Matrix</a> *target);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keywordtype">void</span> loss_cross_entropy_softmax_backward( Matrix *dZ, <span class="keyword">const</span> Matrix *prediction, <span class="keyword">const</span> Matrix *target);</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="preprocessor">#endif </span><span class="comment">/* LOSS_H */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="astructMatrix_html"><div class="ttname"><a href="structMatrix.html">Matrix</a></div><div class="ttdoc">2D Dense Matrix structure stored in row-major order.</div><div class="ttdef"><b>Definition</b> matrix.h:32</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

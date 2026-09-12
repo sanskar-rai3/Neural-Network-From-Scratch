@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['relu_0',['ReLU',['../index.html#autotoc_md6',1,'Leaky ReLU'],['../index.html#autotoc_md5',1,'ReLU']]],
-  ['rendering_1',['Rendering',['../index.html#autotoc_md24',1,'']]],
-  ['rows_2',['rows',['../structMatrix.html#ab5ef79dacea42ca28bc8e7dc12228f5b',1,'Matrix']]]
+  ['scratch_20in_20c_0',['Neural Network From Scratch in C',['../index.html',1,'']]],
+  ['sigmoid_1',['Sigmoid',['../index.html#autotoc_md7',1,'']]],
+  ['softmax_2',['Softmax',['../index.html#autotoc_md9',1,'']]],
+  ['softmax_20cross_20entropy_3',['Softmax + Cross-Entropy',['../index.html#autotoc_md15',1,'']]],
+  ['squared_20error_4',['Mean Squared Error',['../index.html#autotoc_md13',1,'']]]
 ];

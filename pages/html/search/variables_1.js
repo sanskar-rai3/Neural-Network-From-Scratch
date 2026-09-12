@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cols_0',['cols',['../structMatrix.html#aff5a435785e059205cd66638d55306d2',1,'Matrix']]]
+  ['type_0',['type',['../structOptimizer.html#ae898519672dd0949924aeaf66651c90c',1,'Optimizer']]]
 ];

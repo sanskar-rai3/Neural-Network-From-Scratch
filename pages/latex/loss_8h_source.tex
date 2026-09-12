@@ -25,25 +25,25 @@
 \DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ LOSS\_H}}
 \DoxyCodeLine{00022\ }
 \DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}common.h"{}}}
-\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}matrix.h"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}math/matrix.h"{}}}
 \DoxyCodeLine{00025\ }
 \DoxyCodeLine{00026\ \textcolor{comment}{/*==============================================================================}}
 \DoxyCodeLine{00027\ \textcolor{comment}{\ *\ Forward\ pass}}
 \DoxyCodeLine{00028\ \textcolor{comment}{\ *=============================================================================*/}}
 \DoxyCodeLine{00029\ }
-\DoxyCodeLine{00039\ \textcolor{keywordtype}{float}\ loss\_mse(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *target);}
+\DoxyCodeLine{00039\ \textcolor{keywordtype}{float}\ loss\_mse(\textcolor{keyword}{const}\ Matrix\ *prediction,\ \textcolor{keyword}{const}\ Matrix\ *target);}
 \DoxyCodeLine{00040\ }
-\DoxyCodeLine{00050\ \textcolor{keywordtype}{float}\ loss\_cross\_entropy(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *target);}
+\DoxyCodeLine{00050\ \textcolor{keywordtype}{float}\ loss\_cross\_entropy(\textcolor{keyword}{const}\ Matrix\ *prediction,\ \textcolor{keyword}{const}\ Matrix\ *target);}
 \DoxyCodeLine{00051\ }
 \DoxyCodeLine{00052\ \textcolor{comment}{/*==============================================================================}}
 \DoxyCodeLine{00053\ \textcolor{comment}{\ *\ Loss\ Backward\ Pass}}
 \DoxyCodeLine{00054\ \textcolor{comment}{\ *============================================================================*/}}
 \DoxyCodeLine{00055\ }
-\DoxyCodeLine{00068\ \textcolor{keywordtype}{void}\ loss\_mse\_backward(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *d\_prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *target);}
+\DoxyCodeLine{00068\ \textcolor{keywordtype}{void}\ loss\_mse\_backward(Matrix\ *d\_prediction,\ \textcolor{keyword}{const}\ Matrix\ *prediction,\ \textcolor{keyword}{const}\ Matrix\ *target);}
 \DoxyCodeLine{00069\ }
-\DoxyCodeLine{00083\ \textcolor{keywordtype}{void}\ loss\_cross\_entropy\_backward(\doxymbox{\hyperlink{structMatrix}{Matrix}}\ *d\_prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *target);}
+\DoxyCodeLine{00083\ \textcolor{keywordtype}{void}\ loss\_cross\_entropy\_backward(Matrix\ *d\_prediction,\ \textcolor{keyword}{const}\ Matrix\ *prediction,\ \textcolor{keyword}{const}\ Matrix\ *target);}
 \DoxyCodeLine{00084\ }
-\DoxyCodeLine{00103\ \textcolor{keywordtype}{void}\ loss\_cross\_entropy\_softmax\_backward(\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *dZ,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *prediction,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{structMatrix}{Matrix}}\ *target);}
+\DoxyCodeLine{00103\ \textcolor{keywordtype}{void}\ loss\_cross\_entropy\_softmax\_backward(\ Matrix\ *dZ,\ \textcolor{keyword}{const}\ Matrix\ *prediction,\ \textcolor{keyword}{const}\ Matrix\ *target);}
 \DoxyCodeLine{00104\ }
 \DoxyCodeLine{00105\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ LOSS\_H\ */}\textcolor{preprocessor}{}}
 
