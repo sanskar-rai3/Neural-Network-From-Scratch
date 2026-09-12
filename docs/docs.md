@@ -4,14 +4,14 @@ A feed-forward neural network implemented entirely in C, without machine-learnin
 
 The purpose of this project is to understand how neural networks work internally by implementing the underlying mathematics and components directly rather than hiding them behind high-level libraries.
 
-The network currently supports matrix operations, EMNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-layer networks, SGD optimization, EMNIST training, inference, accuracy evaluation, and sample rendering.
+The network currently supports matrix operations, EMNIST loading, dense layers, activation functions, loss functions, backpropagation, configurable multi-layer networks, SGD optimization, EMNIST training, inference and accuracy evaluation.
 
 ## Overview
 
-The basic data flow through the network is:
+The basic data flow through the dense network is:
 
 ```
-EMNIST image
+Data loading
     |
     v
 Input matrix
@@ -644,19 +644,6 @@ Correct: 9200
 Total:   10000
 
 Accuracy = 92.00%
-```
-
-## Rendering
-
-The project includes an SDL2-based EMNIST renderer.
-
-A normalized `1 x 784` image can be displayed as a `28 x 28` image.
-
-The renderer converts normalized floating-point values back into grayscale pixel values:
-
-```
-0.0 -> 0
-1.0 -> 255
 ```
 
 The predicted and actual labels can also be included in the window title. This makes it possible to visually inspect individual predictions instead of relying only on numerical accuracy.
