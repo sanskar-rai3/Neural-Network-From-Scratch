@@ -21,7 +21,7 @@
 #include "nn.h"
 #include "optimizer.h"
 #include "loss.h"
-#include "matrix.h"
+#include "math/matrix.h"
 
 #include "data-loader/emnist_loader.h"
 
@@ -168,7 +168,7 @@ int main(void) {
     //     return 1;
     // }
 
-    network_load(&nn, "models/mnist-model.nmf");
+    network_load(&nn, "models/mnist-model-10epoch.nmf");
 
     /* Optimizer initialization */
     Optimizer optimizer;
@@ -246,7 +246,7 @@ int main(void) {
         printf("epoch: %2zu | loss: %.6f\n", epoch + 1, epoch_loss);
     }
 
-    network_save(&nn, "models/2mnist-model.nmf");
+    network_save(&nn, "models/mnist-model-15epoch.nmf");
 
     /*=====================================================================*/
 

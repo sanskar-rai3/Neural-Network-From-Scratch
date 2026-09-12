@@ -108,7 +108,7 @@ Outcome network_backward(Network *network, const Matrix *d_output);
 /**
  * @brief Minor version number.
  */
-#define NN_VERSION_MINOR 1
+#define NN_VERSION_MINOR 0
 
 /**
  * @brief Patch version number.

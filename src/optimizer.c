@@ -77,4 +77,6 @@ Outcome optimizer_step(Optimizer *optimizer, Network *network) {
         default:
             return OUTCOME_OPT_UNKNOWN;
     }
+
+    return OUTCOME_OK;
 }
