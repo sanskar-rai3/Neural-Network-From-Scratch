@@ -19,8 +19,6 @@
 
 #include "common.h"
 #include "nn.h"
-#include "layer.h"
-#include "activation.h"
 #include "optimizer.h"
 #include "loss.h"
 #include "matrix.h"

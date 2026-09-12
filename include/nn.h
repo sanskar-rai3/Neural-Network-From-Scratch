@@ -21,8 +21,9 @@
 #define NETWORK_H
 
 #include "common.h"
-#include "layer.h"
-#include "matrix.h"
+#include "layer/layer.h"
+#include "math/matrix.h"
+#include "error/error.h"
 
 /*==============================================================================
  * Network Structure Definition
@@ -49,7 +50,7 @@ typedef struct Network {
  * @param layer_count Number of layers to create.
  * @return            1 on success, 0 on failure.
  */
-int network_init(Network *network, const LayerConfig *configs, usize layer_count);
+Outcome network_init(Network *network, const LayerConfig *configs, usize layer_count);
 
 /**
  * @brief Frees all dynamic memory owned by the network and its constituent layers.
@@ -72,7 +73,7 @@ void network_destroy(Network *network);
  * @param network Pointer to the initialized Network.
  * @param input   Input matrix (batch_size x initial_input_size).
  */
-void network_forward(Matrix *output, const Network *network, const Matrix *input);
+Outcome network_forward(Matrix *output, const Network *network, const Matrix *input);
 
 /*==============================================================================
  * Backward Pass
@@ -88,7 +89,7 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
  * @param d_output Gradient of the loss with respect to the network output
  *                 (dL/dA), with shape (batch_size x output_size).
  */
-void network_backward(Network *network, const Matrix *d_output);
+Outcome network_backward(Network *network, const Matrix *d_output);
 
 /*==============================================================================
  * Saving and Loading Models 
@@ -107,7 +108,7 @@ void network_backward(Network *network, const Matrix *d_output);
 /**
  * @brief Minor version number.
  */
-#define NN_VERSION_MINOR 0
+#define NN_VERSION_MINOR 1
 
 /**
  * @brief Patch version number.
@@ -134,7 +135,7 @@ void network_backward(Network *network, const Matrix *d_output);
  * @param network Pointer to the input network
  * @param file_name Name of the file to store the data
  */
-void network_save(const Network *network, const char *file_name);
+Outcome network_save(const Network *network, const char *file_name);
 
 /**
  * @brief Loads all the data from file
@@ -142,6 +143,6 @@ void network_save(const Network *network, const char *file_name);
  * @param network Pointer to the output network
  * @param file_name Name of the file to load the data from
  */
-void network_load(Network *network, const char *file_name);
+Outcome network_load(Network *network, const char *file_name);
 
 #endif /* NETWORK_H */

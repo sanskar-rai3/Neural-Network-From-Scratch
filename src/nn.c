@@ -19,31 +19,32 @@
 
 #include "common.h"
 #include "nn.h" 
-#include "layer.h"
-#include "matrix.h"
+#include "error/error.h"
+#include "layer/layer.h"
+#include "math/matrix.h"
+#include "error/error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 /*==============================================================================
  * Creation & Destruction
  *============================================================================*/
 
-int network_init(Network *network, const LayerConfig *configs, usize layer_count) {
-    assert(network != NULL);
-    assert(configs != NULL);
-    assert(layer_count > 0);
+Outcome network_init(Network *network, const LayerConfig *configs, usize layer_count) {
+    if (!network || !configs || !(layer_count > 0))
+        return OUTCOME_INVALID_ARGS;
 
     network->layers = malloc(layer_count * sizeof(Layer));
     if (!network->layers) {
-        return 0;
+        return OUTCOME_ALLOCATION_FAILED;
     }
 
     network->layer_count = layer_count;
 
     for (usize i = 0; i < layer_count; i++) {
-        if (!layer_init(&network->layers[i], &configs[i])) {
+        Outcome outcome = layer_init(&network->layers[i], &configs[i]);
+        if (!outcome) {
             while (i > 0) {
                 i--;
                 layer_destroy(&network->layers[i]);
@@ -53,16 +54,14 @@ int network_init(Network *network, const LayerConfig *configs, usize layer_count
             network->layers = NULL;
             network->layer_count = 0;
 
-            return 0;
+            return outcome;
         }
     }
 
-    return 1;
+    return OUTCOME_OK;
 }
 
 void network_destroy(Network *network) {
-    assert(network != NULL);
-
     if (network->layers != NULL) {
         for (usize i = 0; i < network->layer_count; i++) {
             layer_destroy(&network->layers[i]);
@@ -79,24 +78,28 @@ void network_destroy(Network *network) {
  * Forward Pass
  *============================================================================*/
 
-void network_forward(Matrix *output, const Network *network, const Matrix *input) {
-    assert(output != NULL);
-    assert(network != NULL);
-    assert(input != NULL);
-    assert(network->layer_count > 0);
-    assert(network->layers != NULL);
+Outcome network_forward(Matrix *output, const Network *network, const Matrix *input) {
+    if (!output || !network || !input)
+        return OUTCOME_INVALID_ARGS;
 
     /* Layer 1: Run input directly into a temp matrix */
     Matrix current;
-    matrix_create(&current, input->rows, network->layers[0].dense.weights.cols);
-    layer_forward(&current, &network->layers[0], input);
+    if (!matrix_create(&current, input->rows, network->layers[0].dense.weights.cols))
+        return OUTCOME_ALLOCATION_FAILED;
+
+    Outcome outcome = layer_forward(&current, &network->layers[0], input);
+    if (!outcome)
+        return outcome;
 
     /* Middle Layers: Run current -> next, swap */
     for (usize i = 1; i < network->layer_count - 1; i++) {
         Matrix next;
-        matrix_create(&next, input->rows, network->layers[i].dense.weights.cols);
+        if (!matrix_create(&next, input->rows, network->layers[i].dense.weights.cols))
+            return OUTCOME_ALLOCATION_FAILED;
 
-        layer_forward(&next, &network->layers[i], &current);
+        outcome = layer_forward(&next, &network->layers[i], &current);
+        if (!outcome)
+            return outcome;
 
         matrix_destroy(&current);
         current = next;
@@ -104,31 +107,35 @@ void network_forward(Matrix *output, const Network *network, const Matrix *input
 
     /* Final Layer: Compute directly into output */
     if (network->layer_count > 1) {
-        layer_forward(output, &network->layers[network->layer_count - 1], &current);
+        outcome = layer_forward(output, &network->layers[network->layer_count - 1], &current);
+        if (!outcome)
+            return outcome;
+
         matrix_destroy(&current);
     } else {
         /* If 1 layer total, output gets current's data */
         *output = current;
     }
+
+    return OUTCOME_OK;
 }
 
 /*==============================================================================
  * Backward Pass
  *============================================================================*/
 
-void network_backward(Network *network, const Matrix *d_output) {
-    assert(network);
-    assert(d_output);
-    assert(network->layer_count > 0);
-
-    Matrix d_current = matrix_empty();
+Outcome network_backward(Network *network, const Matrix *d_output) {
+    if (!network || !d_output)
+        return OUTCOME_INVALID_ARGS;
 
     /*
      * Initially:
      *
      * d_current = dL/dA of the final layer
      */
-    matrix_create(&d_current, d_output->rows, d_output->cols);
+    Matrix d_current;
+    if (!matrix_create(&d_current, d_output->rows, d_output->cols))
+        return OUTCOME_ALLOCATION_FAILED;
 
     matrix_copy(&d_current, d_output);
 
@@ -140,15 +147,17 @@ void network_backward(Network *network, const Matrix *d_output) {
          *
          * X has the same shape as the layer's cached input.
          */
-        Matrix d_next = matrix_empty();
-
-        matrix_create(&d_next, layer->dense.input_cache.rows, layer->dense.input_cache.cols);
+        Matrix d_next;
+        if (!matrix_create(&d_next, layer->dense.input_cache.rows, layer->dense.input_cache.cols))
+            return OUTCOME_ALLOCATION_FAILED;
 
         /*
          * d_current = dL/dA
          * d_next    = dL/dX
          */
-        layer_backward(&d_next, layer, &d_current);
+        Outcome outcome = layer_backward(&d_next, layer, &d_current);
+        if (!outcome)
+            return outcome;
 
         matrix_destroy(&d_current);
 
@@ -159,12 +168,14 @@ void network_backward(Network *network, const Matrix *d_output) {
      * d_current is now dL/dX for the entire network.
      */
     matrix_destroy(&d_current);
+
+    return OUTCOME_OK;
 }
 
-void network_save(const Network *network, const char *file_name) {
+Outcome network_save(const Network *network, const char *file_name) {
     FILE *file = fopen(file_name, "wb");
     if (!file) {
-        /* Error handling will be implemented later */
+        return OUTCOME_FILE_CREATE_FAILED;
     }
 
     /* Saving the magic number */
@@ -208,31 +219,30 @@ void network_save(const Network *network, const char *file_name) {
             }
 
             default:
-                break;
+                return OUTCOME_LAYER_UNKNOWN;
         }
     }
+
+    return OUTCOME_OK;
 }
 
 
-void network_load(Network *network, const char *file_name) {
+Outcome network_load(Network *network, const char *file_name) {
     FILE *file = fopen(file_name, "rb");
     if (!file) {
-        fprintf(stderr, "no file\n");
-        exit(EXIT_FAILURE);
+        return OUTCOME_FILE_OPEN_FAILED;
     }
 
     u32 magic_num;
     fread(&magic_num, sizeof(u32), 1, file);
     if (magic_num != NN_MAGIC) {
-        fprintf(stderr, "wrong magic num\n");
-        exit(EXIT_FAILURE);
+        return OUTCOME_FILE_INVALID;
     }
 
     u32 version;
     fread(&version, sizeof(u32), 1, file);
     if (version != NN_VERSION) {
-        fprintf(stderr, "Wrong version of nn\n");
-        exit(EXIT_FAILURE);
+        return OUTCOME_FILE_VERSION_MISMATCH;
     }
 
     fread(&network->layer_count, sizeof(usize), 1, file);
@@ -280,7 +290,9 @@ void network_load(Network *network, const char *file_name) {
             }
 
             default:
-                break;
+                return OUTCOME_LAYER_UNKNOWN;
         }
     }
+
+    return OUTCOME_OK;
 }

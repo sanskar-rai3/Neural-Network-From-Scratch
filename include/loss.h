@@ -21,7 +21,7 @@
 #define LOSS_H
 
 #include "common.h"
-#include "matrix.h"
+#include "math/matrix.h"
 
 /*==============================================================================
  * Forward pass

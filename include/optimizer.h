@@ -21,6 +21,7 @@
 #define OPTIMIZER_H
 
 #include "common.h"
+#include "error/error.h"
 
 /* Forward declaration to avoid including nn.h here. */
 typedef struct Network Network;
@@ -56,7 +57,7 @@ typedef struct Optimizer {
  * @param learning_rate Learning rate used during parameter updates.
  * @param type          Optimization algorithm to use.
  */
-void optimizer_init(Optimizer *optimizer, float learning_rate, OptimizerType type);
+Outcome optimizer_init(Optimizer *optimizer, float learning_rate, OptimizerType type);
 
 /**
  * @brief Destroys an optimizer and releases any resources it owns.
@@ -80,6 +81,6 @@ void optimizer_destroy(Optimizer *optimizer);
  * @param optimizer Pointer to the initialized Optimizer.
  * @param network   Pointer to the Network whose parameters will be updated.
  */
-void optimizer_step(Optimizer *optimizer, Network *network);
+Outcome optimizer_step(Optimizer *optimizer, Network *network);
 
 #endif /* OPTIMIZER_H */

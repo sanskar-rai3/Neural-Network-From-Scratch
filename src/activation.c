@@ -19,7 +19,7 @@
 
 #include "common.h"
 #include "activation.h"
-#include "matrix.h"
+#include "math/matrix.h"
 
 #include <math.h>
 #include <assert.h>

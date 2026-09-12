@@ -18,43 +18,41 @@
  */
 
 #include "common.h"
-#include "layer.h"
+#include "layer/layer.h"
 #include "layer/dense.h"
-#include "matrix.h"
-
-#include <assert.h>
+#include "math/matrix.h"
+#include "error/error.h"
 
 /*==============================================================================
  * Creation & Destruction
  *============================================================================*/
 
-int layer_init(Layer *layer, const LayerConfig *config) {
-    assert(layer);
-    assert(config);
+Outcome layer_init(Layer *layer, const LayerConfig *config) {
+    if (!layer || !config)
+        return OUTCOME_INVALID_ARGS;
 
     switch (config->layer_type) {
         case LAYER_DENSE: {
             layer->layer_type = LAYER_DENSE;
 
-            if (!dense_init(&layer->dense, &config->dense_config)) {
-                return 0;
-            }
+            if (!dense_init(&layer->dense, &config->dense_config))
+                return OUTCOME_ALLOCATION_FAILED;
 
             layer->activation = config->activation;
+
+            break;
         }
 
         default:
-            break;
+            return OUTCOME_LAYER_UNKNOWN; 
     }
 
     layer->z_cache = matrix_empty();
 
-    return 1;
+    return OUTCOME_OK;
 }
 
 void layer_destroy(Layer *layer) {
-    assert(layer);
-
     dense_destroy(&layer->dense);
     matrix_destroy(&layer->z_cache);
 
@@ -65,14 +63,16 @@ void layer_destroy(Layer *layer) {
  * Forward Pass
  *============================================================================*/
 
-void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
-    assert(output);
-    assert(layer);
-    assert(input);
+Outcome layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
+    if (!output || !layer || !input)
+        return OUTCOME_INVALID_ARGS;
 
-    assert(input->cols == layer->dense.weights.rows);
-    assert(output->rows == input->rows);
-    assert(output->cols == layer->dense.weights.cols);
+    if (!(input->cols == layer->dense.weights.rows) ||
+        !(output->rows == input->rows)              ||
+        !(output->cols == layer->dense.weights.cols)) {
+
+        return OUTCOME_MATRIX_INVALID_SIZE;
+    }
 
     switch (layer->layer_type) {
         case LAYER_DENSE: {
@@ -82,11 +82,12 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
             /* Cache Z for the backward pass */
             if (layer->z_cache.rows != output->rows ||
                 layer->z_cache.cols != output->cols ||
-                !layer->z_cache.data) {
+               !layer->z_cache.data) {
 
                 matrix_destroy(&layer->z_cache);
 
-                matrix_create(&layer->z_cache, output->rows, output->cols);
+                if (matrix_create(&layer->z_cache, output->rows, output->cols))
+                    return OUTCOME_ALLOCATION_FAILED;
             }
 
             matrix_copy(&layer->z_cache, output);
@@ -98,43 +99,38 @@ void layer_forward(Matrix *output, Layer *layer, const Matrix *input) {
         }
 
         default:
-            break;
+            return OUTCOME_LAYER_UNKNOWN;
     }
+
+    return OUTCOME_OK;
 }
 
 /*==============================================================================
  *  Backward Pass
  *============================================================================*/
 
-void layer_backward(Matrix *d_input, Layer *layer, const Matrix *d_output) {
-    assert(d_input);
-    assert(layer);
-    assert(d_output);
+Outcome layer_backward(Matrix *d_input, Layer *layer, const Matrix *d_output) {
+    if (!d_input || !layer || !d_output)
+        return OUTCOME_INVALID_ARGS;
 
-    assert(d_output->rows == layer->z_cache.rows);
-    assert(d_output->cols == layer->z_cache.cols);
+    if (!(d_output->rows == layer->z_cache.rows) ||
+        !(d_output->cols == layer->z_cache.cols)) {
+
+        return OUTCOME_MATRIX_INVALID_SIZE;
+    }
 
     Matrix dZ;
-
-    matrix_create(
-        &dZ,
-        layer->z_cache.rows,
-        layer->z_cache.cols
-    );
+    if (!matrix_create(&dZ, layer->z_cache.rows, layer->z_cache.cols))
+        return OUTCOME_ALLOCATION_FAILED;
 
     /*
      * Activation backward:
      *
      * dZ = dA ⊙ f'(Z)
      *
-     * d_output = dA
+     * dA = d_output
      */
-    activation_backward(
-        &dZ,
-        d_output,
-        &layer->z_cache,
-        layer->activation
-    );
+    activation_backward(&dZ, d_output, &layer->z_cache, layer->activation);
 
     /*
      * Dense backward:
@@ -143,11 +139,9 @@ void layer_backward(Matrix *d_input, Layer *layer, const Matrix *d_output) {
      * dW = X^T * dZ
      * db = sum(dZ)
      */
-    dense_backward(
-        d_input,
-        &layer->dense,
-        &dZ
-    );
+    Outcome outcome = dense_backward(d_input, &layer->dense, &dZ);
+    if (!outcome)
+        return outcome;
 
     matrix_destroy(&dZ);
 }

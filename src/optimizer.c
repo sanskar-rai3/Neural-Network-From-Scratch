@@ -21,23 +21,25 @@
 #include "layer/dense.h"
 #include "nn.h"
 
-#include <assert.h>
+#include "error/error.h"
 
 /*==============================================================================
  * Creation & Destruction
  *============================================================================*/
 
-void optimizer_init(Optimizer *optimizer, float learning_rate, OptimizerType type) {
-    assert(optimizer);
-    assert(learning_rate > 0.0f);
+Outcome optimizer_init(Optimizer *optimizer, float learning_rate, OptimizerType type) {
+    if (!(optimizer) ||
+        !(learning_rate > 0.0f)) {
+        return OUTCOME_INVALID_ARGS;
+    }
 
     optimizer->type = type;
     optimizer->learning_rate = learning_rate;
+
+    return OUTCOME_OK;
 }
 
 void optimizer_destroy(Optimizer *optimizer) {
-    assert(optimizer);
-
     optimizer->type = OPT_NULL;
     optimizer->learning_rate = 0.0f;
 }
@@ -46,46 +48,33 @@ void optimizer_destroy(Optimizer *optimizer) {
  * Optimization
  *============================================================================*/
 
-void optimizer_step(Optimizer *optimizer, Network *network) {
-    assert(optimizer);
-    assert(network);
+Outcome optimizer_step(Optimizer *optimizer, Network *network) {
+    if (!optimizer || !network)
+        return OUTCOME_INVALID_ARGS;
 
     switch (optimizer->type) {
-
-        case OPT_SGD:
+        case OPT_SGD: {
             for (usize i = 0; i < network->layer_count; i++) {
                 Dense *dense = &network->layers[i].dense;
 
                 /*
                  * W = W - learning_rate * dW
                  */
-                matrix_scalar_multiply_inplace(
-                    &dense->d_weights,
-                    optimizer->learning_rate
-                );
-
-                matrix_subtract_inplace(
-                    &dense->weights,
-                    &dense->d_weights
-                );
+                matrix_scalar_multiply_inplace(&dense->d_weights, optimizer->learning_rate);
+                matrix_subtract_inplace(&dense->weights, &dense->d_weights);
 
                 /*
                  * b = b - learning_rate * db
                  */
-                matrix_scalar_multiply_inplace(
-                    &dense->d_bias,
-                    optimizer->learning_rate
-                );
-
-                matrix_subtract_inplace(
-                    &dense->bias,
-                    &dense->d_bias
-                );
+                matrix_scalar_multiply_inplace(&dense->d_bias, optimizer->learning_rate);
+                matrix_subtract_inplace(&dense->bias, &dense->d_bias);
             }
-            break;
 
+            break;
+        }
+       
         case OPT_NULL:
         default:
-            break;
+            return OUTCOME_OPT_UNKNOWN;
     }
 }

@@ -21,7 +21,7 @@
 #define ACTIVATION_H
 
 #include "common.h"
-#include "matrix.h"
+#include "math/matrix.h"
 
 /*==============================================================================
  * Types & Enumerations

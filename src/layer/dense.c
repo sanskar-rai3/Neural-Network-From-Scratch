@@ -19,41 +19,41 @@
 
 #include "common.h"
 #include "layer/dense.h"
-#include "matrix.h"
-
-#include <assert.h>
+#include "error/error.h"
+#include "math/matrix.h"
 
 /*==============================================================================
  * Creation & Destruction
  *============================================================================*/
 
-int dense_init(Dense *layer, const DenseConfig *config) {
-    assert(layer);
-    assert(config);
+Outcome dense_init(Dense *layer, const DenseConfig *config) {
+    if (!layer || !config)
+        return OUTCOME_INVALID_ARGS;
 
     if (!matrix_create(&layer->weights, config->input_size, config->output_size))
-        return 0;
+        return OUTCOME_ALLOCATION_FAILED;
 
     if (!matrix_create(&layer->bias, 1, config->output_size))
-        return 0;
+        return OUTCOME_ALLOCATION_FAILED;
 
     if (!matrix_create(&layer->d_weights, config->input_size, config->output_size))
-        return 0;
+        return OUTCOME_ALLOCATION_FAILED;
 
     if (!matrix_create(&layer->d_bias, 1, config->output_size))
-        return 0;
+        return OUTCOME_ALLOCATION_FAILED;
 
+    /* Randomizing weights with He initialization */
     matrix_he_uniform(&layer->weights, config->input_size);
+
+    /* Initializing bias matrix with 0 */
     matrix_fill(&layer->bias, 0.0f);
 
     layer->input_cache = matrix_empty();
 
-    return 1;
+    return OUTCOME_OK;
 }
 
 void dense_destroy(Dense *layer) {
-    assert(layer);
-
     matrix_destroy(&layer->weights);
     matrix_destroy(&layer->bias);
 
@@ -66,27 +66,26 @@ void dense_destroy(Dense *layer) {
  * Forward Pass
  *============================================================================*/
 
-void dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
-    assert(output);
-    assert(layer);
-    assert(input);
+Outcome dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
+    if (!output || !layer || !input)
+        return OUTCOME_INVALID_ARGS;
 
-    assert(input->cols == layer->weights.rows);
-    assert(output->rows == input->rows);
-    assert(output->cols == layer->weights.cols);
+    if (input->cols != layer->weights.rows ||
+        output->rows != input->rows ||
+        output->cols != layer->weights.cols) {
+
+        return OUTCOME_MATRIX_INVALID_SIZE;
+    }
 
     /* Cache X for backward propagation */
     if (layer->input_cache.rows != input->rows ||
         layer->input_cache.cols != input->cols ||
-        !layer->input_cache.data) {
+       !layer->input_cache.data) {
         
         matrix_destroy(&layer->input_cache);
 
-        matrix_create(
-            &layer->input_cache,
-            input->rows,
-            input->cols
-        );
+        if (!matrix_create(&layer->input_cache, input->rows, input->cols))
+            return OUTCOME_ALLOCATION_FAILED;
     }
 
     matrix_copy(&layer->input_cache, input);
@@ -94,37 +93,33 @@ void dense_forward(Matrix *output, Dense *layer, const Matrix *input) {
     /* Z = XW + b */
     matrix_multiply(output, input, &layer->weights);
     matrix_add_row_inplace(output, &layer->bias);
+
+    return OUTCOME_OK;
 }
 
 /*==============================================================================
  * Backward Pass
  *============================================================================*/
 
-void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ) {
-    assert(d_input);
-    assert(layer);
-    assert(dZ);
+Outcome dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ) {
+    if (!d_input || !layer || !dZ)
+        return OUTCOME_INVALID_ARGS;
 
     const Matrix *X = &layer->input_cache;
     const Matrix *W = &layer->weights;
 
-    assert(dZ->rows == X->rows);
-    assert(dZ->cols == W->cols);
+    if (!(dZ->rows == X->rows) || !(dZ->cols == W->cols))
+        return OUTCOME_MATRIX_INVALID_SIZE;
 
     /*
      * dW = X^T * dZ
      */
-    Matrix X_T = matrix_empty();
-
-    matrix_create(&X_T, X->cols, X->rows);
+    Matrix X_T;
+    if (!matrix_create(&X_T, X->cols, X->rows))
+        return OUTCOME_ALLOCATION_FAILED;
 
     matrix_transpose(&X_T, X);
-
-    matrix_multiply(
-        &layer->d_weights,
-        &X_T,
-        dZ
-    );
+    matrix_multiply(&layer->d_weights, &X_T, dZ);
 
     matrix_destroy(&X_T);
 
@@ -132,28 +127,19 @@ void dense_backward(Matrix *d_input, Dense *layer, const Matrix *dZ) {
      * db = sum(dZ over the batch)
      */
     matrix_fill(&layer->d_bias, 0.0f);
-
-    for (usize r = 0; r < dZ->rows; r++) {
-        for (usize c = 0; c < dZ->cols; c++) {
-            layer->d_bias.data[c] +=
-                dZ->data[r * dZ->cols + c];
-        }
-    }
+    matrix_sum_rows(&layer->d_bias, dZ);
 
     /*
      * dX = dZ * W^T
      */
-    Matrix W_T = matrix_empty();
-
-    matrix_create(&W_T, W->cols, W->rows);
+    Matrix W_T;
+    if (!matrix_create(&W_T, W->cols, W->rows))
+        return OUTCOME_ALLOCATION_FAILED;
 
     matrix_transpose(&W_T, W);
-
-    matrix_multiply(
-        d_input,
-        dZ,
-        &W_T
-    );
+    matrix_multiply(d_input, dZ, &W_T);
 
     matrix_destroy(&W_T);
+
+    return OUTCOME_OK;
 }

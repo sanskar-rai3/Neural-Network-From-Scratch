@@ -238,6 +238,14 @@ void matrix_transpose(Matrix *result, const Matrix *mat);
  */
 void matrix_add_row(Matrix *result, const Matrix *mat, const Matrix *row);
 
+/**
+ * @brief Adds the sum of each row of a matrix to the corresponding
+ *        element of the destination vector.
+ *
+ * @param result Pointer to the destination matrix
+ * @param mat Pointer to the source matrix
+ */
+void matrix_sum_rows(Matrix *result, const Matrix *mat);
 
 /*==============================================================================
  * In-place Arithmetic

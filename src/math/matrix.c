@@ -18,7 +18,8 @@
  */
 
 #include "common.h"
-#include "matrix.h"
+#include "math/matrix.h"
+#include "error/error.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -37,15 +38,14 @@ int matrix_create(Matrix *mat, usize rows, usize cols) {
     assert(cols > 0);
 
     float *data = malloc(rows * cols * sizeof(float));
-    if (!data) {
-        return 0;
-    }
+    if (!data)
+        return OUTCOME_ALLOCATION_FAILED;
 
     mat->rows = rows;
     mat->cols = cols;
     mat->data = data;
 
-    return 1;
+    return OUTCOME_OK;
 }
 
 int matrix_copy_buffer(Matrix *mat, usize rows, usize cols, float *buffer) {
@@ -286,6 +286,14 @@ void matrix_add_row(Matrix *result, const Matrix *mat, const Matrix *row) {
         usize offset = r * mat->cols;
         for (usize c = 0; c < mat->cols; c++) {
             result->data[offset + c] = mat->data[offset + c] + row->data[c];
+        }
+    }
+}
+
+void matrix_sum_rows(Matrix *result, const Matrix *mat) {
+    for (usize r = 0; r < mat->rows; r++) {
+        for (usize c = 0; c < mat->cols; c++) {
+            result->data[c] += mat->data[r * mat->cols + c];
         }
     }
 }
