@@ -39,6 +39,9 @@ void tensor_copy(Tensor *dest, const Tensor *src);
 
 void tensor_fill(Tensor *t, float val);
 
+void tensor_get(float *val, const Tensor *t, const usize *index);
+void tensor_set(Tensor *t, const usize *index, float val);
+
 void tensor_max(float *ret, const Tensor *t);
 void tensor_min(float *ret, const Tensor *t);
 

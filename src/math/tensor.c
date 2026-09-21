@@ -78,6 +78,24 @@ void tensor_fill(Tensor *t, float val) {
     }
 }
 
+void tensor_get(float *val, const Tensor *t, const usize *index) {
+    int offset = 0;
+    for (usize i = 0; i < t->rank; i++) {
+        index += t->strides[i] * index[i]; 
+    }
+
+    *val = t->data[offset];
+}
+
+void tensor_set(Tensor *t, const usize *index, float val) {
+    int offset = 0;
+    for (usize i = 0; i < t->rank; i++) {
+        index += t->strides[i] * index[i]; 
+    }
+
+    t->data[offset] = val;
+} 
+
 void tensor_max(float *ret, const Tensor *t) {
     float max = t->data[0];
 
