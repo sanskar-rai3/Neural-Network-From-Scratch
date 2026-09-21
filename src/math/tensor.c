@@ -120,6 +120,14 @@ void tensor_min(float *ret, const Tensor *t) {
     *ret = min;
 }
 
+void tensor_sum(float *ret, const Tensor *t) {
+    float sum = 0.0f;
+
+    for (usize i = 0; i < t->size; i++) {
+        sum += t->data[i];
+    }
+}
+
 void tensor_flatten(Tensor *t) {
     t->rank = 1;
 

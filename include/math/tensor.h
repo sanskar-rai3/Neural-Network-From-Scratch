@@ -45,6 +45,8 @@ void tensor_set(Tensor *t, const usize *index, float val);
 void tensor_max(float *ret, const Tensor *t);
 void tensor_min(float *ret, const Tensor *t);
 
+void tensor_sum(float *ret, const Tensor *t);
+
 void tensor_flatten(Tensor *t);
 
 #endif /* TENSOR_H */
