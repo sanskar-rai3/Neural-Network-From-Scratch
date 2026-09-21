@@ -78,6 +78,30 @@ void tensor_fill(Tensor *t, float val) {
     }
 }
 
+void tensor_max(float *ret, const Tensor *t) {
+    float max = t->data[0];
+
+    for (usize i = 1; i < t->size; i++) {
+        if (t->data[i] > max) {
+            max = t->data[i];
+        }
+    }
+
+    *ret = max;
+}
+
+void tensor_min(float *ret, const Tensor *t) {
+    float min = t->data[0];
+
+    for (usize i = 1; i < t->size; i++) {
+        if (t->data[i] < min) {
+            min = t->data[i];
+        }
+    }
+
+    *ret = min;
+}
+
 void tensor_flatten(Tensor *t) {
     t->rank = 1;
 
