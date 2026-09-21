@@ -35,6 +35,10 @@ typedef struct {
 void tensor_create(Tensor *t, usize rank, const usize *shape);
 void tensor_destroy(Tensor *t);
 
+void tensor_copy(Tensor *dest, const Tensor *src);
+
+void tensor_fill(Tensor *t, float val);
+
 void tensor_flatten(Tensor *t);
 
 #endif /* TENSOR_H */

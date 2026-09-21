@@ -29,18 +29,31 @@ void tensor_create(Tensor *t, usize rank, const usize *shape) {
     t->rank = rank;
 
     t->shape = malloc(rank * sizeof(usize));
+    if (!t->shape) {
+        // error handling
+    }
+
     memcpy(t->shape, shape, rank * sizeof(usize));
 
     t->size = 1;
-    for (usize i = 0; i < rank; i++)
+    for (usize i = 0; i < rank; i++) {
         t->size *= t->shape[i];
+    }
 
     t->strides = malloc(rank * sizeof(usize));
+    if (!t->strides) {
+        // error handling
+    }
+
     t->strides[rank - 1] = 1;
-    for (usize i = rank - 1; i > 0; i--)
+    for (usize i = rank - 1; i > 0; i--) {
         t->strides[i - 1] = t->strides[i] * t->shape[i];
+    }
 
     t->data = malloc(t->size * sizeof(float));
+    if (!t->data) {
+        // error handling
+    }
 }
 
 void tensor_destroy(Tensor *t) {
@@ -52,6 +65,17 @@ void tensor_destroy(Tensor *t) {
     t->rank    = 0;
     t->shape   = NULL;
     t->strides = NULL;
+}
+
+void tensor_copy(Tensor *dest, const Tensor *src) {
+    tensor_create(dest, src->rank, src->shape);    
+    memcpy(dest->data, src->data, src->size * sizeof(usize));
+}
+
+void tensor_fill(Tensor *t, float val) {
+    for (usize i = 0; i < t->size; i++) {
+        t->data[i] = val;
+    }
 }
 
 void tensor_flatten(Tensor *t) {
