@@ -35,4 +35,6 @@ typedef struct {
 void tensor_create(Tensor *t, usize rank, const usize *shape);
 void tensor_destroy(Tensor *t);
 
+void tensor_flatten(Tensor *t);
+
 #endif /* TENSOR_H */

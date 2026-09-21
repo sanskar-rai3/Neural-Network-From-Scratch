@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// error handling will be implemented later
+
 void tensor_create(Tensor *t, usize rank, const usize *shape) {
     t->rank = rank;
 
@@ -50,4 +52,24 @@ void tensor_destroy(Tensor *t) {
     t->rank    = 0;
     t->shape   = NULL;
     t->strides = NULL;
+}
+
+void tensor_flatten(Tensor *t) {
+    t->rank = 1;
+
+    free(t->strides);
+    t->strides = malloc(sizeof(usize));
+    if (!t->strides) {
+        // error handling
+    }
+
+    t->strides[0] = 1;
+
+    free(t->shape);
+    t->shape = malloc(sizeof(usize));
+    if (!t->shape) {
+        // error handling
+    }
+
+    t->shape[0] = t->size;
 }
