@@ -128,6 +128,18 @@ void tensor_sum(float *ret, const Tensor *t) {
     }
 }
 
+void tensor_hadamard_multiply(Tensor *result, const Tensor *a, const Tensor *b) {
+    for (usize i = 0; i < result->size; i++) {
+        result->data[i] = a->data[i] * b->data[i];
+    }
+}
+
+void tensor_scalar_multiply(Tensor *result, const Tensor *t, float scalar) {
+    for (usize i = 0; i < result->size; i++) {
+        result->data[i] = scalar * t->data[i];
+    }
+}
+
 void tensor_flatten(Tensor *t) {
     t->rank = 1;
 
