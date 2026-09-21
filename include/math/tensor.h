@@ -46,8 +46,10 @@ void tensor_max(float *ret, const Tensor *t);
 void tensor_min(float *ret, const Tensor *t);
 void tensor_sum(float *ret, const Tensor *t);
 
-void tensor_hadamard_multiply(Tensor *result, const Tensor *b, const Tensor *b);
+void tensor_hadamard_multiply(Tensor *result, const Tensor *a, const Tensor *b);
 void tensor_scalar_multiply(Tensor *result, const Tensor *t, float scalar);
+
+void tensor_randomize(Tensor *t, float min, float max);
 
 void tensor_flatten(Tensor *t);
 

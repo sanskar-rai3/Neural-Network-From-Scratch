@@ -22,6 +22,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 
 // error handling will be implemented later
 
@@ -137,6 +139,23 @@ void tensor_hadamard_multiply(Tensor *result, const Tensor *a, const Tensor *b) 
 void tensor_scalar_multiply(Tensor *result, const Tensor *t, float scalar) {
     for (usize i = 0; i < result->size; i++) {
         result->data[i] = scalar * t->data[i];
+    }
+}
+
+static inline float random_float(float min, float max) {
+    static bool seeded = false;
+    if (!seeded) {
+        srand(time(NULL));
+        seeded = true;
+    }
+
+    float scale = (float)rand() / (float)RAND_MAX;
+    return min + scale * (max - min);
+}
+
+void tensor_randomize(Tensor *t, float min, float max) {
+    for (usize i = 0; i < t->size; i++) {
+        t->data[i] = random_float(min, max);
     }
 }
 
