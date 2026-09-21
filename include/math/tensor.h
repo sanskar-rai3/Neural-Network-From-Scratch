@@ -36,7 +36,6 @@ void tensor_create(Tensor *t, usize rank, const usize *shape);
 void tensor_destroy(Tensor *t);
 
 void tensor_copy(Tensor *dest, const Tensor *src);
-
 void tensor_fill(Tensor *t, float val);
 
 void tensor_get(float *val, const Tensor *t, const usize *index);
@@ -54,5 +53,6 @@ void tensor_he_uniform(Tensor *t, usize fan_in);
 void tensor_xavier_uniform(Tensor *t, usize fan_in, usize fan_out);
 
 void tensor_flatten(Tensor *t);
+void tensor_reshape(Tensor *t, usize rank, const usize *shape);
 
 #endif /* TENSOR_H */

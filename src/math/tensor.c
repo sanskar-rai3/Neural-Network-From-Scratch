@@ -188,3 +188,38 @@ void tensor_flatten(Tensor *t) {
 
     t->shape[0] = t->size;
 }
+
+void tensor_reshape(Tensor *t, usize rank, const usize *shape) {
+    usize size = 1;
+
+    for (usize i = 0; i < rank; i++)
+        size *= shape[i];
+
+    if (size != t->size) {
+        return;
+    }
+
+    t->rank = rank;
+
+    t->shape = malloc(rank * sizeof(usize));
+    if (!t->shape) {
+        // error handling
+    }
+
+    memcpy(t->shape, shape, rank * sizeof(usize));
+
+    t->size = 1;
+    for (usize i = 0; i < rank; i++) {
+        t->size *= t->shape[i];
+    }
+
+    t->strides = malloc(rank * sizeof(usize));
+    if (!t->strides) {
+        // error handling
+    }
+
+    t->strides[rank - 1] = 1;
+    for (usize i = rank - 1; i > 0; i--) {
+        t->strides[i - 1] = t->strides[i] * t->shape[i];
+    }
+}
