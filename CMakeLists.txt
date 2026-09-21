@@ -40,7 +40,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ==============================================================================
-# Source Files & Dependencies
+# Source Files
 # ==============================================================================
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
@@ -48,9 +48,6 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-
-# Locate SDL2
-find_package(SDL2 REQUIRED)
 
 # ==============================================================================
 # Libraries
@@ -62,11 +59,6 @@ if(NOT MSVC)
             m
     )
 endif()
-
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-        SDL2::SDL2
-)
 
 # ==============================================================================
 # Target Configuration

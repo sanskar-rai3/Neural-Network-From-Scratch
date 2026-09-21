@@ -8,7 +8,7 @@ Supports matrix operations, MNIST loading, dense layers, activation functions (R
 
 ## Documentation
 
-Full API and design documentation: https://sanskar-rai3.github.io/Neural-Network-From-Scratch/
+Full API and design documentation can be found inside [docs/](./docs/)
 
 ## Building
 
