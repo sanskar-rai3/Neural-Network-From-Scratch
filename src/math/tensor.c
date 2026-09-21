@@ -159,6 +159,16 @@ void tensor_randomize(Tensor *t, float min, float max) {
     }
 }
 
+void tensor_he_uniform(Tensor *t, usize fan_in) {
+    float limit = sqrtf(6.0f / (float)fan_in);
+    matrix_randomize(t, -limit, limit);
+}
+
+void tensor_xavier_uniform(Tensor *t, usize fan_in, usize fan_out) {
+    float limit = sqrtf(6.0f / (float)(fan_in + fan_out));
+    matrix_randomize(t, -limit, limit);
+}
+
 void tensor_flatten(Tensor *t) {
     t->rank = 1;
 

@@ -50,6 +50,8 @@ void tensor_hadamard_multiply(Tensor *result, const Tensor *a, const Tensor *b);
 void tensor_scalar_multiply(Tensor *result, const Tensor *t, float scalar);
 
 void tensor_randomize(Tensor *t, float min, float max);
+void tensor_he_uniform(Tensor *t, usize fan_in);
+void tensor_xavier_uniform(Tensor *t, usize fan_in, usize fan_out);
 
 void tensor_flatten(Tensor *t);
 
